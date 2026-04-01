@@ -137,29 +137,17 @@ export default function Pricing() {
             {/* PayPal Button */}
             <a
               href={PAYPAL_URL}
-              target="_top"
-              rel="noopener"
               onMouseEnter={() => setIsHovered(true)}
               onMouseLeave={() => setIsHovered(false)}
-              onClick={handlePayPal}
               className="relative flex items-center justify-center gap-3 w-full py-4 rounded-2xl font-bold text-white text-lg no-underline transition-all duration-300"
               style={{
-                background: isLoading ? "#1e3a8a" : "linear-gradient(135deg, #003087 0%, #009cde 100%)",
-                transform: isHovered && !isLoading ? "translateY(-2px)" : "translateY(0)",
-                boxShadow: isHovered && !isLoading ? "0 12px 32px rgba(0,48,135,0.4)" : "0 4px 16px rgba(0,48,135,0.25)",
+                background: "linear-gradient(135deg, #003087 0%, #009cde 100%)",
+                transform: isHovered ? "translateY(-2px)" : "translateY(0)",
+                boxShadow: isHovered ? "0 12px 32px rgba(0,48,135,0.4)" : "0 4px 16px rgba(0,48,135,0.25)",
               }}
             >
-              {isLoading ? (
-                <>
-                  <RefreshCw className="w-5 h-5 animate-spin" />
-                  Duke hapur PayPal...
-                </>
-              ) : (
-                <>
-                  <CreditCard className="w-5 h-5" />
-                  Paguaj me PayPal — €15/vit
-                </>
-              )}
+              <CreditCard className="w-5 h-5" />
+              Paguaj me PayPal — €15/vit
             </a>
 
             {/* Security note */}
