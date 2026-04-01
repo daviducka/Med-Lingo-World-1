@@ -8,34 +8,11 @@ export default function Pricing() {
   const [error, setError] = useState("");
 
   useEffect(() => {
-    // Check subscription status
     fetch("/api/payments/is-subscribed")
       .then(r => r.json())
       .then(data => setIsSubscribed(data.isSubscribed))
       .catch(() => setIsSubscribed(false));
   }, []);
-
-  const handleStripeCheckout = async () => {
-    setIsLoading(true);
-    setError("");
-
-    try {
-      const res = await fetch("/api/payments/checkout", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-      });
-
-      if (!res.ok) throw new Error("Gabim në checkout");
-
-      const { url } = await res.json();
-      if (url) {
-        window.location.href = url;
-      }
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Gabim i panjohur");
-      setIsLoading(false);
-    }
-  };
 
   const handlePayPalCheckout = async () => {
     setIsLoading(true);
@@ -107,7 +84,7 @@ export default function Pricing() {
               "24+ kurse mjekësore",
               "6 lojëra interaktive",
               "Dr. Denisa AI 24/7",
-              "Sertifikatat", 
+              "Sertifikatat",
               "Hard Round exam",
               "Flashkarta & Shënime",
             ].map((feature, i) => (
@@ -118,37 +95,21 @@ export default function Pricing() {
             ))}
           </div>
 
-          {/* CTA Buttons */}
-          <div className="space-y-3">
-            <Button
-              onClick={handleStripeCheckout}
-              disabled={isLoading}
-              className="w-full py-6 text-lg font-bold rounded-2xl bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 shadow-lg"
-            >
-              {isLoading ? (
-                <>
-                  <Loader className="w-5 h-5 mr-2 animate-spin" />
-                  Duke përpunuar...
-                </>
-              ) : (
-                "💳 Stripe - Fillo Tani"
-              )}
-            </Button>
-            <Button
-              onClick={handlePayPalCheckout}
-              disabled={isLoading}
-              className="w-full py-6 text-lg font-bold rounded-2xl bg-gradient-to-r from-blue-700 to-blue-900 hover:from-blue-800 hover:to-slate-950 shadow-lg"
-            >
-              {isLoading ? (
-                <>
-                  <Loader className="w-5 h-5 mr-2 animate-spin" />
-                  Duke përpunuar...
-                </>
-              ) : (
-                "🅿️ PayPal - Fillo Tani"
-              )}
-            </Button>
-          </div>
+          {/* PayPal Button */}
+          <Button
+            onClick={handlePayPalCheckout}
+            disabled={isLoading}
+            className="w-full py-6 text-lg font-bold rounded-2xl bg-gradient-to-r from-blue-600 to-blue-800 hover:from-blue-700 hover:to-blue-900 shadow-lg"
+          >
+            {isLoading ? (
+              <>
+                <Loader className="w-5 h-5 mr-2 animate-spin" />
+                Duke përpunuar...
+              </>
+            ) : (
+              "🅿️ Paguaj me PayPal"
+            )}
+          </Button>
 
           {error && (
             <p className="text-red-600 font-bold text-sm mt-4 text-center">{error}</p>
@@ -156,7 +117,7 @@ export default function Pricing() {
 
           {/* Secure payment badge */}
           <div className="text-center mt-6">
-            <p className="text-xs text-gray-500 font-semibold">🔒 Pagesa e sigurt përmes Stripe</p>
+            <p className="text-xs text-gray-500 font-semibold">🔒 Pagesa e sigurt përmes PayPal</p>
           </div>
         </div>
       </div>
@@ -171,7 +132,7 @@ export default function Pricing() {
         <div className="text-center p-4 bg-muted rounded-2xl">
           <p className="text-2xl mb-2">🔒</p>
           <h3 className="font-bold mb-1">Pagesa Sigure</h3>
-          <p className="text-xs text-muted-foreground">Përmes Stripe të besueshëm</p>
+          <p className="text-xs text-muted-foreground">Përmes PayPal të besueshëm</p>
         </div>
         <div className="text-center p-4 bg-muted rounded-2xl">
           <p className="text-2xl mb-2">📧</p>

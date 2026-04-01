@@ -33,7 +33,11 @@ async function getPayPalAccessToken(): Promise<string> {
       body: "grant_type=client_credentials",
     });
 
-    if (!response.ok) throw new Error("Failed to get PayPal token");
+    if (!response.ok) {
+      const errBody = await response.text();
+      console.error("PayPal token failed:", response.status, errBody);
+      throw new Error(`Failed to get PayPal token: ${response.status} ${errBody}`);
+    }
 
     const data = (await response.json()) as { access_token: string };
     return data.access_token;
