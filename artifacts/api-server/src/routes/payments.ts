@@ -77,16 +77,16 @@ router.post("/checkout", async (req, res): Promise<void> => {
             product_data: {
               name: "El_lingo Premium - Mbajta e Plotë",
               description: "Qasje e plotë në të gjithë kurset, lojërat dhe sertifikatat",
-              images: ["https://emoji.aranja.com/static/emoji-data/img-google-64/1f3af.png"],
             },
             unit_amount: 1500, // 15 EUR in cents
+            recurring: { interval: "month" },
           },
           quantity: 1,
         },
       ],
       mode: "subscription",
-      success_url: `${process.env.REPLIT_DEV_DOMAIN || "http://localhost:5173"}/payment-success?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${process.env.REPLIT_DEV_DOMAIN || "http://localhost:5173"}/`,
+      success_url: `https://${process.env.REPLIT_DEV_DOMAIN || "localhost:5173"}/payment-success?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `https://${process.env.REPLIT_DEV_DOMAIN || "localhost:5173"}/`,
       metadata: {
         userId: DEFAULT_USER_ID,
         email: userData.email,

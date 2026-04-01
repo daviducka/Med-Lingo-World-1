@@ -69,8 +69,8 @@ router.post("/create-subscription", async (req, res): Promise<void> => {
           brand_name: "El_lingo",
           locale: "sq_AL",
           user_action: "SUBSCRIBE_NOW",
-          return_url: `${process.env.REPLIT_DEV_DOMAIN || "http://localhost:5173"}/paypal-return`,
-          cancel_url: `${process.env.REPLIT_DEV_DOMAIN || "http://localhost:5173"}/pricing`,
+          return_url: `https://${process.env.REPLIT_DEV_DOMAIN || "localhost:5173"}/paypal-return`,
+          cancel_url: `https://${process.env.REPLIT_DEV_DOMAIN || "localhost:5173"}/pricing`,
         },
       }),
     });
