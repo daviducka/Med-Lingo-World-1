@@ -1,15 +1,29 @@
 openapi: 3.1.0
 info:
-  # Do not change the title, if the title changes, the import paths will be broken
   title: Api
   version: 0.1.0
-  description: API specification
+  description: El_lingo Medical Learning Platform API
 servers:
   - url: /api
     description: Base API path
 tags:
   - name: health
     description: Health operations
+  - name: users
+    description: User profile and progress
+  - name: courses
+    description: Medical courses and subjects
+  - name: lessons
+    description: Individual lessons within courses
+  - name: questions
+    description: Quiz questions and answers
+  - name: progress
+    description: User learning progress
+  - name: leaderboard
+    description: Leaderboard and rankings
+  - name: languages
+    description: Supported interface languages
+
 paths:
   /healthz:
     get:
@@ -24,6 +38,276 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthStatus"
+
+  /users/profile:
+    get:
+      operationId: getUserProfile
+      tags: [users]
+      summary: Get user profile
+      responses:
+        "200":
+          description: User profile
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserProfile"
+    patch:
+      operationId: updateUserProfile
+      tags: [users]
+      summary: Update user profile
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateUserProfileBody"
+      responses:
+        "200":
+          description: Updated profile
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserProfile"
+
+  /users/stats:
+    get:
+      operationId: getUserStats
+      tags: [users]
+      summary: Get user stats (XP, streak, hearts, total lessons)
+      responses:
+        "200":
+          description: User stats
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserStats"
+
+  /courses:
+    get:
+      operationId: listCourses
+      tags: [courses]
+      summary: List all medical courses
+      parameters:
+        - name: language
+          in: query
+          schema:
+            type: string
+          description: Interface language code (e.g. en, es, fr)
+      responses:
+        "200":
+          description: List of courses
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Course"
+
+  /courses/{courseId}:
+    get:
+      operationId: getCourse
+      tags: [courses]
+      summary: Get a specific course with its units
+      parameters:
+        - name: courseId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Course details with units
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CourseDetail"
+        "404":
+          description: Course not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /courses/{courseId}/lessons:
+    get:
+      operationId: listLessons
+      tags: [lessons]
+      summary: List lessons for a course
+      parameters:
+        - name: courseId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: List of lessons
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Lesson"
+
+  /lessons/{lessonId}:
+    get:
+      operationId: getLesson
+      tags: [lessons]
+      summary: Get a lesson with its questions
+      parameters:
+        - name: lessonId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Lesson with questions
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LessonDetail"
+        "404":
+          description: Lesson not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /lessons/{lessonId}/complete:
+    post:
+      operationId: completeLesson
+      tags: [lessons]
+      summary: Mark a lesson as complete and update XP/streak
+      parameters:
+        - name: lessonId
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CompleteLessonBody"
+      responses:
+        "200":
+          description: Lesson completion result
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CompleteLessonResponse"
+
+  /hard-round/questions:
+    get:
+      operationId: getHardRoundQuestions
+      tags: [questions]
+      summary: Get a set of hard-round medical board-level questions
+      parameters:
+        - name: category
+          in: query
+          schema:
+            type: string
+          description: Medical category (anatomy, pharmacology, etc.)
+        - name: count
+          in: query
+          schema:
+            type: integer
+          description: Number of questions to return (default 10)
+      responses:
+        "200":
+          description: Hard round questions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Question"
+
+  /hard-round/submit:
+    post:
+      operationId: submitHardRound
+      tags: [questions]
+      summary: Submit hard round answers and get score
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SubmitHardRoundBody"
+      responses:
+        "200":
+          description: Hard round result
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HardRoundResult"
+
+  /progress:
+    get:
+      operationId: getUserProgress
+      tags: [progress]
+      summary: Get user's full learning progress across all courses
+      responses:
+        "200":
+          description: User progress
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/CourseProgress"
+
+  /progress/summary:
+    get:
+      operationId: getProgressSummary
+      tags: [progress]
+      summary: Get aggregated progress summary (total XP, courses completed, streak, etc.)
+      responses:
+        "200":
+          description: Progress summary
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProgressSummary"
+
+  /leaderboard:
+    get:
+      operationId: getLeaderboard
+      tags: [leaderboard]
+      summary: Get top learners leaderboard
+      parameters:
+        - name: limit
+          in: query
+          schema:
+            type: integer
+          description: Number of entries (default 20)
+      responses:
+        "200":
+          description: Leaderboard entries
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/LeaderboardEntry"
+
+  /languages:
+    get:
+      operationId: listLanguages
+      tags: [languages]
+      summary: List all supported interface languages
+      responses:
+        "200":
+          description: Supported languages
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Language"
+
 components:
   schemas:
     HealthStatus:
@@ -34,3 +318,436 @@ components:
       required:
         - status
 
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+      required:
+        - error
+
+    UserProfile:
+      type: object
+      properties:
+        id:
+          type: integer
+        username:
+          type: string
+        displayName:
+          type: string
+        avatarUrl:
+          type: ["string", "null"]
+        selectedLanguage:
+          type: string
+        xp:
+          type: integer
+        streak:
+          type: integer
+        hearts:
+          type: integer
+        createdAt:
+          type: string
+      required:
+        - id
+        - username
+        - displayName
+        - selectedLanguage
+        - xp
+        - streak
+        - hearts
+        - createdAt
+
+    UpdateUserProfileBody:
+      type: object
+      properties:
+        displayName:
+          type: string
+        avatarUrl:
+          type: ["string", "null"]
+        selectedLanguage:
+          type: string
+
+    UserStats:
+      type: object
+      properties:
+        xp:
+          type: integer
+        streak:
+          type: integer
+        hearts:
+          type: integer
+        totalLessonsCompleted:
+          type: integer
+        hardRoundsCompleted:
+          type: integer
+        rank:
+          type: integer
+        weeklyXp:
+          type: integer
+      required:
+        - xp
+        - streak
+        - hearts
+        - totalLessonsCompleted
+        - hardRoundsCompleted
+        - rank
+        - weeklyXp
+
+    Course:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        description:
+          type: string
+        category:
+          type: string
+        iconEmoji:
+          type: string
+        color:
+          type: string
+        totalLessons:
+          type: integer
+        difficulty:
+          type: string
+        language:
+          type: string
+      required:
+        - id
+        - title
+        - description
+        - category
+        - iconEmoji
+        - color
+        - totalLessons
+        - difficulty
+        - language
+
+    CourseDetail:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        description:
+          type: string
+        category:
+          type: string
+        iconEmoji:
+          type: string
+        color:
+          type: string
+        difficulty:
+          type: string
+        language:
+          type: string
+        lessons:
+          type: array
+          items:
+            $ref: "#/components/schemas/Lesson"
+      required:
+        - id
+        - title
+        - description
+        - category
+        - iconEmoji
+        - color
+        - difficulty
+        - language
+        - lessons
+
+    Lesson:
+      type: object
+      properties:
+        id:
+          type: integer
+        courseId:
+          type: integer
+        title:
+          type: string
+        description:
+          type: string
+        xpReward:
+          type: integer
+        orderIndex:
+          type: integer
+        isLocked:
+          type: boolean
+        isCompleted:
+          type: boolean
+        questionCount:
+          type: integer
+      required:
+        - id
+        - courseId
+        - title
+        - description
+        - xpReward
+        - orderIndex
+        - isLocked
+        - isCompleted
+        - questionCount
+
+    LessonDetail:
+      type: object
+      properties:
+        id:
+          type: integer
+        courseId:
+          type: integer
+        title:
+          type: string
+        description:
+          type: string
+        xpReward:
+          type: integer
+        questions:
+          type: array
+          items:
+            $ref: "#/components/schemas/Question"
+      required:
+        - id
+        - courseId
+        - title
+        - description
+        - xpReward
+        - questions
+
+    Question:
+      type: object
+      properties:
+        id:
+          type: integer
+        lessonId:
+          type: ["integer", "null"]
+        questionText:
+          type: string
+        questionType:
+          type: string
+          enum: [multiple_choice, true_false, fill_blank]
+        options:
+          type: array
+          items:
+            type: string
+        correctAnswer:
+          type: string
+        explanation:
+          type: string
+        category:
+          type: string
+        difficulty:
+          type: string
+          enum: [easy, medium, hard, board_level]
+        language:
+          type: string
+      required:
+        - id
+        - questionText
+        - questionType
+        - options
+        - correctAnswer
+        - explanation
+        - category
+        - difficulty
+        - language
+
+    CompleteLessonBody:
+      type: object
+      properties:
+        score:
+          type: integer
+        correctAnswers:
+          type: integer
+        totalQuestions:
+          type: integer
+        timeTakenSeconds:
+          type: integer
+      required:
+        - score
+        - correctAnswers
+        - totalQuestions
+
+    CompleteLessonResponse:
+      type: object
+      properties:
+        xpEarned:
+          type: integer
+        newXpTotal:
+          type: integer
+        streakUpdated:
+          type: boolean
+        newStreak:
+          type: integer
+        heartsRemaining:
+          type: integer
+        lessonCompleted:
+          type: boolean
+      required:
+        - xpEarned
+        - newXpTotal
+        - streakUpdated
+        - newStreak
+        - heartsRemaining
+        - lessonCompleted
+
+    SubmitHardRoundBody:
+      type: object
+      properties:
+        answers:
+          type: array
+          items:
+            $ref: "#/components/schemas/AnswerSubmission"
+        timeTakenSeconds:
+          type: integer
+      required:
+        - answers
+
+    AnswerSubmission:
+      type: object
+      properties:
+        questionId:
+          type: integer
+        selectedAnswer:
+          type: string
+      required:
+        - questionId
+        - selectedAnswer
+
+    HardRoundResult:
+      type: object
+      properties:
+        score:
+          type: integer
+        totalQuestions:
+          type: integer
+        correctCount:
+          type: integer
+        xpEarned:
+          type: integer
+        results:
+          type: array
+          items:
+            $ref: "#/components/schemas/QuestionResult"
+      required:
+        - score
+        - totalQuestions
+        - correctCount
+        - xpEarned
+        - results
+
+    QuestionResult:
+      type: object
+      properties:
+        questionId:
+          type: integer
+        isCorrect:
+          type: boolean
+        correctAnswer:
+          type: string
+        selectedAnswer:
+          type: string
+        explanation:
+          type: string
+      required:
+        - questionId
+        - isCorrect
+        - correctAnswer
+        - selectedAnswer
+        - explanation
+
+    CourseProgress:
+      type: object
+      properties:
+        courseId:
+          type: integer
+        courseName:
+          type: string
+        completedLessons:
+          type: integer
+        totalLessons:
+          type: integer
+        percentComplete:
+          type: integer
+        xpEarned:
+          type: integer
+      required:
+        - courseId
+        - courseName
+        - completedLessons
+        - totalLessons
+        - percentComplete
+        - xpEarned
+
+    ProgressSummary:
+      type: object
+      properties:
+        totalXp:
+          type: integer
+        currentStreak:
+          type: integer
+        coursesCompleted:
+          type: integer
+        lessonsCompleted:
+          type: integer
+        hardRoundsCompleted:
+          type: integer
+        averageScore:
+          type: integer
+        weeklyXp:
+          type: integer
+        monthlyXp:
+          type: integer
+      required:
+        - totalXp
+        - currentStreak
+        - coursesCompleted
+        - lessonsCompleted
+        - hardRoundsCompleted
+        - averageScore
+        - weeklyXp
+        - monthlyXp
+
+    LeaderboardEntry:
+      type: object
+      properties:
+        rank:
+          type: integer
+        userId:
+          type: integer
+        displayName:
+          type: string
+        avatarUrl:
+          type: ["string", "null"]
+        xp:
+          type: integer
+        streak:
+          type: integer
+        weeklyXp:
+          type: integer
+      required:
+        - rank
+        - userId
+        - displayName
+        - xp
+        - streak
+        - weeklyXp
+
+    Language:
+      type: object
+      properties:
+        code:
+          type: string
+        name:
+          type: string
+        nativeName:
+          type: string
+        flagEmoji:
+          type: string
+      required:
+        - code
+        - name
+        - nativeName
+        - flagEmoji

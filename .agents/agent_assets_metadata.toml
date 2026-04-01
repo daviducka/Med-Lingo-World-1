@@ -1,0 +1,8 @@
+uploads = []
+outputs = []
+
+[[generated]]
+id = "qYXVDf7a59mgErnornuUR"
+uri = "file://artifacts/ellingo/public/avatar.png"
+type = "image"
+title = "Avatar for default user profile"

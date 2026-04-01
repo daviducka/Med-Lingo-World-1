@@ -15,82 +15,114 @@ pnpm workspace monorepo using TypeScript. Each package manages its own dependenc
 - **Validation**: Zod (`zod/v4`), `drizzle-zod`
 - **API codegen**: Orval (from OpenAPI spec)
 - **Build**: esbuild (CJS bundle)
+- **Frontend**: React + Vite + Tailwind CSS (shadcn/ui)
+- **Routing**: Wouter
+- **Charts**: Recharts
+
+## Project: El_lingo
+
+El_lingo is a Duolingo-style medical learning platform for medical students. Available in 15+ languages.
+
+### Features
+- Gamified medical lessons (anatomy, pharmacology, physiology, pathology, microbiology, biochemistry, neuroanatomy, immunology)
+- XP, streaks, hearts (lives), leaderboard
+- Hard Round mode — board-exam-level questions (USMLE style)
+- Multi-language support (15 languages)
+- AdSense placeholder in footer for monetization
+- Progress tracking with charts
+
+### Artifacts
+- `artifacts/ellingo` — React/Vite frontend (port from env PORT, path: `/`)
+- `artifacts/api-server` — Express API (port 8080, path: `/api`)
 
 ## Structure
 
 ```text
 artifacts-monorepo/
-├── artifacts/              # Deployable applications
-│   └── api-server/         # Express API server
+├── artifacts/
+│   ├── api-server/         # Express API server
+│   └── ellingo/            # El_lingo React frontend
 ├── lib/                    # Shared libraries
 │   ├── api-spec/           # OpenAPI spec + Orval codegen config
 │   ├── api-client-react/   # Generated React Query hooks
 │   ├── api-zod/            # Generated Zod schemas from OpenAPI
 │   └── db/                 # Drizzle ORM schema + DB connection
-├── scripts/                # Utility scripts (single workspace package)
-│   └── src/                # Individual .ts scripts, run via `pnpm --filter @workspace/scripts run <script>`
-├── pnpm-workspace.yaml     # pnpm workspace (artifacts/*, lib/*, lib/integrations/*, scripts)
-├── tsconfig.base.json      # Shared TS options (composite, bundler resolution, es2022)
-├── tsconfig.json           # Root TS project references
-└── package.json            # Root package with hoisted devDeps
+│       └── src/schema/
+│           ├── users.ts
+│           ├── courses.ts
+│           ├── lessons.ts
+│           ├── questions.ts
+│           ├── user_progress.ts
+│           └── hard_round_results.ts
+├── scripts/
+├── pnpm-workspace.yaml
+├── tsconfig.base.json
+├── tsconfig.json
+└── package.json
 ```
 
 ## TypeScript & Composite Projects
 
-Every package extends `tsconfig.base.json` which sets `composite: true`. The root `tsconfig.json` lists all packages as project references. This means:
+Every package extends `tsconfig.base.json` which sets `composite: true`. The root `tsconfig.json` lists all packages as project references.
 
-- **Always typecheck from the root** — run `pnpm run typecheck` (which runs `tsc --build --emitDeclarationOnly`). This builds the full dependency graph so that cross-package imports resolve correctly. Running `tsc` inside a single package will fail if its dependencies haven't been built yet.
-- **`emitDeclarationOnly`** — we only emit `.d.ts` files during typecheck; actual JS bundling is handled by esbuild/tsx/vite...etc, not `tsc`.
-- **Project references** — when package A depends on package B, A's `tsconfig.json` must list B in its `references` array. `tsc --build` uses this to determine build order and skip up-to-date packages.
+- **Always typecheck from the root** — run `pnpm run typecheck`
+- **`emitDeclarationOnly`** — we only emit `.d.ts` files during typecheck
+- **Project references** — when package A depends on package B, A's `tsconfig.json` must list B in its `references` array.
 
 ## Root Scripts
 
-- `pnpm run build` — runs `typecheck` first, then recursively runs `build` in all packages that define it
+- `pnpm run build` — runs `typecheck` first, then recursively runs `build` in all packages
 - `pnpm run typecheck` — runs `tsc --build --emitDeclarationOnly` using project references
 
 ## Packages
 
+### `artifacts/ellingo` (`@workspace/ellingo`)
+
+React+Vite frontend. Pages:
+- `/` — Home/Dashboard (stats, course cards, Hard Round CTA)
+- `/learn` — Course selection grid with language filter
+- `/learn/:courseId` — Course detail with lesson path
+- `/lesson/:lessonId` — Duolingo-style immersive quiz
+- `/hard-round` — Board-level challenge mode
+- `/leaderboard` — Weekly XP rankings
+- `/progress` — Progress charts
+- `/profile` — User profile and settings
+
 ### `artifacts/api-server` (`@workspace/api-server`)
 
-Express 5 API server. Routes live in `src/routes/` and use `@workspace/api-zod` for request and response validation and `@workspace/db` for persistence.
-
-- Entry: `src/index.ts` — reads `PORT`, starts Express
-- App setup: `src/app.ts` — mounts CORS, JSON/urlencoded parsing, routes at `/api`
-- Routes: `src/routes/index.ts` mounts sub-routers; `src/routes/health.ts` exposes `GET /health` (full path: `/api/health`)
-- Depends on: `@workspace/db`, `@workspace/api-zod`
-- `pnpm --filter @workspace/api-server run dev` — run the dev server
-- `pnpm --filter @workspace/api-server run build` — production esbuild bundle (`dist/index.cjs`)
-- Build bundles an allowlist of deps (express, cors, pg, drizzle-orm, zod, etc.) and externalizes the rest
+Express 5 API. Routes:
+- `GET/PATCH /api/users/profile` — User profile
+- `GET /api/users/stats` — XP, streak, hearts, rank
+- `GET /api/courses` — List all courses
+- `GET /api/courses/:id` — Course with lessons
+- `GET /api/courses/:id/lessons` — Lessons with status
+- `GET /api/lessons/:id` — Lesson with questions
+- `POST /api/lessons/:id/complete` — Complete lesson, award XP
+- `GET /api/hard-round/questions` — Board-level questions
+- `POST /api/hard-round/submit` — Submit hard round answers
+- `GET /api/progress` — User course progress
+- `GET /api/progress/summary` — Aggregated summary
+- `GET /api/leaderboard` — Weekly XP leaderboard
+- `GET /api/languages` — 15 supported languages
 
 ### `lib/db` (`@workspace/db`)
 
-Database layer using Drizzle ORM with PostgreSQL. Exports a Drizzle client instance and schema models.
+Database schema tables: users, courses, lessons, questions, user_progress, hard_round_results.
 
-- `src/index.ts` — creates a `Pool` + Drizzle instance, exports schema
-- `src/schema/index.ts` — barrel re-export of all models
-- `src/schema/<modelname>.ts` — table definitions with `drizzle-zod` insert schemas (no models definitions exist right now)
-- `drizzle.config.ts` — Drizzle Kit config (requires `DATABASE_URL`, automatically provided by Replit)
-- Exports: `.` (pool, db, schema), `./schema` (schema only)
-
-Production migrations are handled by Replit when publishing. In development, we just use `pnpm --filter @workspace/db run push`, and we fallback to `pnpm --filter @workspace/db run push-force`.
+- `pnpm --filter @workspace/db run push` — sync schema
+- `pnpm --filter @workspace/db run push-force` — force sync
 
 ### `lib/api-spec` (`@workspace/api-spec`)
 
-Owns the OpenAPI 3.1 spec (`openapi.yaml`) and the Orval config (`orval.config.ts`). Running codegen produces output into two sibling packages:
+OpenAPI 3.1 spec at `openapi.yaml`. Run codegen: `pnpm --filter @workspace/api-spec run codegen`
 
-1. `lib/api-client-react/src/generated/` — React Query hooks + fetch client
-2. `lib/api-zod/src/generated/` — Zod schemas
+## Monetization
 
-Run codegen: `pnpm --filter @workspace/api-spec run codegen`
+AdSense placeholder div with id="ad-container" is present in the Layout footer. To activate AdSense:
+1. Sign up at https://adsense.google.com
+2. Get your publisher ID
+3. Replace the placeholder div with the AdSense script tag
 
-### `lib/api-zod` (`@workspace/api-zod`)
+## Default User
 
-Generated Zod schemas from the OpenAPI spec (e.g. `HealthCheckResponse`). Used by `api-server` for response validation.
-
-### `lib/api-client-react` (`@workspace/api-client-react`)
-
-Generated React Query hooks and fetch client from the OpenAPI spec (e.g. `useHealthCheck`, `healthCheck`).
-
-### `scripts` (`@workspace/scripts`)
-
-Utility scripts package. Each script is a `.ts` file in `src/` with a corresponding npm script in `package.json`. Run scripts via `pnpm --filter @workspace/scripts run <script>`. Scripts can import any workspace package (e.g., `@workspace/db`) by adding it as a dependency in `scripts/package.json`.
+The API uses a single default user (id=1, username="medstudent") for demo purposes. In production, implement proper authentication.

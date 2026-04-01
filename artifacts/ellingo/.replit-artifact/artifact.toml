@@ -1,0 +1,31 @@
+kind = "web"
+previewPath = "/"
+title = "El_lingo - Medical Language Learning"
+version = "1.0.0"
+id = "artifacts/ellingo"
+router = "path"
+
+[[integratedSkills]]
+name = "react-vite"
+version = "1.0.0"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 23563
+
+[services.development]
+run = "pnpm --filter @workspace/ellingo run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/ellingo", "run", "build" ]
+publicDir = "artifacts/ellingo/dist/public"
+serve = "static"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "23563"
+BASE_PATH = "/"
