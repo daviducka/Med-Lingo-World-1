@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { BookOpen, Trophy } from "lucide-react";
-import { useGetCourse } from "@workspace/api-client-react";
+import { ArrowLeft } from "lucide-react";
 import { useGetUserProfile } from "@workspace/api-client-react";
 import { Button } from "@/components/ui/button";
 import MatchTheTerm from "./games/MatchTheTerm";
@@ -13,115 +12,164 @@ import Crossword from "./games/Crossword";
 type GameId = "match-term" | "daily-challenge" | "guess-organ" | "flashcards" | "quiz" | "crossword" | null;
 
 const GAMES = [
-  {
-    id: "match-term" as GameId,
-    emoji: "🔗",
-    title: "Match the Term",
-    desc: "Lidh termat me përkufizimet e tyre",
-    bg: "from-blue-400 to-blue-600",
-  },
-  {
-    id: "daily-challenge" as GameId,
-    emoji: "📅",
-    title: "Daily Challenge",
-    desc: "Loja e re çdo ditë — sfida e përditshme",
-    bg: "from-purple-400 to-purple-600",
-  },
-  {
-    id: "guess-organ" as GameId,
-    emoji: "🫀",
-    title: "Guess the Organ",
-    desc: "Identifiko organet dhe sistemet e trupit",
-    bg: "from-pink-400 to-rose-600",
-  },
-  {
-    id: "flashcards" as GameId,
-    emoji: "🎴",
-    title: "Flashcards Game",
-    desc: "Mëso me kartela — shpejtësi dhe memorie",
-    bg: "from-orange-400 to-orange-600",
-  },
-  {
-    id: "quiz" as GameId,
-    emoji: "❓",
-    title: "Multiple Choice Quiz",
-    desc: "Pyetje me alternativa — testo njohuritë",
-    bg: "from-cyan-400 to-blue-600",
-  },
-  {
-    id: "crossword" as GameId,
-    emoji: "🔤",
-    title: "Medical Crossword",
-    desc: "Fjalëkryqe mjekësore — plotëso rutën",
-    bg: "from-green-400 to-green-600",
-  },
+  { id: "match-term" as GameId, emoji: "🔗", title: "Match the Term", desc: "Lidh termat me përkufizimet", bg: "from-blue-400 to-blue-600", needsCourse: true },
+  { id: "daily-challenge" as GameId, emoji: "📅", title: "Daily Challenge", desc: "Sfida e përditshme", bg: "from-purple-400 to-purple-600", needsCourse: false },
+  { id: "guess-organ" as GameId, emoji: "🫀", title: "Guess the Organ", desc: "Identifiko organet e trupit", bg: "from-pink-400 to-rose-600", needsCourse: true },
+  { id: "flashcards" as GameId, emoji: "🎴", title: "Flashcards Game", desc: "Mëso me kartela interaktive", bg: "from-orange-400 to-orange-600", needsCourse: true },
+  { id: "quiz" as GameId, emoji: "❓", title: "Multiple Choice Quiz", desc: "Pyetje me alternativa", bg: "from-cyan-400 to-blue-600", needsCourse: true },
+  { id: "crossword" as GameId, emoji: "🔤", title: "Medical Crossword", desc: "Fjalëkryqe mjekësore", bg: "from-green-400 to-green-600", needsCourse: true },
 ];
 
-function GameHub({
-  onSelectGame,
-  selectedCourse,
-}: {
-  onSelectGame: (gameId: GameId, courseId?: number) => void;
-  selectedCourse: number | null;
-}) {
+interface Course {
+  id: number;
+  title: string;
+  iconEmoji: string;
+  category: string;
+  color: string;
+  totalLessons: number;
+}
+
+export default function GerardGames() {
+  const [activeGame, setActiveGame] = useState<GameId>(null);
+  const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
+  const [courses, setCourses] = useState<Course[]>([]);
+  const [step, setStep] = useState<"courses" | "games" | "playing">("courses");
   const { data: profile } = useGetUserProfile();
-  const [courses, setCourses] = useState<any[]>([]);
   const language = profile?.selectedLanguage || "sq";
 
   useEffect(() => {
-    // Fetch courses based on user's language
     fetch(`/api/courses?language=${language}`)
       .then(r => r.json())
       .then(data => setCourses(data || []))
       .catch(() => setCourses([]));
   }, [language]);
 
+  const handleSelectCourse = (course: Course) => {
+    setSelectedCourse(course);
+    setStep("games");
+  };
+
+  const handleSelectGame = (gameId: GameId) => {
+    if (gameId === "daily-challenge") {
+      setActiveGame(gameId);
+      setStep("playing");
+      return;
+    }
+    if (!selectedCourse) return;
+    setActiveGame(gameId);
+    setStep("playing");
+  };
+
+  const handleBack = () => {
+    if (step === "playing") {
+      setActiveGame(null);
+      setStep("games");
+    } else if (step === "games") {
+      setSelectedCourse(null);
+      setStep("courses");
+    }
+  };
+
+  // ─── Render active game ──────────────────────────────────────────────────
+  if (step === "playing" && selectedCourse) {
+    if (activeGame === "match-term") return <MatchTheTerm courseId={selectedCourse.id} onBack={handleBack} />;
+    if (activeGame === "guess-organ") return <GuessTheOrgan courseId={selectedCourse.id} onBack={handleBack} />;
+    if (activeGame === "flashcards") return <FlashcardsGame courseId={selectedCourse.id} onBack={handleBack} />;
+    if (activeGame === "quiz") return <MultipleChoiceQuiz courseId={selectedCourse.id} onBack={handleBack} />;
+    if (activeGame === "crossword") return <Crossword courseId={selectedCourse.id} onBack={handleBack} />;
+  }
+  if (step === "playing" && activeGame === "daily-challenge") {
+    return <DailyChallenge onBack={handleBack} />;
+  }
+
+  // ─── Step 1: Course Selection ────────────────────────────────────────────
+  if (step === "courses") {
+    return (
+      <div className="max-w-5xl mx-auto">
+        <div className="text-center mb-10">
+          <h1 className="text-5xl font-bold mb-2 shimmer-text" style={{ fontFamily: "Fredoka One, sans-serif" }}>
+            Gerard Games 🎮
+          </h1>
+          <p className="text-muted-foreground font-semibold text-lg">
+            Zgjedh një kurs për të filluar lojën
+          </p>
+          <p className="text-xs text-muted-foreground italic mt-1">by Elson</p>
+        </div>
+
+        {/* Daily Challenge - no course needed */}
+        <div
+          onClick={() => { setActiveGame("daily-challenge"); setStep("playing"); }}
+          className="mb-6 cursor-pointer rounded-3xl p-5 bg-gradient-to-r from-purple-500 to-violet-600 text-white shadow-xl hover:-translate-y-1 transition-all duration-200 flex items-center gap-4"
+        >
+          <div className="text-5xl">📅</div>
+          <div className="flex-1">
+            <h2 className="text-2xl font-bold" style={{ fontFamily: "Fredoka One, sans-serif" }}>Daily Challenge</h2>
+            <p className="text-white/85 text-sm font-semibold">Sfida e përditshme — nuk kërkon kurs</p>
+          </div>
+          <div className="bg-white/25 px-4 py-2 rounded-full font-bold text-sm">Luaj →</div>
+        </div>
+
+        {/* Course Grid */}
+        <h2 className="font-bold text-xl mb-4">Zgjedh Kursin 📚</h2>
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+          {courses.map(course => (
+            <button
+              key={course.id}
+              onClick={() => handleSelectCourse(course)}
+              className="p-4 rounded-2xl border-2 text-left transition-all duration-200 hover:-translate-y-1 hover:shadow-lg group"
+              style={{ borderColor: `${course.color}40`, backgroundColor: `${course.color}10` }}
+            >
+              <div className="text-4xl mb-3">{course.iconEmoji}</div>
+              <p className="font-bold text-sm leading-tight">{course.title}</p>
+              <p className="text-xs text-muted-foreground mt-1 capitalize">{course.category}</p>
+              <div
+                className="mt-3 text-xs font-bold px-3 py-1 rounded-full inline-block"
+                style={{ backgroundColor: `${course.color}25`, color: course.color }}
+              >
+                {course.totalLessons} mësime →
+              </div>
+            </button>
+          ))}
+        </div>
+
+        <div className="mt-8 text-center text-sm text-muted-foreground font-medium">
+          🎮 Gerard Games · <span className="text-primary font-bold">Created by Elson</span>
+        </div>
+      </div>
+    );
+  }
+
+  // ─── Step 2: Games Selection ─────────────────────────────────────────────
   return (
     <div className="max-w-5xl mx-auto">
-      {/* Header */}
-      <div className="text-center mb-10">
-        <h1
-          className="text-6xl font-bold mb-3 shimmer-text"
-          style={{ fontFamily: "Fredoka One, sans-serif" }}
+      {/* Header with back + selected course */}
+      <div className="flex items-center gap-4 mb-8">
+        <Button variant="ghost" onClick={handleBack} className="font-bold gap-2 rounded-xl">
+          <ArrowLeft className="w-4 h-4" /> Ndrysho Kursin
+        </Button>
+        <div
+          className="flex items-center gap-3 px-4 py-2 rounded-2xl border-2"
+          style={{ borderColor: `${selectedCourse?.color}50`, backgroundColor: `${selectedCourse?.color}15` }}
         >
-          Gerard Games 🎮
-        </h1>
-        <p className="text-muted-foreground font-semibold text-xl mb-2">
-          6 Lojëra Interaktive për të Mësuar Mjekësinë
-        </p>
-        <p className="text-xs text-muted-foreground italic font-medium">
-          by Elson
-        </p>
-      </div>
-
-      {/* Course Selector */}
-      {selectedCourse === null && (
-        <div className="mb-10 bg-card border-2 border-border rounded-2xl p-6">
-          <h2 className="font-bold text-lg mb-4">Zgjedh një Kurs</h2>
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-            {courses?.map(course => (
-              <button
-                key={course.id}
-                onClick={() => {
-                  /* Store selected course for games */
-                }}
-                className="p-3 rounded-xl border-2 border-border hover:border-primary text-left transition-all hover:bg-primary/5"
-              >
-                <div className="text-2xl mb-2">{course.iconEmoji}</div>
-                <p className="font-bold text-sm">{course.title}</p>
-                <p className="text-xs text-muted-foreground">{course.category}</p>
-              </button>
-            ))}
+          <span className="text-2xl">{selectedCourse?.iconEmoji}</span>
+          <div>
+            <p className="font-bold text-sm">{selectedCourse?.title}</p>
+            <p className="text-xs text-muted-foreground capitalize">{selectedCourse?.category}</p>
           </div>
         </div>
-      )}
+      </div>
+
+      <div className="text-center mb-8">
+        <h2 className="text-3xl font-bold" style={{ fontFamily: "Fredoka One, sans-serif" }}>Zgjedh Lojën 🕹️</h2>
+        <p className="text-muted-foreground font-semibold mt-1">6 lojëra interaktive për të mësuar</p>
+      </div>
 
       {/* Games Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
         {GAMES.map(game => (
           <button
             key={game.id}
-            onClick={() => onSelectGame(game.id, selectedCourse || undefined)}
+            onClick={() => handleSelectGame(game.id)}
             className={`group relative overflow-hidden rounded-3xl p-6 text-left text-white shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 hover:scale-[1.02] active:scale-[0.98] bg-gradient-to-br ${game.bg}`}
           >
             <div className="absolute -right-4 -bottom-4 text-9xl opacity-15 select-none pointer-events-none">
@@ -129,10 +177,7 @@ function GameHub({
             </div>
             <div className="relative z-10">
               <div className="text-5xl mb-3 drop-shadow">{game.emoji}</div>
-              <h2
-                className="text-2xl font-bold mb-1 drop-shadow"
-                style={{ fontFamily: "Fredoka One, sans-serif" }}
-              >
+              <h2 className="text-xl font-bold mb-1 drop-shadow" style={{ fontFamily: "Fredoka One, sans-serif" }}>
                 {game.title}
               </h2>
               <p className="text-white/85 font-semibold text-sm">{game.desc}</p>
@@ -144,52 +189,9 @@ function GameHub({
         ))}
       </div>
 
-      {/* Footer */}
-      <div className="text-center text-sm text-muted-foreground font-medium">
-        🎮 Gerard Games · Lojëra mini në El_lingo ·{" "}
-        <span className="text-primary font-bold">Created by Elson</span>
+      <div className="mt-8 text-center text-sm text-muted-foreground font-medium">
+        🎮 Gerard Games · <span className="text-primary font-bold">Created by Elson</span>
       </div>
     </div>
-  );
-}
-
-export default function GerardGames() {
-  const [activeGame, setActiveGame] = useState<GameId>(null);
-  const [selectedCourse, setSelectedCourse] = useState<number | null>(null);
-
-  const handleSelectGame = (gameId: GameId, courseId?: number) => {
-    if (gameId === "daily-challenge") {
-      setActiveGame(gameId);
-    } else if (courseId) {
-      setSelectedCourse(courseId);
-      setActiveGame(gameId);
-    }
-  };
-
-  const handleBack = () => {
-    setActiveGame(null);
-    setSelectedCourse(null);
-  };
-
-  // Render selected game
-  if (activeGame === "match-term" && selectedCourse)
-    return <MatchTheTerm courseId={selectedCourse} onBack={handleBack} />;
-  if (activeGame === "daily-challenge")
-    return <DailyChallenge onBack={handleBack} />;
-  if (activeGame === "guess-organ" && selectedCourse)
-    return <GuessTheOrgan courseId={selectedCourse} onBack={handleBack} />;
-  if (activeGame === "flashcards" && selectedCourse)
-    return <FlashcardsGame courseId={selectedCourse} onBack={handleBack} />;
-  if (activeGame === "quiz" && selectedCourse)
-    return <MultipleChoiceQuiz courseId={selectedCourse} onBack={handleBack} />;
-  if (activeGame === "crossword" && selectedCourse)
-    return <Crossword courseId={selectedCourse} onBack={handleBack} />;
-
-  // Default: show games hub
-  return (
-    <GameHub
-      onSelectGame={handleSelectGame}
-      selectedCourse={selectedCourse}
-    />
   );
 }

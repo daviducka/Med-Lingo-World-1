@@ -114,18 +114,10 @@ router.get("/flashcards-game", async (req, res): Promise<void> => {
 router.get("/flashcards-game/:courseId", async (req, res): Promise<void> => {
   const courseId = parseInt(req.params.courseId);
 
-  const lessons = await db
-    .select({ id: lessonsTable.id })
-    .from(lessonsTable)
-    .where(eq(lessonsTable.courseId, courseId));
-  const lessonIds = lessons.map(l => l.id);
-
-  let cards = await db
+  const cards = await db
     .select()
     .from(flashcardsTable)
     .where(eq(flashcardsTable.courseId, courseId));
-
-  cards = cards.filter(c => lessonIds.includes(c.lessonId || 0));
 
   const gameCards = cards.map(c => ({
     id: c.id,

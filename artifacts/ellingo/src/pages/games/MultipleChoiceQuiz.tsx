@@ -21,7 +21,7 @@ export default function MultipleChoiceQuiz({ courseId, onBack }: { courseId: num
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch(`/api/games/quiz/${courseId}/10`)
+    fetch(`/api/games/quiz/${courseId}`)
       .then(r => r.json())
       .then(data => { setQuestions(data.questions || []); setLoading(false); })
       .catch(() => setLoading(false));
