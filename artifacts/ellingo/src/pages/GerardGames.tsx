@@ -65,15 +65,16 @@ function GameHub({
   selectedCourse: number | null;
 }) {
   const { data: profile } = useGetUserProfile();
+  const [courses, setCourses] = useState<any[]>([]);
   const language = profile?.selectedLanguage || "sq";
-  
-  // Mock courses data - in production would fetch from API
-  const mockCourses = [
-    { id: 1, title: "Anatomia Njerëzore", category: "anatomy", iconEmoji: "🦴", color: "#ef4444", language: "sq" },
-    { id: 2, title: "Farmakologjia", category: "pharmacology", iconEmoji: "💊", color: "#3b82f6", language: "sq" },
-    { id: 3, title: "Fiziologjia", category: "physiology", iconEmoji: "❤️", color: "#22c55e", language: "sq" },
-  ];
-  const courses = mockCourses;
+
+  useEffect(() => {
+    // Fetch courses based on user's language
+    fetch(`/api/courses?language=${language}`)
+      .then(r => r.json())
+      .then(data => setCourses(data || []))
+      .catch(() => setCourses([]));
+  }, [language]);
 
   return (
     <div className="max-w-5xl mx-auto">
