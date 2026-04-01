@@ -1,40 +1,24 @@
-import React, { useState, useEffect } from "react";
-import { Check, Loader } from "lucide-react";
+import React, { useEffect, useState } from "react";
+import { Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
+const PAYPAL_EMAIL = "njdj0665@gmail.com";
+const PRICE = "15.00";
+const CURRENCY = "EUR";
+const RETURN_PATH = "/payment-success";
+const CANCEL_PATH = "/pricing";
+
 export default function Pricing() {
-  const [isLoading, setIsLoading] = useState(false);
   const [isSubscribed, setIsSubscribed] = useState(false);
-  const [error, setError] = useState("");
+  const [origin, setOrigin] = useState("");
 
   useEffect(() => {
+    setOrigin(window.location.origin);
     fetch("/api/payments/is-subscribed")
       .then(r => r.json())
       .then(data => setIsSubscribed(data.isSubscribed))
       .catch(() => setIsSubscribed(false));
   }, []);
-
-  const handlePayPalCheckout = async () => {
-    setIsLoading(true);
-    setError("");
-
-    try {
-      const res = await fetch("/api/paypal/create-subscription", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-      });
-
-      if (!res.ok) throw new Error("Gabim në PayPal");
-
-      const { approvalUrl } = await res.json();
-      if (approvalUrl) {
-        window.location.href = approvalUrl;
-      }
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Gabim i panjohur");
-      setIsLoading(false);
-    }
-  };
 
   if (isSubscribed) {
     return (
@@ -95,25 +79,27 @@ export default function Pricing() {
             ))}
           </div>
 
-          {/* PayPal Button */}
-          <Button
-            onClick={handlePayPalCheckout}
-            disabled={isLoading}
-            className="w-full py-6 text-lg font-bold rounded-2xl bg-gradient-to-r from-blue-600 to-blue-800 hover:from-blue-700 hover:to-blue-900 shadow-lg"
-          >
-            {isLoading ? (
-              <>
-                <Loader className="w-5 h-5 mr-2 animate-spin" />
-                Duke përpunuar...
-              </>
-            ) : (
-              "🅿️ Paguaj me PayPal"
-            )}
-          </Button>
-
-          {error && (
-            <p className="text-red-600 font-bold text-sm mt-4 text-center">{error}</p>
-          )}
+          {/* PayPal Direct Form */}
+          <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
+            <input type="hidden" name="cmd" value="_xclick-subscriptions" />
+            <input type="hidden" name="business" value={PAYPAL_EMAIL} />
+            <input type="hidden" name="item_name" value="El_lingo Premium - Abonim Mujor" />
+            <input type="hidden" name="a3" value={PRICE} />
+            <input type="hidden" name="p3" value="1" />
+            <input type="hidden" name="t3" value="M" />
+            <input type="hidden" name="src" value="1" />
+            <input type="hidden" name="currency_code" value={CURRENCY} />
+            <input type="hidden" name="return" value={origin + RETURN_PATH} />
+            <input type="hidden" name="cancel_return" value={origin + CANCEL_PATH} />
+            <input type="hidden" name="no_note" value="1" />
+            <input type="hidden" name="no_shipping" value="1" />
+            <button
+              type="submit"
+              className="w-full py-4 text-lg font-bold rounded-2xl bg-gradient-to-r from-blue-600 to-blue-800 hover:from-blue-700 hover:to-blue-900 shadow-lg text-white transition-all"
+            >
+              🅿️ Paguaj me PayPal
+            </button>
+          </form>
 
           {/* Secure payment badge */}
           <div className="text-center mt-6">
@@ -146,10 +132,10 @@ export default function Pricing() {
         <p className="text-muted-foreground font-medium">
           Pyetje? Kontaktohuni në{" "}
           <a
-            href="mailto:edg.businessofficial@gmail.com"
+            href="mailto:njdj0665@gmail.com"
             className="text-primary font-bold hover:underline"
           >
-            edg.businessofficial@gmail.com
+            njdj0665@gmail.com
           </a>
         </p>
       </div>
