@@ -101,6 +101,8 @@ export default function Pricing() {
           {/* PayPal Link Button */}
           <a
             href={PAYPAL_URL}
+            target="_blank"
+            rel="noopener noreferrer"
             className="block w-full py-4 text-center text-lg font-bold rounded-2xl bg-gradient-to-r from-blue-600 to-blue-800 hover:from-blue-700 hover:to-blue-900 shadow-lg text-white transition-all"
           >
             🅿️ Paguaj me PayPal
