@@ -10,6 +10,8 @@ import languagesRouter from "./languages";
 import flashcardsRouter from "./flashcards";
 import studyNotesRouter from "./study-notes";
 import examPrepRouter from "./exam-prep";
+import aiDoctorRouter from "./ai-doctor";
+import elNotesRouter from "./el-notes";
 
 const router: IRouter = Router();
 
@@ -24,5 +26,7 @@ router.use(languagesRouter);
 router.use(flashcardsRouter);
 router.use(studyNotesRouter);
 router.use(examPrepRouter);
+router.use("/ai-doctor", aiDoctorRouter);
+router.use("/notes", elNotesRouter);
 
 export default router;

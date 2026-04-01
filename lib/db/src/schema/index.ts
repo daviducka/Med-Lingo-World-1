@@ -6,3 +6,6 @@ export * from "./user_progress";
 export * from "./hard_round_results";
 export * from "./flashcards";
 export * from "./study_notes";
+export * from "./el_notes";
+export * from "./conversations";
+export * from "./messages";

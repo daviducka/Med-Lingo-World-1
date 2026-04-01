@@ -16,6 +16,9 @@ import Profile from "@/pages/Profile";
 import Flashcards from "@/pages/Flashcards";
 import StudyNotes from "@/pages/StudyNotes";
 import ExamPrep from "@/pages/ExamPrep";
+import AiDoctor from "@/pages/AiDoctor";
+import ElNotes from "@/pages/ElNotes";
+import GerardGames from "@/pages/GerardGames";
 
 const queryClient = new QueryClient();
 
@@ -24,7 +27,7 @@ function Router() {
     <Switch>
       <Route path="/lesson/:lessonId" component={LessonQuiz} />
       <Route path="/hard-round" component={HardRound} />
-      
+
       <Route>
         <Layout>
           <Switch>
@@ -34,6 +37,9 @@ function Router() {
             <Route path="/flashcards" component={Flashcards} />
             <Route path="/study-notes" component={StudyNotes} />
             <Route path="/exam-prep" component={ExamPrep} />
+            <Route path="/ai-doctor" component={AiDoctor} />
+            <Route path="/notes" component={ElNotes} />
+            <Route path="/games" component={GerardGames} />
             <Route path="/leaderboard" component={Leaderboard} />
             <Route path="/progress" component={Progress} />
             <Route path="/profile" component={Profile} />
