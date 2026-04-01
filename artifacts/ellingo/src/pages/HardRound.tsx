@@ -69,18 +69,18 @@ export default function HardRound() {
           
           <div>
             <h1 className="text-4xl font-black text-red-500 tracking-tight uppercase mb-2">Hard Round</h1>
-            <p className="text-slate-400 font-bold text-lg">USMLE Board-Level Questions</p>
+            <p className="text-slate-400 font-bold text-lg">Pyetje USMLE — Niveli i Provimit</p>
           </div>
 
           <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 text-left space-y-4">
             <div className="flex items-center gap-3 font-bold text-slate-300">
-              <Timer className="text-red-400" /> 2:00 Minutes Total
+              <Timer className="text-red-400" /> 2:00 Minuta Gjithsej
             </div>
             <div className="flex items-center gap-3 font-bold text-slate-300">
-              <Shield className="text-red-400" /> 10 High-Difficulty Questions
+              <Shield className="text-red-400" /> 10 Pyetje Shumë të Vështira
             </div>
             <div className="flex items-center gap-3 font-bold text-slate-300">
-              <span className="text-red-400">2x</span> Double XP Reward
+              <span className="text-red-400">2x</span> Shpërblim XP i Dyfishtë
             </div>
           </div>
 
@@ -89,11 +89,11 @@ export default function HardRound() {
             className="w-full h-16 text-xl font-black bg-red-600 hover:bg-red-700 text-white rounded-2xl border-b-[6px] border-red-800 active:border-b-0 active:translate-y-[6px] transition-all uppercase tracking-wider"
             onClick={() => setStarted(true)}
           >
-            Start Challenge
+            FILLO SFIDËN
           </Button>
 
           <Button variant="ghost" className="text-slate-500 hover:text-slate-300 font-bold" onClick={() => setLocation('/')}>
-            Cancel
+            Anulo
           </Button>
         </div>
       </div>
@@ -104,20 +104,20 @@ export default function HardRound() {
     return (
       <div className="fixed inset-0 bg-slate-950 text-slate-50 z-[100] flex flex-col items-center justify-center p-6 text-center">
         <div className="w-full max-w-lg space-y-8 animate-in fade-in duration-500">
-          <h1 className="text-4xl font-black text-red-500 uppercase">Round Complete</h1>
+          <h1 className="text-4xl font-black text-red-500 uppercase">Raundi Përfundoi!</h1>
           
           {result ? (
             <div className="bg-slate-900 border border-slate-800 rounded-3xl p-8 space-y-6">
               <div className="text-7xl font-black text-white">{result.score}%</div>
-              <p className="text-slate-400 font-bold text-lg">{result.correctCount} out of {result.totalQuestions} correct</p>
+              <p className="text-slate-400 font-bold text-lg">{result.correctCount} nga {result.totalQuestions} të sakta</p>
               
               <div className="bg-red-500/10 border border-red-500/20 rounded-2xl p-4">
-                <div className="text-red-500 font-bold uppercase text-xs mb-1">XP Earned</div>
+                <div className="text-red-500 font-bold uppercase text-xs mb-1">XP Fituar</div>
                 <div className="text-3xl font-black text-red-400">+{result.xpEarned}</div>
               </div>
             </div>
           ) : (
-            <div className="animate-pulse font-bold text-slate-500">Calculating results...</div>
+            <div className="animate-pulse font-bold text-slate-500">Duke llogaritur rezultatin...</div>
           )}
 
           <Button 
@@ -125,7 +125,7 @@ export default function HardRound() {
             className="w-full h-14 text-lg font-bold bg-slate-800 hover:bg-slate-700 text-white rounded-2xl"
             onClick={() => setLocation('/')}
           >
-            Return to Dashboard
+            Kthehu në Kryefaqe
           </Button>
         </div>
       </div>
@@ -133,7 +133,7 @@ export default function HardRound() {
   }
 
   if (isLoading || !questions) {
-    return <div className="fixed inset-0 bg-slate-950 flex items-center justify-center text-red-500 font-black text-2xl uppercase tracking-widest animate-pulse z-[100]">Loading...</div>;
+    return <div className="fixed inset-0 bg-slate-950 flex items-center justify-center text-red-500 font-black text-2xl uppercase tracking-widest animate-pulse z-[100]">Duke ngarkuar...</div>;
   }
 
   const currentQ = questions[currentIdx];
@@ -143,7 +143,7 @@ export default function HardRound() {
   return (
     <div className="fixed inset-0 bg-slate-950 text-slate-50 z-[100] flex flex-col font-sans">
       <div className="px-6 py-6 flex items-center justify-between border-b border-slate-800">
-        <div className="font-bold text-slate-400">Question {currentIdx + 1}/10</div>
+        <div className="font-bold text-slate-400">Pyetja {currentIdx + 1}/10</div>
         <div className={`font-black text-2xl flex items-center gap-2 ${timeLeft < 30 ? 'text-red-500 animate-pulse' : 'text-white'}`}>
           <Timer /> {mins}:{secs.toString().padStart(2, '0')}
         </div>

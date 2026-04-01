@@ -10,13 +10,13 @@ export default function Progress() {
 
   // Mock chart data based on summary for visual richness
   const chartData = [
-    { name: "Mon", xp: Math.floor(Math.random() * 200) + 50 },
-    { name: "Tue", xp: Math.floor(Math.random() * 200) + 50 },
-    { name: "Wed", xp: Math.floor(Math.random() * 200) + 50 },
-    { name: "Thu", xp: Math.floor(Math.random() * 200) + 50 },
-    { name: "Fri", xp: Math.floor(Math.random() * 200) + 50 },
-    { name: "Sat", xp: Math.floor(Math.random() * 300) + 100 },
-    { name: "Sun", xp: summary?.weeklyXp || Math.floor(Math.random() * 300) + 100 },
+    { name: "Hën", xp: Math.floor(Math.random() * 200) + 50 },
+    { name: "Mar", xp: Math.floor(Math.random() * 200) + 50 },
+    { name: "Mër", xp: Math.floor(Math.random() * 200) + 50 },
+    { name: "Enj", xp: Math.floor(Math.random() * 200) + 50 },
+    { name: "Pre", xp: Math.floor(Math.random() * 200) + 50 },
+    { name: "Sht", xp: Math.floor(Math.random() * 300) + 100 },
+    { name: "Die", xp: summary?.weeklyXp || Math.floor(Math.random() * 300) + 100 },
   ];
 
   if (isSummaryLoading || isProgressLoading) {
@@ -26,8 +26,8 @@ export default function Progress() {
   return (
     <div className="space-y-8 animate-in fade-in duration-500">
       <div>
-        <h1 className="text-3xl font-black tracking-tight mb-2">Your Progress</h1>
-        <p className="text-muted-foreground font-medium">Tracking your journey to becoming a medical expert.</p>
+        <h1 className="text-3xl font-black tracking-tight mb-2">Progresi Juaj</h1>
+        <p className="text-muted-foreground font-medium">Gjurmoni rrugëtimin tuaj drejt ekspertizës mjekësore.</p>
       </div>
 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -36,7 +36,7 @@ export default function Progress() {
             <Flame className="w-6 h-6 fill-current" />
           </div>
           <div className="text-3xl font-black">{summary?.currentStreak || 0}</div>
-          <div className="text-sm font-bold text-muted-foreground uppercase mt-1">Day Streak</div>
+          <div className="text-sm font-bold text-muted-foreground uppercase mt-1">Ditë Radhazi</div>
         </div>
         
         <div className="bg-card border-2 rounded-2xl p-4 md:p-6 text-center">
@@ -44,7 +44,7 @@ export default function Progress() {
             <Award className="w-6 h-6" />
           </div>
           <div className="text-3xl font-black">{summary?.totalXp || 0}</div>
-          <div className="text-sm font-bold text-muted-foreground uppercase mt-1">Total XP</div>
+          <div className="text-sm font-bold text-muted-foreground uppercase mt-1">XP Total</div>
         </div>
 
         <div className="bg-card border-2 rounded-2xl p-4 md:p-6 text-center">
@@ -52,7 +52,7 @@ export default function Progress() {
             <BookOpen className="w-6 h-6" />
           </div>
           <div className="text-3xl font-black">{summary?.lessonsCompleted || 0}</div>
-          <div className="text-sm font-bold text-muted-foreground uppercase mt-1">Lessons</div>
+          <div className="text-sm font-bold text-muted-foreground uppercase mt-1">Mësime</div>
         </div>
 
         <div className="bg-card border-2 rounded-2xl p-4 md:p-6 text-center">
@@ -60,12 +60,12 @@ export default function Progress() {
             <Target className="w-6 h-6" />
           </div>
           <div className="text-3xl font-black">{summary?.averageScore ? Math.round(summary.averageScore) : 0}%</div>
-          <div className="text-sm font-bold text-muted-foreground uppercase mt-1">Avg Score</div>
+          <div className="text-sm font-bold text-muted-foreground uppercase mt-1">Nota Mesatare</div>
         </div>
       </div>
 
       <div className="bg-card border-2 rounded-3xl p-6 md:p-8">
-        <h2 className="text-xl font-bold mb-8 flex items-center gap-2">XP History <span className="text-muted-foreground font-normal text-sm">(This Week)</span></h2>
+        <h2 className="text-xl font-bold mb-8 flex items-center gap-2">Historia e XP <span className="text-muted-foreground font-normal text-sm">(Kjo Javë)</span></h2>
         <div className="h-[300px] w-full">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={chartData} margin={{ top: 0, right: 0, left: -20, bottom: 0 }}>
@@ -84,7 +84,7 @@ export default function Progress() {
 
       {courseProgress && courseProgress.length > 0 && (
         <div className="space-y-4">
-          <h2 className="text-xl font-bold">Course Mastery</h2>
+          <h2 className="text-xl font-bold">Zotërimi i Lëndëve</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {courseProgress.map((course) => (
               <div key={course.courseId} className="bg-card border-2 rounded-2xl p-5 flex items-center gap-4">
@@ -97,7 +97,7 @@ export default function Progress() {
                 </div>
                 <div className="flex-1 min-w-0">
                   <h3 className="font-bold text-lg truncate">{course.courseName}</h3>
-                  <p className="text-muted-foreground font-medium text-sm">{course.completedLessons} / {course.totalLessons} Lessons</p>
+                  <p className="text-muted-foreground font-medium text-sm">{course.completedLessons} / {course.totalLessons} Mësime</p>
                 </div>
               </div>
             ))}

@@ -109,7 +109,7 @@ export default function Certificates() {
             <div className="text-4xl mb-2">🏆</div>
             <p className="text-3xl font-bold text-blue-700">{stats.total}</p>
             <p className="text-xs font-bold text-blue-600 uppercase tracking-wide mt-1">
-              Total
+              Gjithsej
             </p>
           </div>
           <div className="bg-gradient-to-br from-green-100 to-green-50 border-2 border-green-300 rounded-2xl p-6 text-center">
@@ -118,7 +118,7 @@ export default function Certificates() {
               {stats.completion}
             </p>
             <p className="text-xs font-bold text-green-600 uppercase tracking-wide mt-1">
-              Completion
+              Përfundim
             </p>
           </div>
           <div className="bg-gradient-to-br from-yellow-100 to-yellow-50 border-2 border-yellow-300 rounded-2xl p-6 text-center">
@@ -127,14 +127,14 @@ export default function Certificates() {
               {stats.excellence}
             </p>
             <p className="text-xs font-bold text-yellow-600 uppercase tracking-wide mt-1">
-              Excellence
+              Shkëlqyeshmëri
             </p>
           </div>
           <div className="bg-gradient-to-br from-purple-100 to-purple-50 border-2 border-purple-300 rounded-2xl p-6 text-center">
             <div className="text-4xl mb-2">👑</div>
             <p className="text-3xl font-bold text-purple-700">{stats.mastery}</p>
             <p className="text-xs font-bold text-purple-600 uppercase tracking-wide mt-1">
-              Mastery
+              Zotërim
             </p>
           </div>
           <div className="bg-gradient-to-br from-green-100 to-green-50 border-2 border-green-300 rounded-2xl p-6 text-center">
@@ -143,7 +143,7 @@ export default function Certificates() {
               {stats.daily_challenge}
             </p>
             <p className="text-xs font-bold text-green-600 uppercase tracking-wide mt-1">
-              Daily
+              Ditor
             </p>
           </div>
           <div className="bg-gradient-to-br from-pink-100 to-pink-50 border-2 border-pink-300 rounded-2xl p-6 text-center">
@@ -152,7 +152,7 @@ export default function Certificates() {
               {stats.weekly_challenge}
             </p>
             <p className="text-xs font-bold text-pink-600 uppercase tracking-wide mt-1">
-              Weekly
+              Javor
             </p>
           </div>
         </div>
@@ -178,7 +178,7 @@ export default function Certificates() {
               : "bg-blue-100 text-blue-700 hover:bg-blue-200"
           }`}
         >
-          🏅 Completion
+          🏅 Përfundim
         </button>
         <button
           onClick={() => setFilter("excellence")}
@@ -188,7 +188,7 @@ export default function Certificates() {
               : "bg-yellow-100 text-yellow-700 hover:bg-yellow-200"
           }`}
         >
-          ⭐ Excellence
+          ⭐ Shkëlqyeshmëri
         </button>
         <button
           onClick={() => setFilter("mastery")}
@@ -198,7 +198,7 @@ export default function Certificates() {
               : "bg-purple-100 text-purple-700 hover:bg-purple-200"
           }`}
         >
-          👑 Mastery
+          👑 Zotërim
         </button>
       </div>
 

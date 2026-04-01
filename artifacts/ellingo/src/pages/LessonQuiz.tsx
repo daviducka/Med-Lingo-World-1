@@ -23,7 +23,7 @@ export default function LessonQuiz() {
 
   const startTimeRef = useRef(Date.now());
 
-  if (isLoading || !lesson) return <div className="min-h-screen bg-background flex items-center justify-center font-bold text-xl animate-pulse">Loading...</div>;
+  if (isLoading || !lesson) return <div className="min-h-screen bg-background flex items-center justify-center font-bold text-xl animate-pulse">Duke ngarkuar...</div>;
 
   const questions = lesson.questions || [];
   const currentQ = questions[currentQIndex];
@@ -81,7 +81,7 @@ export default function LessonQuiz() {
     return (
       <div className="fixed inset-0 bg-background z-[100] flex flex-col items-center justify-center p-6 text-center animate-in zoom-in duration-500">
         <div className="w-full max-w-md space-y-8">
-          <h1 className="text-4xl font-black text-amber-500 drop-shadow-sm">Lesson Complete!</h1>
+          <h1 className="text-4xl font-black text-amber-500 drop-shadow-sm">Mësimi Përfundoi! 🎉</h1>
           
           <div className="bg-card border-2 p-8 rounded-3xl shadow-xl space-y-6">
             <div className="flex justify-center mb-4">
@@ -92,18 +92,18 @@ export default function LessonQuiz() {
             
             <div className="grid grid-cols-2 gap-4">
               <div className="bg-amber-50 border-2 border-amber-200 p-4 rounded-2xl">
-                <div className="text-amber-600 font-bold uppercase text-xs mb-1">Total XP</div>
+                <div className="text-amber-600 font-bold uppercase text-xs mb-1">XP Fituar</div>
                 <div className="text-3xl font-black text-amber-500">+{xpEarned}</div>
               </div>
               <div className="bg-green-50 border-2 border-green-200 p-4 rounded-2xl">
-                <div className="text-green-600 font-bold uppercase text-xs mb-1">Accuracy</div>
+                <div className="text-green-600 font-bold uppercase text-xs mb-1">Saktësia</div>
                 <div className="text-3xl font-black text-green-500">{Math.round((correctCount/questions.length)*100)}%</div>
               </div>
             </div>
           </div>
           
           <Button size="lg" className="w-full h-14 text-lg font-bold rounded-2xl border-b-[6px] active:border-b-0 active:translate-y-[6px] transition-all" onClick={() => setLocation(`/learn/${lesson.courseId}`)}>
-            Continue
+            Vazhdo
           </Button>
         </div>
       </div>
@@ -176,7 +176,7 @@ export default function LessonQuiz() {
                   <Check className="w-8 h-8" />
                 </div>
                 <div>
-                  <h3 className="text-2xl font-black text-success">Excellent!</h3>
+                  <h3 className="text-2xl font-black text-success">Shkëlqyeshëm!</h3>
                   <p className="text-success/80 font-bold mt-1 max-w-xl">{currentQ?.explanation}</p>
                 </div>
               </div>
@@ -187,7 +187,7 @@ export default function LessonQuiz() {
                   <X className="w-8 h-8" />
                 </div>
                 <div>
-                  <h3 className="text-2xl font-black text-destructive">Correct answer:</h3>
+                  <h3 className="text-2xl font-black text-destructive">Përgjigja e saktë:</h3>
                   <p className="font-bold text-destructive mt-1 text-lg">{currentQ?.correctAnswer}</p>
                   <p className="text-destructive/80 font-bold mt-2 max-w-xl text-sm">{currentQ?.explanation}</p>
                 </div>
@@ -204,7 +204,7 @@ export default function LessonQuiz() {
             disabled={!selectedOption && answerState === 'idle'}
             onClick={answerState === 'idle' ? handleCheck : handleNext}
           >
-            {answerState === 'idle' ? 'Check' : 'Continue'}
+            {answerState === 'idle' ? 'Kontrollo' : 'Vazhdo'}
           </Button>
 
         </div>

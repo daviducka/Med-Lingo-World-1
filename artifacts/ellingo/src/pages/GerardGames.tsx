@@ -11,13 +11,28 @@ import Crossword from "./games/Crossword";
 
 type GameId = "match-term" | "daily-challenge" | "guess-organ" | "flashcards" | "quiz" | "crossword" | null;
 
+const CATEGORY_SQ: Record<string, string> = {
+  anatomy: "Anatomi",
+  pharmacology: "Farmakologji",
+  physiology: "Fiziologji",
+  pathology: "Patologji",
+  microbiology: "Mikrobiologji",
+  biochemistry: "Biokimi",
+  neuroanatomy: "Neuroanatomi",
+  immunology: "Imunologji",
+  biology: "Biologji",
+  ecology: "Ekologji",
+  botany: "Botanikë",
+  genetics: "Gjenetikë",
+};
+
 const GAMES = [
-  { id: "match-term" as GameId, emoji: "🔗", title: "Match the Term", desc: "Lidh termat me përkufizimet", bg: "from-blue-400 to-blue-600", needsCourse: true },
-  { id: "daily-challenge" as GameId, emoji: "📅", title: "Daily Challenge", desc: "Sfida e përditshme", bg: "from-purple-400 to-purple-600", needsCourse: false },
-  { id: "guess-organ" as GameId, emoji: "🫀", title: "Guess the Organ", desc: "Identifiko organet e trupit", bg: "from-pink-400 to-rose-600", needsCourse: true },
-  { id: "flashcards" as GameId, emoji: "🎴", title: "Flashcards Game", desc: "Mëso me kartela interaktive", bg: "from-orange-400 to-orange-600", needsCourse: true },
-  { id: "quiz" as GameId, emoji: "❓", title: "Multiple Choice Quiz", desc: "Pyetje me alternativa", bg: "from-cyan-400 to-blue-600", needsCourse: true },
-  { id: "crossword" as GameId, emoji: "🔤", title: "Medical Crossword", desc: "Fjalëkryqe mjekësore", bg: "from-green-400 to-green-600", needsCourse: true },
+  { id: "match-term" as GameId, emoji: "🔗", title: "Lidh Termat", desc: "Lidh termat me përkufizimet", bg: "from-blue-400 to-blue-600", needsCourse: true },
+  { id: "daily-challenge" as GameId, emoji: "📅", title: "Sfida Ditore", desc: "Sfida e përditshme — nuk kërkon kurs", bg: "from-purple-400 to-purple-600", needsCourse: false },
+  { id: "guess-organ" as GameId, emoji: "🫀", title: "Gjej Organin", desc: "Identifiko organet e trupit", bg: "from-pink-400 to-rose-600", needsCourse: true },
+  { id: "flashcards" as GameId, emoji: "🎴", title: "Loja e Kartelave", desc: "Mëso me kartela interaktive", bg: "from-orange-400 to-orange-600", needsCourse: true },
+  { id: "quiz" as GameId, emoji: "❓", title: "Quiz me Alternativa", desc: "Pyetje me zgjedhje të shumëfishta", bg: "from-cyan-400 to-blue-600", needsCourse: true },
+  { id: "crossword" as GameId, emoji: "🔤", title: "Fjalëkryq Mjekësor", desc: "Fjalëkryqe mjekësore shqip", bg: "from-green-400 to-green-600", needsCourse: true },
 ];
 
 interface Course {
@@ -103,7 +118,7 @@ export default function GerardGames() {
         >
           <div className="text-5xl">📅</div>
           <div className="flex-1">
-            <h2 className="text-2xl font-bold" style={{ fontFamily: "Fredoka One, sans-serif" }}>Daily Challenge</h2>
+            <h2 className="text-2xl font-bold" style={{ fontFamily: "Fredoka One, sans-serif" }}>Sfida Ditore</h2>
             <p className="text-white/85 text-sm font-semibold">Sfida e përditshme — nuk kërkon kurs</p>
           </div>
           <div className="bg-white/25 px-4 py-2 rounded-full font-bold text-sm">Luaj →</div>
@@ -121,7 +136,7 @@ export default function GerardGames() {
             >
               <div className="text-4xl mb-3">{course.iconEmoji}</div>
               <p className="font-bold text-sm leading-tight">{course.title}</p>
-              <p className="text-xs text-muted-foreground mt-1 capitalize">{course.category}</p>
+              <p className="text-xs text-muted-foreground mt-1">{CATEGORY_SQ[course.category] || course.category}</p>
               <div
                 className="mt-3 text-xs font-bold px-3 py-1 rounded-full inline-block"
                 style={{ backgroundColor: `${course.color}25`, color: course.color }}
@@ -154,7 +169,7 @@ export default function GerardGames() {
           <span className="text-2xl">{selectedCourse?.iconEmoji}</span>
           <div>
             <p className="font-bold text-sm">{selectedCourse?.title}</p>
-            <p className="text-xs text-muted-foreground capitalize">{selectedCourse?.category}</p>
+            <p className="text-xs text-muted-foreground">{CATEGORY_SQ[selectedCourse?.category || ""] || selectedCourse?.category}</p>
           </div>
         </div>
       </div>

@@ -12,8 +12,8 @@ export default function Leaderboard() {
         <div className="mx-auto w-24 h-24 bg-amber-100 rounded-full flex items-center justify-center shadow-inner mb-4 border-4 border-amber-300">
           <Trophy className="w-12 h-12 text-amber-500" />
         </div>
-        <h1 className="text-4xl font-black tracking-tight">Weekly League</h1>
-        <p className="text-muted-foreground font-medium text-lg max-w-md mx-auto">Compete with other medical students. Top 10 advance to the next league.</p>
+        <h1 className="text-4xl font-black tracking-tight">Liga Javore</h1>
+        <p className="text-muted-foreground font-medium text-lg max-w-md mx-auto">Garoni me studentë të tjerë mjekësie. Top 10 avancojnë në ligën tjetër.</p>
       </div>
 
       <div className="bg-card rounded-3xl border-2 shadow-sm overflow-hidden">

@@ -19,11 +19,11 @@ const NAV_ITEMS = [
 ];
 
 const MOBILE_NAV = [
-  { href: "/", label: "Home", icon: Home },
+  { href: "/", label: "Ballina", icon: Home },
   { href: "/learn", label: "Mëso", icon: BookOpen },
   { href: "/ai-doctor", label: "Denisa", icon: Bot },
   { href: "/games", label: "Lojëra", icon: Gamepad2 },
-  { href: "/notes", label: "Notes", icon: NotebookPen },
+  { href: "/notes", label: "Shënime", icon: NotebookPen },
 ];
 
 export default function Layout({ children }: { children: React.ReactNode }) {

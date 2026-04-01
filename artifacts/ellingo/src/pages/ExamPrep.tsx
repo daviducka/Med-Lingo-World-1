@@ -170,7 +170,7 @@ export default function ExamPrep() {
                 color: currentQ?.difficulty === "easy" ? "#22c55e" : currentQ?.difficulty === "hard" || currentQ?.difficulty === "board_level" ? "#ef4444" : "#f97316",
               }}
             >
-              {currentQ?.difficulty === "board_level" ? "Board Level" : currentQ?.difficulty}
+              {currentQ?.difficulty === "board_level" ? "Nivel Provimi" : currentQ?.difficulty === "easy" ? "E Lehtë" : currentQ?.difficulty === "hard" ? "E Vështirë" : "Mesatare"}
             </Badge>
           </div>
           <p className="text-lg font-bold text-foreground leading-relaxed" style={{ fontFamily: 'Nunito, sans-serif' }}>
