@@ -19,6 +19,7 @@ import ExamPrep from "@/pages/ExamPrep";
 import AiDoctor from "@/pages/AiDoctor";
 import ElNotes from "@/pages/ElNotes";
 import GerardGames from "@/pages/GerardGames";
+import Certificates from "@/pages/Certificates";
 
 const queryClient = new QueryClient();
 
@@ -40,6 +41,7 @@ function Router() {
             <Route path="/ai-doctor" component={AiDoctor} />
             <Route path="/notes" component={ElNotes} />
             <Route path="/games" component={GerardGames} />
+            <Route path="/certificates" component={Certificates} />
             <Route path="/leaderboard" component={Leaderboard} />
             <Route path="/progress" component={Progress} />
             <Route path="/profile" component={Profile} />

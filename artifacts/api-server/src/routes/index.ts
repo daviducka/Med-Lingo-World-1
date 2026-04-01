@@ -12,6 +12,8 @@ import studyNotesRouter from "./study-notes";
 import examPrepRouter from "./exam-prep";
 import aiDoctorRouter from "./ai-doctor";
 import elNotesRouter from "./el-notes";
+import gamesRouter from "./games";
+import certificatesRouter from "./certificates";
 
 const router: IRouter = Router();
 
@@ -28,5 +30,7 @@ router.use(studyNotesRouter);
 router.use(examPrepRouter);
 router.use("/ai-doctor", aiDoctorRouter);
 router.use("/notes", elNotesRouter);
+router.use("/games", gamesRouter);
+router.use("/certificates", certificatesRouter);
 
 export default router;

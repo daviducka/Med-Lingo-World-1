@@ -96,28 +96,41 @@ router.get("/daily-challenge", async (req, res): Promise<void> => {
 });
 
 // ─── Flashcards Game: Get user's flashcards for game mode ──────────────────
-router.get("/flashcards-game/:courseId?", async (req, res): Promise<void> => {
-  const { courseId } = req.params;
+router.get("/flashcards-game", async (req, res): Promise<void> => {
+  const cards = await db
+    .select()
+    .from(flashcardsTable);
+
+  const gameCards = cards.map(c => ({
+    id: c.id,
+    question: c.front,
+    answer: c.back,
+    difficulty: c.difficulty || "easy",
+  }));
+
+  res.json({ cards: gameCards });
+});
+
+router.get("/flashcards-game/:courseId", async (req, res): Promise<void> => {
+  const courseId = parseInt(req.params.courseId);
+
+  const lessons = await db
+    .select({ id: lessonsTable.id })
+    .from(lessonsTable)
+    .where(eq(lessonsTable.courseId, courseId));
+  const lessonIds = lessons.map(l => l.id);
 
   let cards = await db
     .select()
     .from(flashcardsTable)
-    .where(eq(flashcardsTable.userId, DEFAULT_USER_ID));
+    .where(eq(flashcardsTable.courseId, courseId));
 
-  if (courseId) {
-    // Filter by lesson (since flashcards are linked to lessons, not courses)
-    const lessons = await db
-      .select({ id: lessonsTable.id })
-      .from(lessonsTable)
-      .where(eq(lessonsTable.courseId, parseInt(courseId)));
-    const lessonIds = lessons.map(l => l.id);
-    cards = cards.filter(c => lessonIds.includes(c.lessonId || 0));
-  }
+  cards = cards.filter(c => lessonIds.includes(c.lessonId || 0));
 
   const gameCards = cards.map(c => ({
     id: c.id,
-    question: c.question,
-    answer: c.answer,
+    question: c.front,
+    answer: c.back,
     difficulty: c.difficulty || "easy",
   }));
 
@@ -125,9 +138,9 @@ router.get("/flashcards-game/:courseId?", async (req, res): Promise<void> => {
 });
 
 // ─── Multiple Choice Quiz: Random questions from a course ─────────────────
-router.get("/quiz/:courseId/:count?", async (req, res): Promise<void> => {
+router.get("/quiz/:courseId", async (req, res): Promise<void> => {
   const courseId = parseInt(req.params.courseId);
-  const count = parseInt(req.params.count || "10");
+  const count = 10;
 
   const lessons = await db
     .select({ id: lessonsTable.id })

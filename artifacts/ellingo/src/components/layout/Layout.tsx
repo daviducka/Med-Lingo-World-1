@@ -1,6 +1,6 @@
 import React from "react";
 import { Link, useLocation } from "wouter";
-import { Home, BookOpen, Trophy, BarChart3, User, Shield, Brain, FileText, GraduationCap, Bot, NotebookPen, Gamepad2 } from "lucide-react";
+import { Home, BookOpen, Trophy, BarChart3, User, Shield, Brain, FileText, GraduationCap, Bot, NotebookPen, Gamepad2, Award } from "lucide-react";
 import { useGetUserStats } from "@workspace/api-client-react";
 
 const NAV_ITEMS = [
@@ -12,6 +12,7 @@ const NAV_ITEMS = [
   { href: "/ai-doctor", label: "Dr. Denisa AI", icon: Bot, accent: "text-pink-500" },
   { href: "/notes", label: "EL Notes", icon: NotebookPen, accent: "text-rose-400" },
   { href: "/games", label: "Gerard Games", icon: Gamepad2, accent: "text-orange-500" },
+  { href: "/certificates", label: "Sertifikatat", icon: Award, accent: "text-yellow-500" },
   { href: "/leaderboard", label: "Renditja", icon: Trophy },
   { href: "/progress", label: "Progresi", icon: BarChart3 },
   { href: "/profile", label: "Profili", icon: User },
