@@ -12,12 +12,10 @@ import {
 
 const { Pool } = pg;
 
-if (!process.env.DATABASE_URL) throw new Error("DATABASE_URL not set");
-
-const pool = new Pool({ connectionString: process.env.DATABASE_URL });
-const db = drizzle(pool);
-
 async function seed() {
+  if (!process.env.DATABASE_URL) throw new Error("DATABASE_URL not set");
+  const pool = new Pool({ connectionString: process.env.DATABASE_URL });
+  const db = drizzle(pool);
   console.log("🌱 Seeding El_lingo database...");
 
   // ── COURSES ──────────────────────────────────────────────────────────────
@@ -487,4 +485,10 @@ async function seed() {
   console.log("🎉 Seeding complete!");
 }
 
-seed().catch(err => { console.error(err); process.exit(1); });
+export { seed as seedDatabase };
+
+// Run directly only if this is the entry point
+const isMain = process.argv[1] && (process.argv[1].includes("seed.ts") || process.argv[1].includes("seed.js"));
+if (isMain) {
+  seed().catch(err => { console.error(err); process.exit(1); });
+}

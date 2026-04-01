@@ -4,11 +4,11 @@ import { eq, inArray, sql } from "drizzle-orm";
 import { coursesTable, lessonsTable, questionsTable } from "./schema";
 
 const { Pool } = pg;
-if (!process.env.DATABASE_URL) throw new Error("DATABASE_URL not set");
-const pool = new Pool({ connectionString: process.env.DATABASE_URL });
-const db = drizzle(pool);
 
 async function main() {
+  if (!process.env.DATABASE_URL) throw new Error("DATABASE_URL not set");
+  const pool = new Pool({ connectionString: process.env.DATABASE_URL });
+  const db = drizzle(pool);
   console.log("📚 Filling missing lesson questions...");
 
   // Get all sq courses
@@ -474,4 +474,10 @@ async function main() {
   console.log("🎉 Done!");
 }
 
-main().catch(err => { console.error(err); process.exit(1); });
+export { main as fillQuestions };
+
+// Run directly only if this is the entry point
+const isMain = process.argv[1] && (process.argv[1].includes("fill-questions.ts") || process.argv[1].includes("fill-questions.js"));
+if (isMain) {
+  main().catch(err => { console.error(err); process.exit(1); });
+}
