@@ -137,6 +137,8 @@ export default function Pricing() {
             {/* PayPal Button */}
             <a
               href={PAYPAL_URL}
+              target="_blank"
+              rel="noopener noreferrer"
               onMouseEnter={() => setIsHovered(true)}
               onMouseLeave={() => setIsHovered(false)}
               className="relative flex items-center justify-center gap-3 w-full py-4 rounded-2xl font-bold text-white text-lg no-underline transition-all duration-300"
