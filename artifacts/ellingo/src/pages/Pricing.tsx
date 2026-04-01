@@ -5,20 +5,24 @@ import { Button } from "@/components/ui/button";
 const PAYPAL_EMAIL = "njdj0665@gmail.com";
 const PRICE = "15.00";
 const CURRENCY = "EUR";
-const RETURN_PATH = "/payment-success";
-const CANCEL_PATH = "/pricing";
 
 export default function Pricing() {
   const [isSubscribed, setIsSubscribed] = useState(false);
-  const [origin, setOrigin] = useState("");
 
   useEffect(() => {
-    setOrigin(window.location.origin);
     fetch("/api/payments/is-subscribed")
       .then(r => r.json())
       .then(data => setIsSubscribed(data.isSubscribed))
       .catch(() => setIsSubscribed(false));
   }, []);
+
+  const handlePayPal = () => {
+    const returnUrl = encodeURIComponent(window.location.origin + "/payment-success");
+    const cancelUrl = encodeURIComponent(window.location.origin + "/pricing");
+    const itemName = encodeURIComponent("El_lingo Premium - Abonim Mujor");
+    const url = `https://www.paypal.com/cgi-bin/webscr?cmd=_xclick-subscriptions&business=${encodeURIComponent(PAYPAL_EMAIL)}&item_name=${itemName}&a3=${PRICE}&p3=1&t3=M&src=1&currency_code=${CURRENCY}&no_note=1&no_shipping=1&return=${returnUrl}&cancel_return=${cancelUrl}`;
+    window.top ? (window.top.location.href = url) : (window.location.href = url);
+  };
 
   if (isSubscribed) {
     return (
@@ -79,27 +83,13 @@ export default function Pricing() {
             ))}
           </div>
 
-          {/* PayPal Direct Form */}
-          <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
-            <input type="hidden" name="cmd" value="_xclick-subscriptions" />
-            <input type="hidden" name="business" value={PAYPAL_EMAIL} />
-            <input type="hidden" name="item_name" value="El_lingo Premium - Abonim Mujor" />
-            <input type="hidden" name="a3" value={PRICE} />
-            <input type="hidden" name="p3" value="1" />
-            <input type="hidden" name="t3" value="M" />
-            <input type="hidden" name="src" value="1" />
-            <input type="hidden" name="currency_code" value={CURRENCY} />
-            <input type="hidden" name="return" value={origin + RETURN_PATH} />
-            <input type="hidden" name="cancel_return" value={origin + CANCEL_PATH} />
-            <input type="hidden" name="no_note" value="1" />
-            <input type="hidden" name="no_shipping" value="1" />
-            <button
-              type="submit"
-              className="w-full py-4 text-lg font-bold rounded-2xl bg-gradient-to-r from-blue-600 to-blue-800 hover:from-blue-700 hover:to-blue-900 shadow-lg text-white transition-all"
-            >
-              🅿️ Paguaj me PayPal
-            </button>
-          </form>
+          {/* PayPal Button */}
+          <Button
+            onClick={handlePayPal}
+            className="w-full py-6 text-lg font-bold rounded-2xl bg-gradient-to-r from-blue-600 to-blue-800 hover:from-blue-700 hover:to-blue-900 shadow-lg"
+          >
+            🅿️ Paguaj me PayPal
+          </Button>
 
           {/* Secure payment badge */}
           <div className="text-center mt-6">
