@@ -80,20 +80,18 @@ export default function Pricing() {
           </div>
 
           {/* Features */}
-          <div className="space-y-4 mb-8">
+          <div className="space-y-3 mb-8">
             {[
-              "✅ Qasje në 24+ kurse mjekësore",
-              "✅ 6 lojëra interaktive arsimore",
-              "✅ Dr. Denisa AI chatbot 24/7",
-              "✅ EL Notes me mbrojtje PIN",
-              "✅ Sertifikatat e plotë (4 lloje)",
-              "✅ Flashkarta të personalizuara",
-              "✅ Hard Round exam simulator",
-              "✅ Statistika progrese të detajuara",
+              "24+ kurse mjekësore",
+              "6 lojëra interaktive",
+              "Dr. Denisa AI 24/7",
+              "Sertifikatat", 
+              "Hard Round exam",
+              "Flashkarta & Shënime",
             ].map((feature, i) => (
-              <div key={i} className="flex items-start gap-3">
-                <Check className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
-                <span className="font-medium text-gray-700">{feature}</span>
+              <div key={i} className="flex items-center gap-2">
+                <Check className="w-4 h-4 text-green-600 flex-shrink-0" />
+                <span className="text-sm font-medium text-gray-700">{feature}</span>
               </div>
             ))}
           </div>
@@ -125,24 +123,22 @@ export default function Pricing() {
         </div>
       </div>
 
-      {/* FAQ */}
-      <div className="mt-16 bg-card border-2 border-border rounded-3xl p-8">
-        <h2 className="text-2xl font-bold mb-6" style={{ fontFamily: 'Fredoka One, sans-serif' }}>
-          Pyetje të Shpeshta
-        </h2>
-        <div className="space-y-6">
-          <div>
-            <h3 className="font-bold text-lg mb-2">📅 A mund ta anuloj në çdo kohë?</h3>
-            <p className="text-muted-foreground font-medium">Po! Mund ta anulosh abonimin tuaj në çdo moment pa diçka shtesë. Përdoruesit marrin qasje deri në fund të periudhës aktuale të faturimit.</p>
-          </div>
-          <div>
-            <h3 className="font-bold text-lg mb-2">🔒 A është sigura pagesa ime?</h3>
-            <p className="text-muted-foreground font-medium">Absolutisht! Përdorim Stripe, një platforme pagese e kërkuar globalisht. Të dhënat tuaja të kartës nuk ruhen në serverët tanë.</p>
-          </div>
-          <div>
-            <h3 className="font-bold text-lg mb-2">📧 Si do të ndodh pagesa?</h3>
-            <p className="text-muted-foreground font-medium">Stripe do të dërgojë reçeta në email. Pagesa pritet çdo muaj në të njëjtën ditë si kur u regjistruarit.</p>
-          </div>
+      {/* Quick Info */}
+      <div className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="text-center p-4 bg-muted rounded-2xl">
+          <p className="text-2xl mb-2">📅</p>
+          <h3 className="font-bold mb-1">Anulo Kur të Dëlish</h3>
+          <p className="text-xs text-muted-foreground">Nuk ka kontratë përjetese</p>
+        </div>
+        <div className="text-center p-4 bg-muted rounded-2xl">
+          <p className="text-2xl mb-2">🔒</p>
+          <h3 className="font-bold mb-1">Pagesa Sigure</h3>
+          <p className="text-xs text-muted-foreground">Përmes Stripe të besueshëm</p>
+        </div>
+        <div className="text-center p-4 bg-muted rounded-2xl">
+          <p className="text-2xl mb-2">📧</p>
+          <h3 className="font-bold mb-1">Email Reçeta</h3>
+          <p className="text-xs text-muted-foreground">Çdo muaj i rregullt</p>
         </div>
       </div>
 
