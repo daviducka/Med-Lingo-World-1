@@ -22,6 +22,7 @@ import ElNotes from "@/pages/ElNotes";
 import GerardGames from "@/pages/GerardGames";
 import Certificates from "@/pages/Certificates";
 import Pricing from "@/pages/Pricing";
+import Pay from "@/pages/Pay";
 import PaymentSuccess from "@/pages/PaymentSuccess";
 import PayPalReturn from "@/pages/PayPalReturn";
 
@@ -33,6 +34,7 @@ function Router() {
       <Route path="/lesson/:lessonId" component={LessonQuiz} />
       <Route path="/hard-round" component={HardRound} />
       <Route path="/pricing" component={Pricing} />
+      <Route path="/pay" component={Pay} />
       <Route path="/payment-success" component={PaymentSuccess} />
       <Route path="/paypal-return" component={PayPalReturn} />
 
