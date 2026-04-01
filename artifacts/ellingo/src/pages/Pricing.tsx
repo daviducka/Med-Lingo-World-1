@@ -7,7 +7,7 @@ const PAYPAL_URL =
   `?business=${encodeURIComponent(PAYPAL_EMAIL)}` +
   "&amount=15.00" +
   "&currency_code=EUR" +
-  "&item_name=El_lingo+Premium+-+Abonim+Mujor";
+  "&item_name=El_lingo+Premium+-+Abonim+Vjetor";
 
 const features = [
   { icon: BookOpen, text: "24+ kurse mjekësore", sub: "Anatomi, Farmakologji, Fiziologji e më shumë" },
@@ -21,7 +21,7 @@ const features = [
 const trustBadges = [
   { icon: RefreshCw, title: "Anulo Kur të Dëlish", desc: "Pa kontratë afatgjatë" },
   { icon: Shield,    title: "Pagesa 100% Sigure",  desc: "Mbrojtur nga PayPal" },
-  { icon: Mail,      title: "Faturë me Email",     desc: "Çdo muaj automatikisht" },
+  { icon: Mail,      title: "Faturë me Email",     desc: "Çdo vit automatikisht" },
 ];
 
 export default function Pricing() {
@@ -106,7 +106,7 @@ export default function Pricing() {
               <div className="flex items-end gap-1 mb-1">
                 <span className="text-2xl font-bold text-gray-400 mb-1">€</span>
                 <span className="text-7xl font-black leading-none" style={{ fontFamily: "Fredoka One, sans-serif", color: "#7c3aed" }}>15</span>
-                <span className="text-gray-500 font-medium mb-2">/muaj</span>
+                <span className="text-gray-500 font-medium mb-2">/vit</span>
               </div>
               <p className="text-sm text-gray-400">Pa kontratë • Anulohet kur të dëshironi</p>
             </div>
@@ -157,7 +157,7 @@ export default function Pricing() {
               ) : (
                 <>
                   <CreditCard className="w-5 h-5" />
-                  Paguaj me PayPal — €15/muaj
+                  Paguaj me PayPal — €15/vit
                 </>
               )}
             </a>
