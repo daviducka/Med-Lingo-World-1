@@ -612,41 +612,21 @@ const GAMES = [
 ];
 
 export default function GerardGames() {
-  const [activeGame, setActiveGame] = useState<GameId>(null);
-
-  if (activeGame === "2048")      return <div className="max-w-sm mx-auto"><Game2048 onBack={() => setActiveGame(null)} /></div>;
-  if (activeGame === "flappy")    return <div className="max-w-sm mx-auto"><FlappyBird onBack={() => setActiveGame(null)} /></div>;
-  if (activeGame === "memory")    return <div className="max-w-sm mx-auto"><MemoryGame onBack={() => setActiveGame(null)} /></div>;
-  if (activeGame === "tictactoe") return <div className="max-w-sm mx-auto"><TicTacToe onBack={() => setActiveGame(null)} /></div>;
-
   return (
     <div className="max-w-2xl mx-auto">
       <div className="text-center mb-8">
         <h1 className="text-5xl font-bold mb-2" style={{ fontFamily: 'Fredoka One, sans-serif' }}>
           <span className="shimmer-text">Gerard Games</span> 🎮
         </h1>
-        <p className="text-muted-foreground font-semibold text-lg">Relakso me lojërat e preferuara!</p>
+        <p className="text-muted-foreground font-semibold text-lg">Lojëra më shumë duke ardhur!</p>
         <p className="text-xs text-muted-foreground mt-1 font-medium italic">by Elson</p>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-        {GAMES.map(game => (
-          <button
-            key={game.id}
-            onClick={() => setActiveGame(game.id)}
-            className={`group relative overflow-hidden rounded-3xl p-6 text-left text-white shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 hover:scale-[1.02] active:scale-[0.98] bg-gradient-to-br ${game.bg}`}
-          >
-            <div className="absolute -right-4 -bottom-4 text-9xl opacity-15 select-none pointer-events-none">{game.emoji}</div>
-            <div className="relative z-10">
-              <div className="text-5xl mb-3 drop-shadow">{game.emoji}</div>
-              <h2 className="text-2xl font-bold mb-1 drop-shadow" style={{ fontFamily: 'Fredoka One, sans-serif' }}>{game.title}</h2>
-              <p className="text-white/85 font-semibold text-sm">{game.desc}</p>
-              <div className="mt-4 inline-flex items-center gap-1 bg-white/25 backdrop-blur rounded-full px-4 py-1.5 text-sm font-bold shadow">
-                Luaj Tani →
-              </div>
-            </div>
-          </button>
-        ))}
+      <div className="flex flex-col items-center justify-center py-20">
+        <div className="text-8xl mb-6 drop-shadow-lg opacity-20">🎮</div>
+        <h2 className="text-3xl font-bold mb-4" style={{ fontFamily: 'Fredoka One, sans-serif' }}>Hapësira e Lojërave</h2>
+        <p className="text-muted-foreground font-semibold text-lg text-center max-w-sm mb-2">Lojëra të reja dhe më të bukura po vijnë!</p>
+        <p className="text-sm text-muted-foreground italic">Kthehuni më vonë për surpriza</p>
       </div>
 
       <div className="text-center mt-8 text-sm text-muted-foreground font-medium">
