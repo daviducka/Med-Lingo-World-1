@@ -41,10 +41,7 @@ export default function Pricing() {
 
   const handlePayPal = () => {
     setIsLoading(true);
-    setTimeout(() => {
-      window.open(PAYPAL_URL, "_blank", "noopener,noreferrer");
-      setIsLoading(false);
-    }, 600);
+    setTimeout(() => setIsLoading(false), 2000);
   };
 
   if (isSubscribed) {
@@ -138,32 +135,32 @@ export default function Pricing() {
             </div>
 
             {/* PayPal Button */}
-            <button
-              onClick={handlePayPal}
+            <a
+              href={PAYPAL_URL}
+              target="_top"
+              rel="noopener"
               onMouseEnter={() => setIsHovered(true)}
               onMouseLeave={() => setIsHovered(false)}
-              disabled={isLoading}
-              className="relative w-full py-4 rounded-2xl font-bold text-white text-lg overflow-hidden transition-all duration-300 disabled:opacity-70"
+              onClick={handlePayPal}
+              className="relative flex items-center justify-center gap-3 w-full py-4 rounded-2xl font-bold text-white text-lg no-underline transition-all duration-300"
               style={{
                 background: isLoading ? "#1e3a8a" : "linear-gradient(135deg, #003087 0%, #009cde 100%)",
                 transform: isHovered && !isLoading ? "translateY(-2px)" : "translateY(0)",
                 boxShadow: isHovered && !isLoading ? "0 12px 32px rgba(0,48,135,0.4)" : "0 4px 16px rgba(0,48,135,0.25)",
               }}
             >
-              <span className="flex items-center justify-center gap-3">
-                {isLoading ? (
-                  <>
-                    <RefreshCw className="w-5 h-5 animate-spin" />
-                    Duke hapur PayPal...
-                  </>
-                ) : (
-                  <>
-                    <CreditCard className="w-5 h-5" />
-                    Paguaj me PayPal — €15/muaj
-                  </>
-                )}
-              </span>
-            </button>
+              {isLoading ? (
+                <>
+                  <RefreshCw className="w-5 h-5 animate-spin" />
+                  Duke hapur PayPal...
+                </>
+              ) : (
+                <>
+                  <CreditCard className="w-5 h-5" />
+                  Paguaj me PayPal — €15/muaj
+                </>
+              )}
+            </a>
 
             {/* Security note */}
             <div className="flex items-center justify-center gap-2 mt-4">
