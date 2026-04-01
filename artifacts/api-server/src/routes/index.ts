@@ -15,6 +15,7 @@ import elNotesRouter from "./el-notes";
 import gamesRouter from "./games";
 import certificatesRouter from "./certificates";
 import paymentsRouter from "./payments";
+import paypalRouter from "./paypal";
 
 const router: IRouter = Router();
 
@@ -34,5 +35,6 @@ router.use("/notes", elNotesRouter);
 router.use("/games", gamesRouter);
 router.use("/certificates", certificatesRouter);
 router.use("/payments", paymentsRouter);
+router.use("/paypal", paypalRouter);
 
 export default router;

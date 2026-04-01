@@ -15,7 +15,7 @@ export default function Pricing() {
       .catch(() => setIsSubscribed(false));
   }, []);
 
-  const handleCheckout = async () => {
+  const handleStripeCheckout = async () => {
     setIsLoading(true);
     setError("");
 
@@ -30,6 +30,28 @@ export default function Pricing() {
       const { url } = await res.json();
       if (url) {
         window.location.href = url;
+      }
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Gabim i panjohur");
+      setIsLoading(false);
+    }
+  };
+
+  const handlePayPalCheckout = async () => {
+    setIsLoading(true);
+    setError("");
+
+    try {
+      const res = await fetch("/api/paypal/create-subscription", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+      });
+
+      if (!res.ok) throw new Error("Gabim në PayPal");
+
+      const { approvalUrl } = await res.json();
+      if (approvalUrl) {
+        window.location.href = approvalUrl;
       }
     } catch (err) {
       setError(err instanceof Error ? err.message : "Gabim i panjohur");
@@ -96,21 +118,37 @@ export default function Pricing() {
             ))}
           </div>
 
-          {/* CTA Button */}
-          <Button
-            onClick={handleCheckout}
-            disabled={isLoading}
-            className="w-full py-6 text-lg font-bold rounded-2xl bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 shadow-lg"
-          >
-            {isLoading ? (
-              <>
-                <Loader className="w-5 h-5 mr-2 animate-spin" />
-                Duke përpunuar...
-              </>
-            ) : (
-              "Fillo Premium Tani"
-            )}
-          </Button>
+          {/* CTA Buttons */}
+          <div className="space-y-3">
+            <Button
+              onClick={handleStripeCheckout}
+              disabled={isLoading}
+              className="w-full py-6 text-lg font-bold rounded-2xl bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 shadow-lg"
+            >
+              {isLoading ? (
+                <>
+                  <Loader className="w-5 h-5 mr-2 animate-spin" />
+                  Duke përpunuar...
+                </>
+              ) : (
+                "💳 Stripe - Fillo Tani"
+              )}
+            </Button>
+            <Button
+              onClick={handlePayPalCheckout}
+              disabled={isLoading}
+              className="w-full py-6 text-lg font-bold rounded-2xl bg-gradient-to-r from-blue-700 to-blue-900 hover:from-blue-800 hover:to-slate-950 shadow-lg"
+            >
+              {isLoading ? (
+                <>
+                  <Loader className="w-5 h-5 mr-2 animate-spin" />
+                  Duke përpunuar...
+                </>
+              ) : (
+                "🅿️ PayPal - Fillo Tani"
+              )}
+            </Button>
+          </div>
 
           {error && (
             <p className="text-red-600 font-bold text-sm mt-4 text-center">{error}</p>
