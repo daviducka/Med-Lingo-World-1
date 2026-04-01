@@ -63,7 +63,7 @@ router.post("/create-subscription", async (req, res): Promise<void> => {
             given_name: "El_lingo",
             surname: "Student",
           },
-          email_address: "student@ellingo.com",
+          email_address: "edg.businessofficial@gmail.com",
         },
         application_context: {
           brand_name: "El_lingo",

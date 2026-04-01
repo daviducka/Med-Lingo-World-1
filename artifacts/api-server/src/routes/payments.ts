@@ -60,7 +60,7 @@ router.post("/checkout", async (req, res): Promise<void> => {
       customerId = existing[0].stripeCustomerId;
     } else {
       const customer = await stripe.customers.create({
-        email: userData.email || "student@ellingo.com",
+        email: "edg.businessofficial@gmail.com",
         name: userData.name || "El_lingo Student",
       });
       customerId = customer.id;
