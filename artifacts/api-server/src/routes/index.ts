@@ -14,6 +14,7 @@ import aiDoctorRouter from "./ai-doctor";
 import elNotesRouter from "./el-notes";
 import gamesRouter from "./games";
 import certificatesRouter from "./certificates";
+import paymentsRouter from "./payments";
 
 const router: IRouter = Router();
 
@@ -32,5 +33,6 @@ router.use("/ai-doctor", aiDoctorRouter);
 router.use("/notes", elNotesRouter);
 router.use("/games", gamesRouter);
 router.use("/certificates", certificatesRouter);
+router.use("/payments", paymentsRouter);
 
 export default router;

@@ -21,6 +21,8 @@ import AiDoctor from "@/pages/AiDoctor";
 import ElNotes from "@/pages/ElNotes";
 import GerardGames from "@/pages/GerardGames";
 import Certificates from "@/pages/Certificates";
+import Pricing from "@/pages/Pricing";
+import PaymentSuccess from "@/pages/PaymentSuccess";
 
 const queryClient = new QueryClient();
 
@@ -29,6 +31,8 @@ function Router() {
     <Switch>
       <Route path="/lesson/:lessonId" component={LessonQuiz} />
       <Route path="/hard-round" component={HardRound} />
+      <Route path="/pricing" component={Pricing} />
+      <Route path="/payment-success" component={PaymentSuccess} />
 
       <Route>
         <Layout>

@@ -26,6 +26,16 @@ app.use(
   }),
 );
 app.use(cors());
+
+// Webhook endpoints need raw body for signature verification (must be before JSON parsing)
+app.post("/api/payments/webhook", express.raw({ type: "application/json" }), (req, res, next) => {
+  // Convert raw body to string for Stripe verification
+  if (Buffer.isBuffer(req.body)) {
+    (req as any).rawBody = req.body.toString('utf8');
+  }
+  next();
+});
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 

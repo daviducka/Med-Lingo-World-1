@@ -1,6 +1,6 @@
 import React from "react";
 import { Link, useLocation } from "wouter";
-import { Home, BookOpen, Trophy, BarChart3, User, Shield, Brain, FileText, GraduationCap, Bot, NotebookPen, Gamepad2, Award } from "lucide-react";
+import { Home, BookOpen, Trophy, BarChart3, User, Shield, Brain, FileText, GraduationCap, Bot, NotebookPen, Gamepad2, Award, CreditCard } from "lucide-react";
 import { useGetUserStats } from "@workspace/api-client-react";
 
 const NAV_ITEMS = [
@@ -69,7 +69,18 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             );
           })}
 
-          <div className="pt-2">
+          <div className="pt-2 space-y-1.5">
+            <Link
+              href="/pricing"
+              className={`flex items-center gap-3 px-3 py-2 rounded-xl font-bold transition-all duration-200 text-sm ${
+                location === '/pricing'
+                  ? 'bg-purple-500/20 text-purple-700 border border-purple-500/30'
+                  : 'text-purple-600 bg-purple-500/10 hover:bg-purple-500/20 border border-purple-500/20'
+              }`}
+            >
+              <CreditCard className="w-4 h-4 flex-shrink-0" />
+              Premium 👑
+            </Link>
             <Link
               href="/hard-round"
               className={`flex items-center gap-3 px-3 py-2 rounded-xl font-bold transition-all duration-200 text-sm ${
