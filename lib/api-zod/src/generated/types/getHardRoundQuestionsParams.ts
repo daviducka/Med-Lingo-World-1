@@ -3,16 +3,10 @@
  * Do not edit manually.
  * Api
  * El_lingo Medical Learning Platform API
- * OpenAPI spec version: 0.1.0
+ * OpenAPI spec version: 0.2.0
  */
 
 export type GetHardRoundQuestionsParams = {
-  /**
-   * Medical category (anatomy, pharmacology, etc.)
-   */
   category?: string;
-  /**
-   * Number of questions to return (default 10)
-   */
   count?: number;
 };

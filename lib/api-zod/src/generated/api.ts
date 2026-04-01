@@ -3,12 +3,11 @@
  * Do not edit manually.
  * Api
  * El_lingo Medical Learning Platform API
- * OpenAPI spec version: 0.1.0
+ * OpenAPI spec version: 0.2.0
  */
 import * as zod from "zod";
 
 /**
- * Returns server health status
  * @summary Health check
  */
 export const HealthCheckResponse = zod.object({
@@ -52,7 +51,7 @@ export const UpdateUserProfileResponse = zod.object({
 });
 
 /**
- * @summary Get user stats (XP, streak, hearts, total lessons)
+ * @summary Get user stats
  */
 export const GetUserStatsResponse = zod.object({
   xp: zod.number(),
@@ -68,10 +67,8 @@ export const GetUserStatsResponse = zod.object({
  * @summary List all medical courses
  */
 export const ListCoursesQueryParams = zod.object({
-  language: zod.coerce
-    .string()
-    .optional()
-    .describe("Interface language code (e.g. en, es, fr)"),
+  language: zod.coerce.string().optional(),
+  category: zod.coerce.string().optional(),
 });
 
 export const ListCoursesResponseItem = zod.object({
@@ -88,7 +85,7 @@ export const ListCoursesResponseItem = zod.object({
 export const ListCoursesResponse = zod.array(ListCoursesResponseItem);
 
 /**
- * @summary Get a specific course with its units
+ * @summary Get a specific course
  */
 export const GetCourseParams = zod.object({
   courseId: zod.coerce.number(),
@@ -139,7 +136,7 @@ export const ListLessonsResponseItem = zod.object({
 export const ListLessonsResponse = zod.array(ListLessonsResponseItem);
 
 /**
- * @summary Get a lesson with its questions
+ * @summary Get a lesson with its questions (returns up to 30)
  */
 export const GetLessonParams = zod.object({
   lessonId: zod.coerce.number(),
@@ -168,7 +165,7 @@ export const GetLessonResponse = zod.object({
 });
 
 /**
- * @summary Mark a lesson as complete and update XP/streak
+ * @summary Mark a lesson as complete
  */
 export const CompleteLessonParams = zod.object({
   lessonId: zod.coerce.number(),
@@ -191,17 +188,11 @@ export const CompleteLessonResponse = zod.object({
 });
 
 /**
- * @summary Get a set of hard-round medical board-level questions
+ * @summary Get hard-round board-level questions
  */
 export const GetHardRoundQuestionsQueryParams = zod.object({
-  category: zod.coerce
-    .string()
-    .optional()
-    .describe("Medical category (anatomy, pharmacology, etc.)"),
-  count: zod.coerce
-    .number()
-    .optional()
-    .describe("Number of questions to return (default 10)"),
+  category: zod.coerce.string().optional(),
+  count: zod.coerce.number().optional(),
 });
 
 export const GetHardRoundQuestionsResponseItem = zod.object({
@@ -221,7 +212,7 @@ export const GetHardRoundQuestionsResponse = zod.array(
 );
 
 /**
- * @summary Submit hard round answers and get score
+ * @summary Submit hard round answers
  */
 export const SubmitHardRoundBody = zod.object({
   answers: zod.array(
@@ -250,7 +241,7 @@ export const SubmitHardRoundResponse = zod.object({
 });
 
 /**
- * @summary Get user's full learning progress across all courses
+ * @summary Get user learning progress
  */
 export const GetUserProgressResponseItem = zod.object({
   courseId: zod.number(),
@@ -263,7 +254,7 @@ export const GetUserProgressResponseItem = zod.object({
 export const GetUserProgressResponse = zod.array(GetUserProgressResponseItem);
 
 /**
- * @summary Get aggregated progress summary (total XP, courses completed, streak, etc.)
+ * @summary Get aggregated progress summary
  */
 export const GetProgressSummaryResponse = zod.object({
   totalXp: zod.number(),
@@ -277,13 +268,10 @@ export const GetProgressSummaryResponse = zod.object({
 });
 
 /**
- * @summary Get top learners leaderboard
+ * @summary Get leaderboard
  */
 export const GetLeaderboardQueryParams = zod.object({
-  limit: zod.coerce
-    .number()
-    .optional()
-    .describe("Number of entries (default 20)"),
+  limit: zod.coerce.number().optional(),
 });
 
 export const GetLeaderboardResponseItem = zod.object({
@@ -298,7 +286,7 @@ export const GetLeaderboardResponseItem = zod.object({
 export const GetLeaderboardResponse = zod.array(GetLeaderboardResponseItem);
 
 /**
- * @summary List all supported interface languages
+ * @summary List supported languages
  */
 export const ListLanguagesResponseItem = zod.object({
   code: zod.string(),
@@ -307,3 +295,110 @@ export const ListLanguagesResponseItem = zod.object({
   flagEmoji: zod.string(),
 });
 export const ListLanguagesResponse = zod.array(ListLanguagesResponseItem);
+
+/**
+ * @summary List flashcards for a lesson or course
+ */
+export const ListFlashcardsQueryParams = zod.object({
+  lessonId: zod.coerce.number().optional(),
+  courseId: zod.coerce.number().optional(),
+});
+
+export const ListFlashcardsResponseItem = zod.object({
+  id: zod.number(),
+  lessonId: zod.number().nullish(),
+  courseId: zod.number().nullish(),
+  front: zod.string(),
+  back: zod.string(),
+  category: zod.string(),
+  difficulty: zod.string(),
+  timesFlipped: zod.number(),
+  timesKnown: zod.number(),
+});
+export const ListFlashcardsResponse = zod.array(ListFlashcardsResponseItem);
+
+/**
+ * @summary Record flashcard flip result (known or unknown)
+ */
+export const RecordFlashcardFlipParams = zod.object({
+  flashcardId: zod.coerce.number(),
+});
+
+export const RecordFlashcardFlipBody = zod.object({
+  known: zod.boolean(),
+});
+
+export const RecordFlashcardFlipResponse = zod.object({
+  success: zod.boolean(),
+  timesFlipped: zod.number(),
+  timesKnown: zod.number(),
+});
+
+/**
+ * @summary Get study notes/info for a lesson
+ */
+export const GetStudyNotesParams = zod.object({
+  lessonId: zod.coerce.number(),
+});
+
+export const GetStudyNotesResponse = zod.object({
+  lessonId: zod.number(),
+  title: zod.string(),
+  content: zod.string(),
+  keyPoints: zod.array(zod.string()),
+  mnemonics: zod.array(zod.string()),
+  clinicalPearls: zod.array(zod.string()),
+});
+
+/**
+ * @summary Get 30 exam prep questions (mixed difficulty, USMLE style)
+ */
+export const GetExamPrepQuestionsQueryParams = zod.object({
+  subject: zod.coerce.string().optional(),
+  count: zod.coerce.number().optional(),
+});
+
+export const GetExamPrepQuestionsResponseItem = zod.object({
+  id: zod.number(),
+  lessonId: zod.number().nullish(),
+  questionText: zod.string(),
+  questionType: zod.enum(["multiple_choice", "true_false", "fill_blank"]),
+  options: zod.array(zod.string()),
+  correctAnswer: zod.string(),
+  explanation: zod.string(),
+  category: zod.string(),
+  difficulty: zod.enum(["easy", "medium", "hard", "board_level"]),
+  language: zod.string(),
+});
+export const GetExamPrepQuestionsResponse = zod.array(
+  GetExamPrepQuestionsResponseItem,
+);
+
+/**
+ * @summary Submit exam prep results
+ */
+export const SubmitExamPrepBody = zod.object({
+  answers: zod.array(
+    zod.object({
+      questionId: zod.number(),
+      selectedAnswer: zod.string(),
+    }),
+  ),
+  timeTakenSeconds: zod.number().optional(),
+});
+
+export const SubmitExamPrepResponse = zod.object({
+  score: zod.number(),
+  totalQuestions: zod.number(),
+  correctCount: zod.number(),
+  xpEarned: zod.number(),
+  results: zod.array(
+    zod.object({
+      questionId: zod.number(),
+      isCorrect: zod.boolean(),
+      correctAnswer: zod.string(),
+      selectedAnswer: zod.string(),
+      explanation: zod.string(),
+    }),
+  ),
+});

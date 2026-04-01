@@ -1,75 +1,114 @@
 import React from "react";
 import { Link, useLocation } from "wouter";
-import { Home, BookOpen, Trophy, BarChart3, User, Shield } from "lucide-react";
-import { useGetUserProfile, useGetUserStats } from "@workspace/api-client-react";
+import { Home, BookOpen, Trophy, BarChart3, User, Shield, Brain, FileText, GraduationCap } from "lucide-react";
+import { useGetUserStats } from "@workspace/api-client-react";
 
 const NAV_ITEMS = [
+  { href: "/", label: "Ana Faqe", icon: Home },
+  { href: "/learn", label: "Mëso", icon: BookOpen },
+  { href: "/flashcards", label: "Kartela", icon: Brain },
+  { href: "/study-notes", label: "Shënime", icon: FileText },
+  { href: "/exam-prep", label: "Provimi", icon: GraduationCap },
+  { href: "/leaderboard", label: "Renditja", icon: Trophy },
+  { href: "/progress", label: "Progresi", icon: BarChart3 },
+  { href: "/profile", label: "Profili", icon: User },
+];
+
+const MOBILE_NAV = [
   { href: "/", label: "Home", icon: Home },
-  { href: "/learn", label: "Learn", icon: BookOpen },
-  { href: "/leaderboard", label: "Rank", icon: Trophy },
-  { href: "/progress", label: "Progress", icon: BarChart3 },
-  { href: "/profile", label: "Profile", icon: User },
+  { href: "/learn", label: "Mëso", icon: BookOpen },
+  { href: "/flashcards", label: "Kartela", icon: Brain },
+  { href: "/exam-prep", label: "Provim", icon: GraduationCap },
+  { href: "/profile", label: "Profili", icon: User },
 ];
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   const [location] = useLocation();
-  const { data: profile } = useGetUserProfile();
   const { data: stats } = useGetUserStats();
 
   return (
     <div className="min-h-[100dvh] flex flex-col md:flex-row bg-background">
       {/* Desktop Sidebar */}
       <aside className="hidden md:flex w-64 flex-col fixed top-0 left-0 h-screen border-r bg-card z-50">
-        <div className="p-6 pb-2">
-          <Link href="/" className="flex items-center gap-2 text-2xl font-bold text-primary tracking-tight">
-            <span className="bg-primary text-white p-1.5 rounded-xl">EL</span> El_lingo
+        <div className="p-6 pb-4">
+          <Link href="/" className="flex items-center gap-2.5">
+            <div className="w-9 h-9 bg-gradient-to-br from-violet-600 to-indigo-600 rounded-xl flex items-center justify-center shadow-lg">
+              <span className="text-white font-bold text-sm" style={{ fontFamily: 'Fredoka One, sans-serif' }}>EL</span>
+            </div>
+            <span className="text-2xl font-bold shimmer-text" style={{ fontFamily: 'Fredoka One, sans-serif' }}>
+              El_lingo
+            </span>
           </Link>
         </div>
 
-        <nav className="flex-1 p-4 space-y-2">
+        <nav className="flex-1 p-4 space-y-1 overflow-y-auto">
           {NAV_ITEMS.map((item) => {
             const Icon = item.icon;
             const isActive = location === item.href || (item.href !== "/" && location.startsWith(item.href));
             return (
-              <Link key={item.href} href={item.href} className={`flex items-center gap-4 px-4 py-3 rounded-xl font-bold transition-all duration-200 ${isActive ? 'bg-primary/10 text-primary' : 'text-muted-foreground hover:bg-black/5 hover:text-foreground'}`}>
-                <Icon className={`w-6 h-6 ${isActive ? 'animate-pulse' : ''}`} />
+              <Link
+                key={item.href}
+                href={item.href}
+                className={`flex items-center gap-3.5 px-4 py-2.5 rounded-xl font-bold transition-all duration-200 text-sm ${
+                  isActive
+                    ? 'bg-primary/10 text-primary shadow-sm'
+                    : 'text-muted-foreground hover:bg-black/5 hover:text-foreground'
+                }`}
+              >
+                <Icon className={`w-5 h-5 flex-shrink-0 ${isActive ? 'text-primary' : ''}`} />
                 {item.label}
+                {isActive && <span className="ml-auto w-1.5 h-1.5 rounded-full bg-primary" />}
               </Link>
             );
           })}
 
-          <Link href="/hard-round" className="flex items-center gap-4 px-4 py-3 mt-4 rounded-xl font-bold transition-all duration-200 text-destructive bg-destructive/10 hover:bg-destructive/20 border border-destructive/20">
-            <Shield className="w-6 h-6" />
-            Hard Round
-          </Link>
+          <div className="pt-2">
+            <Link
+              href="/hard-round"
+              className={`flex items-center gap-3.5 px-4 py-2.5 rounded-xl font-bold transition-all duration-200 text-sm ${
+                location === '/hard-round'
+                  ? 'bg-destructive/20 text-destructive'
+                  : 'text-destructive bg-destructive/10 hover:bg-destructive/20'
+              } border border-destructive/20`}
+            >
+              <Shield className="w-5 h-5 flex-shrink-0" />
+              Hard Round 🔥
+            </Link>
+          </div>
         </nav>
 
         {stats && (
-          <div className="p-4 border-t flex items-center justify-around text-sm font-bold text-muted-foreground">
-            <div className="flex items-center gap-1.5 text-amber-500">
-              <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M12 2L15 8L22 9L17 14L18 21L12 18L6 21L7 14L2 9L9 8L12 2Z"/></svg>
-              {stats.streak}
-            </div>
-            <div className="flex items-center gap-1.5 text-primary">
-              <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
-              {stats.xp} XP
-            </div>
-            <div className="flex items-center gap-1.5 text-destructive">
-              <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
-              {stats.hearts}
+          <div className="p-4 border-t">
+            <div className="flex items-center justify-around text-sm font-bold bg-muted rounded-2xl p-3">
+              <div className="flex items-center gap-1.5 text-amber-500">
+                <span className="text-lg">⭐</span>
+                <span>{stats.streak}</span>
+              </div>
+              <div className="w-px h-6 bg-border" />
+              <div className="flex items-center gap-1.5 text-violet-600">
+                <span className="text-lg">💎</span>
+                <span>{stats.xp} XP</span>
+              </div>
+              <div className="w-px h-6 bg-border" />
+              <div className="flex items-center gap-1.5 text-rose-500">
+                <span className="text-lg">❤️</span>
+                <span>{stats.hearts}</span>
+              </div>
             </div>
           </div>
         )}
       </aside>
 
       {/* Mobile Top Stats Bar */}
-      <header className="md:hidden sticky top-0 z-40 bg-card border-b px-4 py-3 flex items-center justify-between">
-        <Link href="/" className="font-bold text-xl text-primary tracking-tight">El_lingo</Link>
+      <header className="md:hidden sticky top-0 z-40 bg-card/95 backdrop-blur border-b px-4 py-3 flex items-center justify-between">
+        <Link href="/" className="font-bold text-xl shimmer-text" style={{ fontFamily: 'Fredoka One, sans-serif' }}>
+          El_lingo
+        </Link>
         {stats && (
-          <div className="flex items-center gap-4 text-sm font-bold">
-            <div className="flex items-center gap-1 text-amber-500"><svg className="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M12 2L15 8L22 9L17 14L18 21L12 18L6 21L7 14L2 9L9 8L12 2Z"/></svg>{stats.streak}</div>
-            <div className="flex items-center gap-1 text-primary"><svg className="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>{stats.xp}</div>
-            <div className="flex items-center gap-1 text-destructive"><svg className="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>{stats.hearts}</div>
+          <div className="flex items-center gap-3 text-sm font-bold">
+            <div className="flex items-center gap-1 text-amber-500">⭐ {stats.streak}</div>
+            <div className="flex items-center gap-1 text-violet-600">💎 {stats.xp}</div>
+            <div className="flex items-center gap-1 text-rose-500">❤️ {stats.hearts}</div>
           </div>
         )}
       </header>
@@ -81,21 +120,26 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         </div>
         
         {/* Banner Ad Placeholder */}
-        <div className="w-full bg-muted border-t p-4 flex justify-center mt-auto" id="ad-container">
-          <div className="w-[728px] max-w-full h-[90px] bg-black/5 border border-dashed rounded flex items-center justify-center text-muted-foreground text-sm">
-            Advertisement - Google AdSense (728x90)
+        <div className="w-full bg-muted border-t p-3 flex justify-center mt-auto" id="ad-container">
+          <div className="w-[728px] max-w-full h-[60px] bg-black/5 border border-dashed rounded-xl flex items-center justify-center text-muted-foreground text-xs font-semibold">
+            Advertisement · Google AdSense (728×90)
           </div>
         </div>
       </main>
 
       {/* Mobile Bottom Nav */}
-      <nav className="md:hidden fixed bottom-0 left-0 w-full bg-card border-t flex items-center justify-around p-2 z-50 pb-safe">
-        {NAV_ITEMS.map((item) => {
+      <nav className="md:hidden fixed bottom-0 left-0 w-full bg-card/95 backdrop-blur border-t flex items-center justify-around p-2 z-50 pb-safe">
+        {MOBILE_NAV.map((item) => {
           const Icon = item.icon;
           const isActive = location === item.href || (item.href !== "/" && location.startsWith(item.href));
           return (
-            <Link key={item.href} href={item.href} className={`p-3 rounded-xl flex flex-col items-center gap-1 ${isActive ? 'text-primary' : 'text-muted-foreground'}`}>
-              <Icon className={`w-6 h-6 ${isActive ? 'animate-bounce' : ''}`} />
+            <Link
+              key={item.href}
+              href={item.href}
+              className={`p-2 rounded-xl flex flex-col items-center gap-0.5 min-w-[56px] ${isActive ? 'text-primary' : 'text-muted-foreground'}`}
+            >
+              <Icon className={`w-5 h-5 ${isActive ? 'scale-110' : ''} transition-transform`} />
+              <span className={`text-[10px] font-bold ${isActive ? 'text-primary' : ''}`}>{item.label}</span>
             </Link>
           );
         })}

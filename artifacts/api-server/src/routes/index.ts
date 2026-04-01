@@ -7,6 +7,9 @@ import hardRoundRouter from "./hard-round";
 import progressRouter from "./progress";
 import leaderboardRouter from "./leaderboard";
 import languagesRouter from "./languages";
+import flashcardsRouter from "./flashcards";
+import studyNotesRouter from "./study-notes";
+import examPrepRouter from "./exam-prep";
 
 const router: IRouter = Router();
 
@@ -18,5 +21,8 @@ router.use(hardRoundRouter);
 router.use(progressRouter);
 router.use(leaderboardRouter);
 router.use(languagesRouter);
+router.use(flashcardsRouter);
+router.use(studyNotesRouter);
+router.use(examPrepRouter);
 
 export default router;

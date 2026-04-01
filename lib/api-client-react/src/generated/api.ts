@@ -3,7 +3,7 @@
  * Do not edit manually.
  * Api
  * El_lingo Medical Learning Platform API
- * OpenAPI spec version: 0.1.0
+ * OpenAPI spec version: 0.2.0
  */
 import { useMutation, useQuery } from "@tanstack/react-query";
 import type {
@@ -23,6 +23,10 @@ import type {
   CourseDetail,
   CourseProgress,
   ErrorResponse,
+  Flashcard,
+  FlipFlashcardBody,
+  FlipFlashcardResponse,
+  GetExamPrepQuestionsParams,
   GetHardRoundQuestionsParams,
   GetLeaderboardParams,
   HardRoundResult,
@@ -32,8 +36,10 @@ import type {
   Lesson,
   LessonDetail,
   ListCoursesParams,
+  ListFlashcardsParams,
   ProgressSummary,
   Question,
+  StudyNotes,
   SubmitHardRoundBody,
   UpdateUserProfileBody,
   UserProfile,
@@ -50,7 +56,6 @@ type Awaited<O> = O extends AwaitedInput<infer T> ? T : never;
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
 /**
- * Returns server health status
  * @summary Health check
  */
 export const getHealthCheckUrl = () => {
@@ -287,7 +292,7 @@ export const useUpdateUserProfile = <
 };
 
 /**
- * @summary Get user stats (XP, streak, hearts, total lessons)
+ * @summary Get user stats
  */
 export const getGetUserStatsUrl = () => {
   return `/api/users/stats`;
@@ -338,7 +343,7 @@ export type GetUserStatsQueryResult = NonNullable<
 export type GetUserStatsQueryError = ErrorType<unknown>;
 
 /**
- * @summary Get user stats (XP, streak, hearts, total lessons)
+ * @summary Get user stats
  */
 
 export function useGetUserStats<
@@ -456,7 +461,7 @@ export function useListCourses<
 }
 
 /**
- * @summary Get a specific course with its units
+ * @summary Get a specific course
  */
 export const getGetCourseUrl = (courseId: number) => {
   return `/api/courses/${courseId}`;
@@ -514,7 +519,7 @@ export type GetCourseQueryResult = NonNullable<
 export type GetCourseQueryError = ErrorType<ErrorResponse>;
 
 /**
- * @summary Get a specific course with its units
+ * @summary Get a specific course
  */
 
 export function useGetCourse<
@@ -628,7 +633,7 @@ export function useListLessons<
 }
 
 /**
- * @summary Get a lesson with its questions
+ * @summary Get a lesson with its questions (returns up to 30)
  */
 export const getGetLessonUrl = (lessonId: number) => {
   return `/api/lessons/${lessonId}`;
@@ -686,7 +691,7 @@ export type GetLessonQueryResult = NonNullable<
 export type GetLessonQueryError = ErrorType<ErrorResponse>;
 
 /**
- * @summary Get a lesson with its questions
+ * @summary Get a lesson with its questions (returns up to 30)
  */
 
 export function useGetLesson<
@@ -713,7 +718,7 @@ export function useGetLesson<
 }
 
 /**
- * @summary Mark a lesson as complete and update XP/streak
+ * @summary Mark a lesson as complete
  */
 export const getCompleteLessonUrl = (lessonId: number) => {
   return `/api/lessons/${lessonId}/complete`;
@@ -777,7 +782,7 @@ export type CompleteLessonMutationBody = BodyType<CompleteLessonBody>;
 export type CompleteLessonMutationError = ErrorType<unknown>;
 
 /**
- * @summary Mark a lesson as complete and update XP/streak
+ * @summary Mark a lesson as complete
  */
 export const useCompleteLesson = <
   TError = ErrorType<unknown>,
@@ -800,7 +805,7 @@ export const useCompleteLesson = <
 };
 
 /**
- * @summary Get a set of hard-round medical board-level questions
+ * @summary Get hard-round board-level questions
  */
 export const getGetHardRoundQuestionsUrl = (
   params?: GetHardRoundQuestionsParams,
@@ -873,7 +878,7 @@ export type GetHardRoundQuestionsQueryResult = NonNullable<
 export type GetHardRoundQuestionsQueryError = ErrorType<unknown>;
 
 /**
- * @summary Get a set of hard-round medical board-level questions
+ * @summary Get hard-round board-level questions
  */
 
 export function useGetHardRoundQuestions<
@@ -900,7 +905,7 @@ export function useGetHardRoundQuestions<
 }
 
 /**
- * @summary Submit hard round answers and get score
+ * @summary Submit hard round answers
  */
 export const getSubmitHardRoundUrl = () => {
   return `/api/hard-round/submit`;
@@ -963,7 +968,7 @@ export type SubmitHardRoundMutationBody = BodyType<SubmitHardRoundBody>;
 export type SubmitHardRoundMutationError = ErrorType<unknown>;
 
 /**
- * @summary Submit hard round answers and get score
+ * @summary Submit hard round answers
  */
 export const useSubmitHardRound = <
   TError = ErrorType<unknown>,
@@ -986,7 +991,7 @@ export const useSubmitHardRound = <
 };
 
 /**
- * @summary Get user's full learning progress across all courses
+ * @summary Get user learning progress
  */
 export const getGetUserProgressUrl = () => {
   return `/api/progress`;
@@ -1037,7 +1042,7 @@ export type GetUserProgressQueryResult = NonNullable<
 export type GetUserProgressQueryError = ErrorType<unknown>;
 
 /**
- * @summary Get user's full learning progress across all courses
+ * @summary Get user learning progress
  */
 
 export function useGetUserProgress<
@@ -1061,7 +1066,7 @@ export function useGetUserProgress<
 }
 
 /**
- * @summary Get aggregated progress summary (total XP, courses completed, streak, etc.)
+ * @summary Get aggregated progress summary
  */
 export const getGetProgressSummaryUrl = () => {
   return `/api/progress/summary`;
@@ -1112,7 +1117,7 @@ export type GetProgressSummaryQueryResult = NonNullable<
 export type GetProgressSummaryQueryError = ErrorType<unknown>;
 
 /**
- * @summary Get aggregated progress summary (total XP, courses completed, streak, etc.)
+ * @summary Get aggregated progress summary
  */
 
 export function useGetProgressSummary<
@@ -1136,7 +1141,7 @@ export function useGetProgressSummary<
 }
 
 /**
- * @summary Get top learners leaderboard
+ * @summary Get leaderboard
  */
 export const getGetLeaderboardUrl = (params?: GetLeaderboardParams) => {
   const normalizedParams = new URLSearchParams();
@@ -1203,7 +1208,7 @@ export type GetLeaderboardQueryResult = NonNullable<
 export type GetLeaderboardQueryError = ErrorType<unknown>;
 
 /**
- * @summary Get top learners leaderboard
+ * @summary Get leaderboard
  */
 
 export function useGetLeaderboard<
@@ -1230,7 +1235,7 @@ export function useGetLeaderboard<
 }
 
 /**
- * @summary List all supported interface languages
+ * @summary List supported languages
  */
 export const getListLanguagesUrl = () => {
   return `/api/languages`;
@@ -1281,7 +1286,7 @@ export type ListLanguagesQueryResult = NonNullable<
 export type ListLanguagesQueryError = ErrorType<unknown>;
 
 /**
- * @summary List all supported interface languages
+ * @summary List supported languages
  */
 
 export function useListLanguages<
@@ -1303,3 +1308,460 @@ export function useListLanguages<
 
   return { ...query, queryKey: queryOptions.queryKey };
 }
+
+/**
+ * @summary List flashcards for a lesson or course
+ */
+export const getListFlashcardsUrl = (params?: ListFlashcardsParams) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? "null" : value.toString());
+    }
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0
+    ? `/api/flashcards?${stringifiedParams}`
+    : `/api/flashcards`;
+};
+
+export const listFlashcards = async (
+  params?: ListFlashcardsParams,
+  options?: RequestInit,
+): Promise<Flashcard[]> => {
+  return customFetch<Flashcard[]>(getListFlashcardsUrl(params), {
+    ...options,
+    method: "GET",
+  });
+};
+
+export const getListFlashcardsQueryKey = (params?: ListFlashcardsParams) => {
+  return [`/api/flashcards`, ...(params ? [params] : [])] as const;
+};
+
+export const getListFlashcardsQueryOptions = <
+  TData = Awaited<ReturnType<typeof listFlashcards>>,
+  TError = ErrorType<unknown>,
+>(
+  params?: ListFlashcardsParams,
+  options?: {
+    query?: UseQueryOptions<
+      Awaited<ReturnType<typeof listFlashcards>>,
+      TError,
+      TData
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey = queryOptions?.queryKey ?? getListFlashcardsQueryKey(params);
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof listFlashcards>>> = ({
+    signal,
+  }) => listFlashcards(params, { signal, ...requestOptions });
+
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof listFlashcards>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type ListFlashcardsQueryResult = NonNullable<
+  Awaited<ReturnType<typeof listFlashcards>>
+>;
+export type ListFlashcardsQueryError = ErrorType<unknown>;
+
+/**
+ * @summary List flashcards for a lesson or course
+ */
+
+export function useListFlashcards<
+  TData = Awaited<ReturnType<typeof listFlashcards>>,
+  TError = ErrorType<unknown>,
+>(
+  params?: ListFlashcardsParams,
+  options?: {
+    query?: UseQueryOptions<
+      Awaited<ReturnType<typeof listFlashcards>>,
+      TError,
+      TData
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getListFlashcardsQueryOptions(params, options);
+
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey;
+  };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+/**
+ * @summary Record flashcard flip result (known or unknown)
+ */
+export const getRecordFlashcardFlipUrl = (flashcardId: number) => {
+  return `/api/flashcards/${flashcardId}/flip`;
+};
+
+export const recordFlashcardFlip = async (
+  flashcardId: number,
+  flipFlashcardBody: FlipFlashcardBody,
+  options?: RequestInit,
+): Promise<FlipFlashcardResponse> => {
+  return customFetch<FlipFlashcardResponse>(
+    getRecordFlashcardFlipUrl(flashcardId),
+    {
+      ...options,
+      method: "POST",
+      headers: { "Content-Type": "application/json", ...options?.headers },
+      body: JSON.stringify(flipFlashcardBody),
+    },
+  );
+};
+
+export const getRecordFlashcardFlipMutationOptions = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof recordFlashcardFlip>>,
+    TError,
+    { flashcardId: number; data: BodyType<FlipFlashcardBody> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof recordFlashcardFlip>>,
+  TError,
+  { flashcardId: number; data: BodyType<FlipFlashcardBody> },
+  TContext
+> => {
+  const mutationKey = ["recordFlashcardFlip"];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof recordFlashcardFlip>>,
+    { flashcardId: number; data: BodyType<FlipFlashcardBody> }
+  > = (props) => {
+    const { flashcardId, data } = props ?? {};
+
+    return recordFlashcardFlip(flashcardId, data, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type RecordFlashcardFlipMutationResult = NonNullable<
+  Awaited<ReturnType<typeof recordFlashcardFlip>>
+>;
+export type RecordFlashcardFlipMutationBody = BodyType<FlipFlashcardBody>;
+export type RecordFlashcardFlipMutationError = ErrorType<unknown>;
+
+/**
+ * @summary Record flashcard flip result (known or unknown)
+ */
+export const useRecordFlashcardFlip = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof recordFlashcardFlip>>,
+    TError,
+    { flashcardId: number; data: BodyType<FlipFlashcardBody> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof recordFlashcardFlip>>,
+  TError,
+  { flashcardId: number; data: BodyType<FlipFlashcardBody> },
+  TContext
+> => {
+  return useMutation(getRecordFlashcardFlipMutationOptions(options));
+};
+
+/**
+ * @summary Get study notes/info for a lesson
+ */
+export const getGetStudyNotesUrl = (lessonId: number) => {
+  return `/api/study-notes/${lessonId}`;
+};
+
+export const getStudyNotes = async (
+  lessonId: number,
+  options?: RequestInit,
+): Promise<StudyNotes> => {
+  return customFetch<StudyNotes>(getGetStudyNotesUrl(lessonId), {
+    ...options,
+    method: "GET",
+  });
+};
+
+export const getGetStudyNotesQueryKey = (lessonId: number) => {
+  return [`/api/study-notes/${lessonId}`] as const;
+};
+
+export const getGetStudyNotesQueryOptions = <
+  TData = Awaited<ReturnType<typeof getStudyNotes>>,
+  TError = ErrorType<ErrorResponse>,
+>(
+  lessonId: number,
+  options?: {
+    query?: UseQueryOptions<
+      Awaited<ReturnType<typeof getStudyNotes>>,
+      TError,
+      TData
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey = queryOptions?.queryKey ?? getGetStudyNotesQueryKey(lessonId);
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getStudyNotes>>> = ({
+    signal,
+  }) => getStudyNotes(lessonId, { signal, ...requestOptions });
+
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!lessonId,
+    ...queryOptions,
+  } as UseQueryOptions<
+    Awaited<ReturnType<typeof getStudyNotes>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type GetStudyNotesQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getStudyNotes>>
+>;
+export type GetStudyNotesQueryError = ErrorType<ErrorResponse>;
+
+/**
+ * @summary Get study notes/info for a lesson
+ */
+
+export function useGetStudyNotes<
+  TData = Awaited<ReturnType<typeof getStudyNotes>>,
+  TError = ErrorType<ErrorResponse>,
+>(
+  lessonId: number,
+  options?: {
+    query?: UseQueryOptions<
+      Awaited<ReturnType<typeof getStudyNotes>>,
+      TError,
+      TData
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetStudyNotesQueryOptions(lessonId, options);
+
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey;
+  };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+/**
+ * @summary Get 30 exam prep questions (mixed difficulty, USMLE style)
+ */
+export const getGetExamPrepQuestionsUrl = (
+  params?: GetExamPrepQuestionsParams,
+) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? "null" : value.toString());
+    }
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0
+    ? `/api/exam-prep/questions?${stringifiedParams}`
+    : `/api/exam-prep/questions`;
+};
+
+export const getExamPrepQuestions = async (
+  params?: GetExamPrepQuestionsParams,
+  options?: RequestInit,
+): Promise<Question[]> => {
+  return customFetch<Question[]>(getGetExamPrepQuestionsUrl(params), {
+    ...options,
+    method: "GET",
+  });
+};
+
+export const getGetExamPrepQuestionsQueryKey = (
+  params?: GetExamPrepQuestionsParams,
+) => {
+  return [`/api/exam-prep/questions`, ...(params ? [params] : [])] as const;
+};
+
+export const getGetExamPrepQuestionsQueryOptions = <
+  TData = Awaited<ReturnType<typeof getExamPrepQuestions>>,
+  TError = ErrorType<unknown>,
+>(
+  params?: GetExamPrepQuestionsParams,
+  options?: {
+    query?: UseQueryOptions<
+      Awaited<ReturnType<typeof getExamPrepQuestions>>,
+      TError,
+      TData
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey =
+    queryOptions?.queryKey ?? getGetExamPrepQuestionsQueryKey(params);
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof getExamPrepQuestions>>
+  > = ({ signal }) =>
+    getExamPrepQuestions(params, { signal, ...requestOptions });
+
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof getExamPrepQuestions>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type GetExamPrepQuestionsQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getExamPrepQuestions>>
+>;
+export type GetExamPrepQuestionsQueryError = ErrorType<unknown>;
+
+/**
+ * @summary Get 30 exam prep questions (mixed difficulty, USMLE style)
+ */
+
+export function useGetExamPrepQuestions<
+  TData = Awaited<ReturnType<typeof getExamPrepQuestions>>,
+  TError = ErrorType<unknown>,
+>(
+  params?: GetExamPrepQuestionsParams,
+  options?: {
+    query?: UseQueryOptions<
+      Awaited<ReturnType<typeof getExamPrepQuestions>>,
+      TError,
+      TData
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetExamPrepQuestionsQueryOptions(params, options);
+
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey;
+  };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+/**
+ * @summary Submit exam prep results
+ */
+export const getSubmitExamPrepUrl = () => {
+  return `/api/exam-prep/submit`;
+};
+
+export const submitExamPrep = async (
+  submitHardRoundBody: SubmitHardRoundBody,
+  options?: RequestInit,
+): Promise<HardRoundResult> => {
+  return customFetch<HardRoundResult>(getSubmitExamPrepUrl(), {
+    ...options,
+    method: "POST",
+    headers: { "Content-Type": "application/json", ...options?.headers },
+    body: JSON.stringify(submitHardRoundBody),
+  });
+};
+
+export const getSubmitExamPrepMutationOptions = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof submitExamPrep>>,
+    TError,
+    { data: BodyType<SubmitHardRoundBody> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof submitExamPrep>>,
+  TError,
+  { data: BodyType<SubmitHardRoundBody> },
+  TContext
+> => {
+  const mutationKey = ["submitExamPrep"];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof submitExamPrep>>,
+    { data: BodyType<SubmitHardRoundBody> }
+  > = (props) => {
+    const { data } = props ?? {};
+
+    return submitExamPrep(data, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type SubmitExamPrepMutationResult = NonNullable<
+  Awaited<ReturnType<typeof submitExamPrep>>
+>;
+export type SubmitExamPrepMutationBody = BodyType<SubmitHardRoundBody>;
+export type SubmitExamPrepMutationError = ErrorType<unknown>;
+
+/**
+ * @summary Submit exam prep results
+ */
+export const useSubmitExamPrep = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof submitExamPrep>>,
+    TError,
+    { data: BodyType<SubmitHardRoundBody> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof submitExamPrep>>,
+  TError,
+  { data: BodyType<SubmitHardRoundBody> },
+  TContext
+> => {
+  return useMutation(getSubmitExamPrepMutationOptions(options));
+};

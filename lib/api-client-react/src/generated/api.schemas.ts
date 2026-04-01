@@ -3,7 +3,7 @@
  * Do not edit manually.
  * Api
  * El_lingo Medical Learning Platform API
- * OpenAPI spec version: 0.1.0
+ * OpenAPI spec version: 0.2.0
  */
 export interface HealthStatus {
   status: string;
@@ -201,27 +201,59 @@ export interface Language {
   flagEmoji: string;
 }
 
+export interface Flashcard {
+  id: number;
+  /** @nullable */
+  lessonId?: number | null;
+  /** @nullable */
+  courseId?: number | null;
+  front: string;
+  back: string;
+  category: string;
+  difficulty: string;
+  timesFlipped: number;
+  timesKnown: number;
+}
+
+export interface FlipFlashcardBody {
+  known: boolean;
+}
+
+export interface FlipFlashcardResponse {
+  success: boolean;
+  timesFlipped: number;
+  timesKnown: number;
+}
+
+export interface StudyNotes {
+  lessonId: number;
+  title: string;
+  content: string;
+  keyPoints: string[];
+  mnemonics: string[];
+  clinicalPearls: string[];
+}
+
 export type ListCoursesParams = {
-  /**
-   * Interface language code (e.g. en, es, fr)
-   */
   language?: string;
+  category?: string;
 };
 
 export type GetHardRoundQuestionsParams = {
-  /**
-   * Medical category (anatomy, pharmacology, etc.)
-   */
   category?: string;
-  /**
-   * Number of questions to return (default 10)
-   */
   count?: number;
 };
 
 export type GetLeaderboardParams = {
-  /**
-   * Number of entries (default 20)
-   */
   limit?: number;
+};
+
+export type ListFlashcardsParams = {
+  lessonId?: number;
+  courseId?: number;
+};
+
+export type GetExamPrepQuestionsParams = {
+  subject?: string;
+  count?: number;
 };

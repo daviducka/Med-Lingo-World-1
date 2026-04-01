@@ -3,7 +3,7 @@
  * Do not edit manually.
  * Api
  * El_lingo Medical Learning Platform API
- * OpenAPI spec version: 0.1.0
+ * OpenAPI spec version: 0.2.0
  */
 
 export * from "./answerSubmission";
@@ -13,6 +13,10 @@ export * from "./course";
 export * from "./courseDetail";
 export * from "./courseProgress";
 export * from "./errorResponse";
+export * from "./flashcard";
+export * from "./flipFlashcardBody";
+export * from "./flipFlashcardResponse";
+export * from "./getExamPrepQuestionsParams";
 export * from "./getHardRoundQuestionsParams";
 export * from "./getLeaderboardParams";
 export * from "./hardRoundResult";
@@ -22,11 +26,13 @@ export * from "./leaderboardEntry";
 export * from "./lesson";
 export * from "./lessonDetail";
 export * from "./listCoursesParams";
+export * from "./listFlashcardsParams";
 export * from "./progressSummary";
 export * from "./question";
 export * from "./questionDifficulty";
 export * from "./questionQuestionType";
 export * from "./questionResult";
+export * from "./studyNotes";
 export * from "./submitHardRoundBody";
 export * from "./updateUserProfileBody";
 export * from "./userProfile";

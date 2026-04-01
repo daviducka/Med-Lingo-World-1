@@ -4,6 +4,7 @@ import { ListLanguagesResponse } from "@workspace/api-zod";
 const router: IRouter = Router();
 
 const SUPPORTED_LANGUAGES = [
+  { code: "sq", name: "Albanian", nativeName: "Shqip", flagEmoji: "🇦🇱" },
   { code: "en", name: "English", nativeName: "English", flagEmoji: "🇺🇸" },
   { code: "es", name: "Spanish", nativeName: "Español", flagEmoji: "🇪🇸" },
   { code: "fr", name: "French", nativeName: "Français", flagEmoji: "🇫🇷" },

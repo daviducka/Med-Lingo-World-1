@@ -1,28 +1,23 @@
 openapi: 3.1.0
 info:
   title: Api
-  version: 0.1.0
+  version: 0.2.0
   description: El_lingo Medical Learning Platform API
 servers:
   - url: /api
     description: Base API path
 tags:
   - name: health
-    description: Health operations
   - name: users
-    description: User profile and progress
   - name: courses
-    description: Medical courses and subjects
   - name: lessons
-    description: Individual lessons within courses
   - name: questions
-    description: Quiz questions and answers
   - name: progress
-    description: User learning progress
   - name: leaderboard
-    description: Leaderboard and rankings
   - name: languages
-    description: Supported interface languages
+  - name: flashcards
+  - name: study-notes
+  - name: exam-prep
 
 paths:
   /healthz:
@@ -30,7 +25,6 @@ paths:
       operationId: healthCheck
       tags: [health]
       summary: Health check
-      description: Returns server health status
       responses:
         "200":
           description: Healthy
@@ -73,7 +67,7 @@ paths:
     get:
       operationId: getUserStats
       tags: [users]
-      summary: Get user stats (XP, streak, hearts, total lessons)
+      summary: Get user stats
       responses:
         "200":
           description: User stats
@@ -92,7 +86,10 @@ paths:
           in: query
           schema:
             type: string
-          description: Interface language code (e.g. en, es, fr)
+        - name: category
+          in: query
+          schema:
+            type: string
       responses:
         "200":
           description: List of courses
@@ -107,7 +104,7 @@ paths:
     get:
       operationId: getCourse
       tags: [courses]
-      summary: Get a specific course with its units
+      summary: Get a specific course
       parameters:
         - name: courseId
           in: path
@@ -116,13 +113,13 @@ paths:
             type: integer
       responses:
         "200":
-          description: Course details with units
+          description: Course details
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/CourseDetail"
         "404":
-          description: Course not found
+          description: Not found
           content:
             application/json:
               schema:
@@ -153,7 +150,7 @@ paths:
     get:
       operationId: getLesson
       tags: [lessons]
-      summary: Get a lesson with its questions
+      summary: Get a lesson with its questions (returns up to 30)
       parameters:
         - name: lessonId
           in: path
@@ -168,7 +165,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/LessonDetail"
         "404":
-          description: Lesson not found
+          description: Not found
           content:
             application/json:
               schema:
@@ -178,7 +175,7 @@ paths:
     post:
       operationId: completeLesson
       tags: [lessons]
-      summary: Mark a lesson as complete and update XP/streak
+      summary: Mark a lesson as complete
       parameters:
         - name: lessonId
           in: path
@@ -193,7 +190,7 @@ paths:
               $ref: "#/components/schemas/CompleteLessonBody"
       responses:
         "200":
-          description: Lesson completion result
+          description: Completion result
           content:
             application/json:
               schema:
@@ -203,18 +200,16 @@ paths:
     get:
       operationId: getHardRoundQuestions
       tags: [questions]
-      summary: Get a set of hard-round medical board-level questions
+      summary: Get hard-round board-level questions
       parameters:
         - name: category
           in: query
           schema:
             type: string
-          description: Medical category (anatomy, pharmacology, etc.)
         - name: count
           in: query
           schema:
             type: integer
-          description: Number of questions to return (default 10)
       responses:
         "200":
           description: Hard round questions
@@ -229,7 +224,7 @@ paths:
     post:
       operationId: submitHardRound
       tags: [questions]
-      summary: Submit hard round answers and get score
+      summary: Submit hard round answers
       requestBody:
         required: true
         content:
@@ -248,7 +243,7 @@ paths:
     get:
       operationId: getUserProgress
       tags: [progress]
-      summary: Get user's full learning progress across all courses
+      summary: Get user learning progress
       responses:
         "200":
           description: User progress
@@ -263,7 +258,7 @@ paths:
     get:
       operationId: getProgressSummary
       tags: [progress]
-      summary: Get aggregated progress summary (total XP, courses completed, streak, etc.)
+      summary: Get aggregated progress summary
       responses:
         "200":
           description: Progress summary
@@ -276,13 +271,12 @@ paths:
     get:
       operationId: getLeaderboard
       tags: [leaderboard]
-      summary: Get top learners leaderboard
+      summary: Get leaderboard
       parameters:
         - name: limit
           in: query
           schema:
             type: integer
-          description: Number of entries (default 20)
       responses:
         "200":
           description: Leaderboard entries
@@ -297,7 +291,7 @@ paths:
     get:
       operationId: listLanguages
       tags: [languages]
-      summary: List all supported interface languages
+      summary: List supported languages
       responses:
         "200":
           description: Supported languages
@@ -308,6 +302,123 @@ paths:
                 items:
                   $ref: "#/components/schemas/Language"
 
+  /flashcards:
+    get:
+      operationId: listFlashcards
+      tags: [flashcards]
+      summary: List flashcards for a lesson or course
+      parameters:
+        - name: lessonId
+          in: query
+          schema:
+            type: integer
+        - name: courseId
+          in: query
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Flashcards list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Flashcard"
+
+  /flashcards/{flashcardId}/flip:
+    post:
+      operationId: recordFlashcardFlip
+      tags: [flashcards]
+      summary: Record flashcard flip result (known or unknown)
+      parameters:
+        - name: flashcardId
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/FlipFlashcardBody"
+      responses:
+        "200":
+          description: Flip recorded
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FlipFlashcardResponse"
+
+  /study-notes/{lessonId}:
+    get:
+      operationId: getStudyNotes
+      tags: [study-notes]
+      summary: Get study notes/info for a lesson
+      parameters:
+        - name: lessonId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Study notes
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StudyNotes"
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /exam-prep/questions:
+    get:
+      operationId: getExamPrepQuestions
+      tags: [exam-prep]
+      summary: Get 30 exam prep questions (mixed difficulty, USMLE style)
+      parameters:
+        - name: subject
+          in: query
+          schema:
+            type: string
+        - name: count
+          in: query
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Exam prep questions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Question"
+
+  /exam-prep/submit:
+    post:
+      operationId: submitExamPrep
+      tags: [exam-prep]
+      summary: Submit exam prep results
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SubmitHardRoundBody"
+      responses:
+        "200":
+          description: Exam prep result
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HardRoundResult"
+
 components:
   schemas:
     HealthStatus:
@@ -315,16 +426,14 @@ components:
       properties:
         status:
           type: string
-      required:
-        - status
+      required: [status]
 
     ErrorResponse:
       type: object
       properties:
         error:
           type: string
-      required:
-        - error
+      required: [error]
 
     UserProfile:
       type: object
@@ -347,15 +456,7 @@ components:
           type: integer
         createdAt:
           type: string
-      required:
-        - id
-        - username
-        - displayName
-        - selectedLanguage
-        - xp
-        - streak
-        - hearts
-        - createdAt
+      required: [id, username, displayName, selectedLanguage, xp, streak, hearts, createdAt]
 
     UpdateUserProfileBody:
       type: object
@@ -384,14 +485,7 @@ components:
           type: integer
         weeklyXp:
           type: integer
-      required:
-        - xp
-        - streak
-        - hearts
-        - totalLessonsCompleted
-        - hardRoundsCompleted
-        - rank
-        - weeklyXp
+      required: [xp, streak, hearts, totalLessonsCompleted, hardRoundsCompleted, rank, weeklyXp]
 
     Course:
       type: object
@@ -414,16 +508,7 @@ components:
           type: string
         language:
           type: string
-      required:
-        - id
-        - title
-        - description
-        - category
-        - iconEmoji
-        - color
-        - totalLessons
-        - difficulty
-        - language
+      required: [id, title, description, category, iconEmoji, color, totalLessons, difficulty, language]
 
     CourseDetail:
       type: object
@@ -448,16 +533,7 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/Lesson"
-      required:
-        - id
-        - title
-        - description
-        - category
-        - iconEmoji
-        - color
-        - difficulty
-        - language
-        - lessons
+      required: [id, title, description, category, iconEmoji, color, difficulty, language, lessons]
 
     Lesson:
       type: object
@@ -480,16 +556,7 @@ components:
           type: boolean
         questionCount:
           type: integer
-      required:
-        - id
-        - courseId
-        - title
-        - description
-        - xpReward
-        - orderIndex
-        - isLocked
-        - isCompleted
-        - questionCount
+      required: [id, courseId, title, description, xpReward, orderIndex, isLocked, isCompleted, questionCount]
 
     LessonDetail:
       type: object
@@ -508,13 +575,7 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/Question"
-      required:
-        - id
-        - courseId
-        - title
-        - description
-        - xpReward
-        - questions
+      required: [id, courseId, title, description, xpReward, questions]
 
     Question:
       type: object
@@ -543,16 +604,7 @@ components:
           enum: [easy, medium, hard, board_level]
         language:
           type: string
-      required:
-        - id
-        - questionText
-        - questionType
-        - options
-        - correctAnswer
-        - explanation
-        - category
-        - difficulty
-        - language
+      required: [id, questionText, questionType, options, correctAnswer, explanation, category, difficulty, language]
 
     CompleteLessonBody:
       type: object
@@ -565,10 +617,7 @@ components:
           type: integer
         timeTakenSeconds:
           type: integer
-      required:
-        - score
-        - correctAnswers
-        - totalQuestions
+      required: [score, correctAnswers, totalQuestions]
 
     CompleteLessonResponse:
       type: object
@@ -585,13 +634,7 @@ components:
           type: integer
         lessonCompleted:
           type: boolean
-      required:
-        - xpEarned
-        - newXpTotal
-        - streakUpdated
-        - newStreak
-        - heartsRemaining
-        - lessonCompleted
+      required: [xpEarned, newXpTotal, streakUpdated, newStreak, heartsRemaining, lessonCompleted]
 
     SubmitHardRoundBody:
       type: object
@@ -602,8 +645,7 @@ components:
             $ref: "#/components/schemas/AnswerSubmission"
         timeTakenSeconds:
           type: integer
-      required:
-        - answers
+      required: [answers]
 
     AnswerSubmission:
       type: object
@@ -612,9 +654,7 @@ components:
           type: integer
         selectedAnswer:
           type: string
-      required:
-        - questionId
-        - selectedAnswer
+      required: [questionId, selectedAnswer]
 
     HardRoundResult:
       type: object
@@ -631,12 +671,7 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/QuestionResult"
-      required:
-        - score
-        - totalQuestions
-        - correctCount
-        - xpEarned
-        - results
+      required: [score, totalQuestions, correctCount, xpEarned, results]
 
     QuestionResult:
       type: object
@@ -651,12 +686,7 @@ components:
           type: string
         explanation:
           type: string
-      required:
-        - questionId
-        - isCorrect
-        - correctAnswer
-        - selectedAnswer
-        - explanation
+      required: [questionId, isCorrect, correctAnswer, selectedAnswer, explanation]
 
     CourseProgress:
       type: object
@@ -673,13 +703,7 @@ components:
           type: integer
         xpEarned:
           type: integer
-      required:
-        - courseId
-        - courseName
-        - completedLessons
-        - totalLessons
-        - percentComplete
-        - xpEarned
+      required: [courseId, courseName, completedLessons, totalLessons, percentComplete, xpEarned]
 
     ProgressSummary:
       type: object
@@ -700,15 +724,7 @@ components:
           type: integer
         monthlyXp:
           type: integer
-      required:
-        - totalXp
-        - currentStreak
-        - coursesCompleted
-        - lessonsCompleted
-        - hardRoundsCompleted
-        - averageScore
-        - weeklyXp
-        - monthlyXp
+      required: [totalXp, currentStreak, coursesCompleted, lessonsCompleted, hardRoundsCompleted, averageScore, weeklyXp, monthlyXp]
 
     LeaderboardEntry:
       type: object
@@ -727,13 +743,7 @@ components:
           type: integer
         weeklyXp:
           type: integer
-      required:
-        - rank
-        - userId
-        - displayName
-        - xp
-        - streak
-        - weeklyXp
+      required: [rank, userId, displayName, xp, streak, weeklyXp]
 
     Language:
       type: object
@@ -746,8 +756,68 @@ components:
           type: string
         flagEmoji:
           type: string
-      required:
-        - code
-        - name
-        - nativeName
-        - flagEmoji
+      required: [code, name, nativeName, flagEmoji]
+
+    Flashcard:
+      type: object
+      properties:
+        id:
+          type: integer
+        lessonId:
+          type: ["integer", "null"]
+        courseId:
+          type: ["integer", "null"]
+        front:
+          type: string
+        back:
+          type: string
+        category:
+          type: string
+        difficulty:
+          type: string
+        timesFlipped:
+          type: integer
+        timesKnown:
+          type: integer
+      required: [id, front, back, category, difficulty, timesFlipped, timesKnown]
+
+    FlipFlashcardBody:
+      type: object
+      properties:
+        known:
+          type: boolean
+      required: [known]
+
+    FlipFlashcardResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        timesFlipped:
+          type: integer
+        timesKnown:
+          type: integer
+      required: [success, timesFlipped, timesKnown]
+
+    StudyNotes:
+      type: object
+      properties:
+        lessonId:
+          type: integer
+        title:
+          type: string
+        content:
+          type: string
+        keyPoints:
+          type: array
+          items:
+            type: string
+        mnemonics:
+          type: array
+          items:
+            type: string
+        clinicalPearls:
+          type: array
+          items:
+            type: string
+      required: [lessonId, title, content, keyPoints, mnemonics, clinicalPearls]

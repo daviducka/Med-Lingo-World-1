@@ -6,14 +6,16 @@
  * OpenAPI spec version: 0.2.0
  */
 
-export interface Course {
+export interface Flashcard {
   id: number;
-  title: string;
-  description: string;
+  /** @nullable */
+  lessonId?: number | null;
+  /** @nullable */
+  courseId?: number | null;
+  front: string;
+  back: string;
   category: string;
-  iconEmoji: string;
-  color: string;
-  totalLessons: number;
   difficulty: string;
-  language: string;
+  timesFlipped: number;
+  timesKnown: number;
 }

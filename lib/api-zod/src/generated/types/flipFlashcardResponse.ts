@@ -6,9 +6,8 @@
  * OpenAPI spec version: 0.2.0
  */
 
-export interface CompleteLessonBody {
-  score: number;
-  correctAnswers: number;
-  totalQuestions: number;
-  timeTakenSeconds?: number;
+export interface FlipFlashcardResponse {
+  success: boolean;
+  timesFlipped: number;
+  timesKnown: number;
 }
