@@ -30,6 +30,45 @@ router.get("/subscription", async (req, res): Promise<void> => {
   });
 });
 
+// Activate subscription after PayPal payment
+router.post("/activate", async (req, res): Promise<void> => {
+  const now = new Date();
+  const oneYearLater = new Date(now);
+  oneYearLater.setFullYear(oneYearLater.getFullYear() + 1);
+
+  const existing = await db
+    .select()
+    .from(subscriptionsTable)
+    .where(eq(subscriptionsTable.userId, DEFAULT_USER_ID));
+
+  if (existing.length > 0) {
+    await db
+      .update(subscriptionsTable)
+      .set({
+        status: "active",
+        planType: "premium",
+        price: 1500,
+        currency: "USD",
+        currentPeriodStart: now,
+        currentPeriodEnd: oneYearLater,
+        updatedAt: now,
+      })
+      .where(eq(subscriptionsTable.userId, DEFAULT_USER_ID));
+  } else {
+    await db.insert(subscriptionsTable).values({
+      userId: DEFAULT_USER_ID,
+      status: "active",
+      planType: "premium",
+      price: 1500,
+      currency: "USD",
+      currentPeriodStart: now,
+      currentPeriodEnd: oneYearLater,
+    });
+  }
+
+  res.json({ success: true, expiresAt: oneYearLater.toISOString() });
+});
+
 // Check if user is subscribed
 router.get("/is-subscribed", async (req, res): Promise<void> => {
   const subs = await db
