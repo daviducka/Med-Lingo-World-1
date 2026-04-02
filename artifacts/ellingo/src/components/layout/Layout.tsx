@@ -67,8 +67,8 @@ export default function Layout({ children }: { children: React.ReactNode }) {
               <span className="text-white font-black text-base" style={{ fontFamily: "Fredoka One, sans-serif" }}>EL</span>
             </div>
             <div>
-              <div className="text-xl font-black leading-tight shimmer-text" style={{ fontFamily: "Fredoka One, sans-serif" }}>El_lingo</div>
-              <div className="text-[9px] text-gray-400 font-semibold tracking-widest uppercase">by Elson</div>
+              <div className="text-xl font-black leading-tight shimmer-text" style={{ fontFamily: "Fredoka One, sans-serif" }}>Med Lingo Portal</div>
+              <div className="text-[9px] text-gray-400 font-semibold tracking-widest uppercase">Medical Learning</div>
             </div>
           </Link>
         </div>
@@ -170,7 +170,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                 <span className="text-[9px] text-gray-400 font-semibold">Jeta</span>
               </div>
             </div>
-            <p className="text-center text-[9px] text-gray-300 font-semibold mt-2 tracking-widest uppercase">El_lingo • by Elson</p>
+            <p className="text-center text-[9px] text-gray-300 font-semibold mt-2 tracking-widest uppercase">Med Lingo Portal</p>
           </div>
         )}
       </aside>
@@ -181,7 +181,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           <div className="w-8 h-8 rounded-xl flex items-center justify-center shadow-md" style={{ background: "linear-gradient(135deg, #7c3aed, #2563eb)" }}>
             <span className="text-white font-black text-xs" style={{ fontFamily: "Fredoka One, sans-serif" }}>EL</span>
           </div>
-          <span className="font-black text-lg shimmer-text" style={{ fontFamily: "Fredoka One, sans-serif" }}>El_lingo</span>
+          <span className="font-black text-lg shimmer-text" style={{ fontFamily: "Fredoka One, sans-serif" }}>Med Lingo Portal</span>
         </Link>
         {stats && (
           <div className="flex items-center gap-3 text-sm font-bold">

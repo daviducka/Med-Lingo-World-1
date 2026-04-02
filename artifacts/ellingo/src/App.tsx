@@ -6,6 +6,7 @@ import NotFound from "@/pages/not-found";
 import BackgroundMusic from "@/components/BackgroundMusic";
 
 import Layout from "@/components/layout/Layout";
+import PaywallGate from "@/components/PaywallGate";
 import Home from "@/pages/Home";
 import Learn from "@/pages/Learn";
 import CourseDetail from "@/pages/CourseDetail";
@@ -67,7 +68,9 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
         <WouterRouter base={import.meta.env.BASE_URL.replace(/\/$/, "")}>
-          <Router />
+          <PaywallGate>
+            <Router />
+          </PaywallGate>
         </WouterRouter>
         <BackgroundMusic />
         <Toaster />
