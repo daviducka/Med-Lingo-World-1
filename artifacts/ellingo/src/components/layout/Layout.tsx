@@ -1,9 +1,9 @@
 import React from "react";
 import { Link, useLocation } from "wouter";
 import {
-  Home, BookOpen, Trophy, BarChart3, User, Shield, Brain,
+  Home, BookOpen, Trophy, BarChart3, User, Brain,
   FileText, GraduationCap, Bot, NotebookPen, Gamepad2, Award,
-  Sparkles, Flame,
+  Flame,
 } from "lucide-react";
 import { useGetUserStats } from "@workspace/api-client-react";
 
@@ -117,20 +117,6 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
           {/* Special buttons */}
           <div className="space-y-2 pt-2">
-            <Link
-              href="/pricing"
-              className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-bold transition-all duration-200 group"
-              style={{
-                background: location === "/pricing"
-                  ? "linear-gradient(135deg, #7c3aed, #2563eb)"
-                  : "linear-gradient(135deg, rgba(124,58,237,0.12), rgba(37,99,235,0.08))",
-                color: location === "/pricing" ? "#fff" : "#7c3aed",
-                border: "1px solid rgba(124,58,237,0.2)",
-              }}
-            >
-              <Sparkles className="w-4 h-4 shrink-0" />
-              <span>Premium 👑</span>
-            </Link>
             <Link
               href="/hard-round"
               className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-bold transition-all duration-200"

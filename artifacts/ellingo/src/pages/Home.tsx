@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "wouter";
 import { useGetUserProfile, useGetUserStats, useListCourses } from "@workspace/api-client-react";
-import { Flame, Target, ChevronRight, BookOpen, Layers } from "lucide-react";
+import { Flame, Target, ChevronRight, BookOpen, Layers, Swords } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 
 export default function Home() {
@@ -167,7 +167,7 @@ export default function Home() {
           <div className="relative p-6 md:p-8 flex flex-col md:flex-row items-center justify-between gap-6 text-white">
             <div className="space-y-2">
               <h2 className="text-2xl md:text-3xl font-black flex items-center gap-2" style={{ fontFamily: 'Fredoka One, sans-serif' }}>
-                <Shield className="w-8 h-8" /> Hard Round 🔥
+                <Swords className="w-8 h-8" /> Hard Round 🔥
               </h2>
               <p className="font-medium text-white/90 max-w-md">
                 Testo njohuritë me pyetje të nivelit USMLE. XP i dyfishtë, pa mëshirë.
