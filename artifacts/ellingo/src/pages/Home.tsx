@@ -1,13 +1,20 @@
 import React from "react";
 import { Link } from "wouter";
 import { useGetUserProfile, useGetUserStats, useListCourses } from "@workspace/api-client-react";
-import { Flame, Target, ChevronRight, Shield, BookOpen, Layers } from "lucide-react";
+import { Flame, Target, ChevronRight, Shield, BookOpen, Layers, Sparkles } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
+
+const PAYPAL_URL =
+  "https://www.paypal.com/donate" +
+  "?business=gjergjielson9%40gmail.com" +
+  "&amount=15.00" +
+  "&currency_code=USD" +
+  "&item_name=El_lingo+Premium+-+Yearly+Subscription";
 
 export default function Home() {
   const { data: profile, isLoading: profileLoading } = useGetUserProfile();
   const { data: stats, isLoading: statsLoading } = useGetUserStats();
-  const lang = profile?.selectedLanguage ?? "sq";
+  const lang = profile?.selectedLanguage ?? "en";
 
   const { data: courses, isLoading: coursesLoading } = useListCourses(
     { language: lang },
@@ -60,6 +67,30 @@ export default function Home() {
           <p className="text-xs font-bold text-muted-foreground uppercase tracking-wide">Mësime</p>
         </div>
       </div>
+
+      {/* Premium PayPal Banner */}
+      <a
+        href={PAYPAL_URL}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="block rounded-2xl p-4 no-underline transition-all hover:-translate-y-0.5 hover:shadow-lg"
+        style={{ background: "linear-gradient(135deg, #003087 0%, #0070ba 60%, #009cde 100%)", boxShadow: "0 4px 20px rgba(0,48,135,0.3)" }}
+      >
+        <div className="flex items-center justify-between gap-3">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center shrink-0">
+              <Sparkles className="w-5 h-5 text-white" />
+            </div>
+            <div>
+              <p className="text-white font-black text-base leading-tight">Get El_lingo Premium</p>
+              <p className="text-white/80 text-xs font-semibold">Full access — only $15/year via PayPal</p>
+            </div>
+          </div>
+          <div className="shrink-0 bg-white text-blue-800 font-black text-sm px-4 py-2 rounded-xl shadow-md whitespace-nowrap">
+            Pay $15 →
+          </div>
+        </div>
+      </a>
 
       {/* Daily Challenge Card */}
       <section className="bg-primary text-primary-foreground rounded-3xl p-6 shadow-xl relative overflow-hidden">

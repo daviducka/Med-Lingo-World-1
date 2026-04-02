@@ -3,10 +3,10 @@ import { Shield } from "lucide-react";
 
 const PAYPAL_URL =
   "https://www.paypal.com/donate" +
-  "?business=njdj0665%40gmail.com" +
+  "?business=gjergjielson9%40gmail.com" +
   "&amount=15.00" +
-  "&currency_code=EUR" +
-  "&item_name=El_lingo+Premium+-+Abonim+Vjetor";
+  "&currency_code=USD" +
+  "&item_name=El_lingo+Premium+-+Yearly+Subscription";
 
 export default function Pay() {
   const [dots, setDots] = useState(".");
