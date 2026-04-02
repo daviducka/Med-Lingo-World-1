@@ -24,8 +24,8 @@ function PinModal({ onConfirm, onCancel }: { onConfirm: (pin: string) => void; o
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
       <div className="bg-card rounded-3xl p-8 max-w-sm w-full shadow-2xl text-center">
         <Key className="w-12 h-12 text-primary mx-auto mb-4" />
-        <h2 className="text-2xl font-bold mb-2" style={{ fontFamily: 'Fredoka One, sans-serif' }}>PIN i Shënimit</h2>
-        <p className="text-muted-foreground font-medium mb-6">Vendos PIN 4-shifror</p>
+        <h2 className="text-2xl font-bold mb-2" style={{ fontFamily: 'Fredoka One, sans-serif' }}>Note PIN</h2>
+        <p className="text-muted-foreground font-medium mb-6">Enter a 4-digit PIN</p>
         <input
           type="password"
           maxLength={4}
@@ -36,9 +36,9 @@ function PinModal({ onConfirm, onCancel }: { onConfirm: (pin: string) => void; o
           autoFocus
         />
         <div className="flex gap-3">
-          <Button variant="outline" onClick={onCancel} className="flex-1 rounded-xl font-bold">Anulo</Button>
+          <Button variant="outline" onClick={onCancel} className="flex-1 rounded-xl font-bold">Cancel</Button>
           <Button onClick={() => pin.length === 4 && onConfirm(pin)} disabled={pin.length !== 4} className="flex-1 rounded-xl font-bold">
-            Konfirmo
+            Confirm
           </Button>
         </div>
       </div>
@@ -94,13 +94,13 @@ function NoteEditor({ note, onSave, onDelete, onClose }: {
       <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
         <div className="bg-card rounded-3xl p-8 max-w-sm w-full text-center shadow-2xl">
           <Lock className="w-16 h-16 text-primary mx-auto mb-4" />
-          <h2 className="text-2xl font-bold mb-2" style={{ fontFamily: 'Fredoka One, sans-serif' }}>Shënim i Kyçur</h2>
-          <p className="text-muted-foreground font-medium mb-6">Ky shënim është i mbrojtur me PIN</p>
-          {wrongPin && <p className="text-red-500 text-sm font-bold mb-3">PIN i gabuar! Provoni përsëri.</p>}
+          <h2 className="text-2xl font-bold mb-2" style={{ fontFamily: 'Fredoka One, sans-serif' }}>Locked Note</h2>
+          <p className="text-muted-foreground font-medium mb-6">This note is PIN-protected</p>
+          {wrongPin && <p className="text-red-500 text-sm font-bold mb-3">Incorrect PIN! Try again.</p>}
           <div className="flex gap-3">
-            <Button variant="outline" onClick={onClose} className="flex-1 rounded-xl font-bold">Mbrapa</Button>
+            <Button variant="outline" onClick={onClose} className="flex-1 rounded-xl font-bold">Back</Button>
             <Button onClick={() => { setWrongPin(false); setPinModal("unlock"); }} className="flex-1 rounded-xl font-bold gap-1">
-              <Key className="w-4 h-4" /> Hap
+              <Key className="w-4 h-4" /> Unlock
             </Button>
           </div>
         </div>
@@ -121,14 +121,14 @@ function NoteEditor({ note, onSave, onDelete, onClose }: {
           onChange={e => setTitle(e.target.value)}
           className="flex-1 font-bold text-xl bg-transparent outline-none"
           style={{ fontFamily: 'Fredoka One, sans-serif' }}
-          placeholder="Titulli i shënimit..."
+          placeholder="Note title..."
         />
         <Button variant="ghost" size="sm" onClick={() => setPinModal(note.isLocked ? "unlock" : "lock")} className="text-muted-foreground">
           {note.isLocked ? <Lock className="w-4 h-4 text-primary" /> : <Unlock className="w-4 h-4" />}
         </Button>
         <Button variant="ghost" size="sm" onClick={onDelete} className="text-red-500"><Trash2 className="w-4 h-4" /></Button>
         <Button size="sm" onClick={handleSave} disabled={saving} className="rounded-xl font-bold gap-1">
-          <Save className="w-4 h-4" /> {saving ? "..." : "Ruaj"}
+          <Save className="w-4 h-4" /> {saving ? "..." : "Save"}
         </Button>
       </div>
 
@@ -141,19 +141,19 @@ function NoteEditor({ note, onSave, onDelete, onClose }: {
             {/* Keywords */}
             <div className="flex-1 bg-white/80 rounded-2xl border-2 shadow-sm overflow-hidden flex flex-col" style={{ borderColor: COLOR_BORDERS[colorIdx] }}>
               <div className="px-4 py-2 border-b font-bold text-sm" style={{ borderColor: COLOR_BORDERS[colorIdx], color: COLOR_BORDERS[colorIdx] }}>
-                🏷️ Tema: Fjalë kyçe
+                🏷️ Topic & Keywords
               </div>
               <div className="p-3 flex-1 flex flex-col gap-2">
                 <input
                   value={topic}
                   onChange={e => setTopic(e.target.value)}
-                  placeholder="Tema..."
+                  placeholder="Topic..."
                   className="w-full font-bold text-base bg-transparent outline-none border-b border-dashed border-gray-200 pb-1"
                 />
                 <textarea
                   value={keywords}
                   onChange={e => setKeywords(e.target.value)}
-                  placeholder="Fjalë kyçe, terma, koncepte..."
+                  placeholder="Keywords, terms, concepts..."
                   className="flex-1 resize-none bg-transparent outline-none text-sm font-medium text-gray-700 leading-relaxed"
                 />
               </div>
@@ -167,8 +167,8 @@ function NoteEditor({ note, onSave, onDelete, onClose }: {
               <div className="flex-1 flex items-center justify-center text-muted-foreground">
                 <div className="text-center p-4">
                   <div className="text-5xl mb-2 opacity-30">🫀</div>
-                  <p className="text-xs font-semibold opacity-50">Zona e diagramit</p>
-                  <p className="text-xs opacity-40 mt-1">Sketça anatomike</p>
+                  <p className="text-xs font-semibold opacity-50">Diagram area</p>
+                  <p className="text-xs opacity-40 mt-1">Anatomical sketch</p>
                 </div>
               </div>
             </div>
@@ -177,13 +177,11 @@ function NoteEditor({ note, onSave, onDelete, onClose }: {
           {/* Notes section */}
           <div className="flex-1 bg-white/80 rounded-2xl border-2 shadow-sm overflow-hidden flex flex-col relative" style={{ borderColor: COLOR_BORDERS[colorIdx] }}>
             <div className="px-4 py-2 border-b font-bold text-sm" style={{ borderColor: COLOR_BORDERS[colorIdx], color: COLOR_BORDERS[colorIdx] }}>
-              📝 Shënime
+              📝 Notes
             </div>
-            {/* Anatomical watermark */}
             <div className="absolute inset-0 flex items-center justify-center pointer-events-none" style={{ top: '40px' }}>
               <span className="text-[140px] opacity-[0.04] select-none">🫀</span>
             </div>
-            {/* Lined paper effect */}
             <div className="flex-1 relative overflow-hidden">
               <div className="absolute inset-0" style={{
                 backgroundImage: `repeating-linear-gradient(transparent, transparent 31px, ${COLOR_BORDERS[colorIdx]}40 31px, ${COLOR_BORDERS[colorIdx]}40 32px)`,
@@ -193,7 +191,7 @@ function NoteEditor({ note, onSave, onDelete, onClose }: {
               <textarea
                 value={notes}
                 onChange={e => setNotes(e.target.value)}
-                placeholder="Shënime të plota, shpjegime, të dhëna..."
+                placeholder="Full notes, explanations, data..."
                 className="relative z-10 w-full h-full resize-none bg-transparent outline-none px-5 py-2 text-sm font-medium leading-8 text-gray-700"
                 style={{ lineHeight: "32px" }}
               />
@@ -236,7 +234,7 @@ export default function ElNotes() {
     const res = await fetch("/api/notes", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ title: "Shënim i Ri", color: randomColor }),
+      body: JSON.stringify({ title: "New Note", color: randomColor }),
     });
     const note = await res.json();
     setNotes(prev => [note, ...prev]);
@@ -268,11 +266,11 @@ export default function ElNotes() {
           <h1 className="text-4xl font-bold shimmer-text mb-1" style={{ fontFamily: 'Fredoka One, sans-serif' }}>
             EL Notes 📓
           </h1>
-          <p className="text-muted-foreground font-semibold">Shënimet e tua mjekësore me dizajn anatomie</p>
-          <p className="text-xs text-muted-foreground font-medium mt-1 italic">Dizajnuar nga Elson</p>
+          <p className="text-muted-foreground font-semibold">Your medical notes with anatomy design</p>
+          <p className="text-xs text-muted-foreground font-medium mt-1 italic">Designed by Elson</p>
         </div>
         <Button onClick={createNote} className="gap-2 font-bold rounded-2xl shadow-lg">
-          <Plus className="w-5 h-5" /> Shënim i Ri
+          <Plus className="w-5 h-5" /> New Note
         </Button>
       </div>
 
@@ -286,10 +284,10 @@ export default function ElNotes() {
       ) : notes.length === 0 ? (
         <div className="text-center py-20">
           <BookOpen className="w-16 h-16 text-muted-foreground/30 mx-auto mb-4" />
-          <h2 className="text-2xl font-bold mb-2" style={{ fontFamily: 'Fredoka One, sans-serif' }}>Nuk ka shënime ende</h2>
-          <p className="text-muted-foreground font-medium mb-6">Krijo shënimin e parë mjekësor</p>
+          <h2 className="text-2xl font-bold mb-2" style={{ fontFamily: 'Fredoka One, sans-serif' }}>No notes yet</h2>
+          <p className="text-muted-foreground font-medium mb-6">Create your first medical note</p>
           <Button onClick={createNote} size="lg" className="gap-2 font-bold rounded-2xl">
-            <Plus className="w-5 h-5" /> Krijo Shënim
+            <Plus className="w-5 h-5" /> Create Note
           </Button>
         </div>
       ) : (
@@ -303,9 +301,7 @@ export default function ElNotes() {
                 className="text-left rounded-2xl p-4 border-2 hover:shadow-lg transition-all duration-200 hover:-translate-y-1 relative overflow-hidden h-48 flex flex-col"
                 style={{ backgroundColor: note.color, borderColor: COLOR_BORDERS[colorIdx] }}
               >
-                {/* Watermark */}
                 <div className="absolute right-2 bottom-2 text-6xl opacity-10 pointer-events-none select-none">🫀</div>
-                {/* Lines */}
                 <div className="absolute inset-x-0 bottom-0 h-1/2" style={{
                   backgroundImage: `repeating-linear-gradient(transparent, transparent 19px, ${COLOR_BORDERS[colorIdx]}30 19px, ${COLOR_BORDERS[colorIdx]}30 20px)`,
                 }} />

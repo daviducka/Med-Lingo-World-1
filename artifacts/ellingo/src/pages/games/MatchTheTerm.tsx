@@ -50,25 +50,25 @@ export default function MatchTheTerm({ courseId, onBack }: { courseId: number; o
     setWon(false);
   };
 
-  if (loading) return <div className="text-center py-8 text-muted-foreground">Duke ngarkuar...</div>;
+  if (loading) return <div className="text-center py-8 text-muted-foreground">Loading...</div>;
 
   return (
     <div className="flex flex-col gap-4">
       <div className="flex items-center justify-between">
         <Button variant="ghost" size="sm" onClick={onBack} className="font-bold gap-1">
-          <ArrowLeft className="w-4 h-4" /> Mbrapa
+          <ArrowLeft className="w-4 h-4" /> Back
         </Button>
         <div className="flex items-center gap-2 bg-blue-100 px-4 py-2 rounded-full">
           <Trophy className="w-4 h-4 text-blue-600" />
           <span className="font-bold text-blue-700">{score}/{pairs.length}</span>
         </div>
-        <Button variant="outline" size="sm" onClick={reset} className="rounded-xl font-bold">Rifillo</Button>
+        <Button variant="outline" size="sm" onClick={reset} className="rounded-xl font-bold">Restart</Button>
       </div>
 
       <div className="grid grid-cols-2 gap-6">
         {/* Terms */}
         <div className="space-y-2">
-          <h3 className="font-bold text-sm uppercase tracking-wide text-muted-foreground">Termat</h3>
+          <h3 className="font-bold text-sm uppercase tracking-wide text-muted-foreground">Terms</h3>
           <div className="space-y-2">
             {pairs.map(pair => (
               <button
@@ -91,7 +91,7 @@ export default function MatchTheTerm({ courseId, onBack }: { courseId: number; o
 
         {/* Definitions */}
         <div className="space-y-2">
-          <h3 className="font-bold text-sm uppercase tracking-wide text-muted-foreground">Përkufizimet</h3>
+          <h3 className="font-bold text-sm uppercase tracking-wide text-muted-foreground">Definitions</h3>
           <div className="space-y-2">
             {[...pairs].sort(() => Math.random() - 0.5).map(pair => (
               <button
@@ -116,8 +116,8 @@ export default function MatchTheTerm({ courseId, onBack }: { courseId: number; o
       {won && (
         <div className="bg-green-50 border-2 border-green-200 rounded-2xl p-6 text-center">
           <div className="text-5xl mb-3">🎉</div>
-          <h2 className="text-2xl font-bold text-green-700 mb-2">Përfunduar!</h2>
-          <p className="text-green-600 font-bold">Lidhe të gjithë çiftet {score}/{pairs.length}</p>
+          <h2 className="text-2xl font-bold text-green-700 mb-2">Complete!</h2>
+          <p className="text-green-600 font-bold">Matched all pairs {score}/{pairs.length}</p>
         </div>
       )}
     </div>

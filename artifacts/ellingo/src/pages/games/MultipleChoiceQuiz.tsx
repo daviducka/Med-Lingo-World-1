@@ -27,8 +27,8 @@ export default function MultipleChoiceQuiz({ courseId, onBack }: { courseId: num
       .catch(() => setLoading(false));
   }, [courseId]);
 
-  if (loading) return <div className="text-center py-8 text-muted-foreground">Duke ngarkuar...</div>;
-  if (!questions.length) return <div className="text-center py-8 text-muted-foreground">Nuk ka pyetje të disponueshme</div>;
+  if (loading) return <div className="text-center py-8 text-muted-foreground">Loading...</div>;
+  if (!questions.length) return <div className="text-center py-8 text-muted-foreground">No questions available</div>;
 
   const current = questions[currentIndex];
   const isCorrect = selected === current.correctAnswer;
@@ -57,10 +57,10 @@ export default function MultipleChoiceQuiz({ courseId, onBack }: { courseId: num
     <div className="max-w-2xl mx-auto flex flex-col gap-6">
       <div className="flex items-center justify-between">
         <Button variant="ghost" size="sm" onClick={onBack} className="font-bold gap-1">
-          <ArrowLeft className="w-4 h-4" /> Mbrapa
+          <ArrowLeft className="w-4 h-4" /> Back
         </Button>
         <span className="text-sm font-bold text-muted-foreground">
-          Pyetja {currentIndex + 1}/{questions.length}
+          Question {currentIndex + 1}/{questions.length}
         </span>
         <div className="flex items-center gap-2 bg-cyan-100 px-4 py-2 rounded-full">
           <Trophy className="w-4 h-4 text-cyan-600" />
@@ -83,16 +83,16 @@ export default function MultipleChoiceQuiz({ courseId, onBack }: { courseId: num
           : current.difficulty === "intermediate" ? "bg-yellow-100 text-yellow-700"
           : "bg-red-100 text-red-700"
         }`}>
-          {current.difficulty === "easy" ? "🟢 E Lehtë"
-          : current.difficulty === "intermediate" ? "🟡 Mesatare"
-          : "🔴 E Vështirë"}
+          {current.difficulty === "easy" ? "🟢 Easy"
+          : current.difficulty === "intermediate" ? "🟡 Medium"
+          : "🔴 Hard"}
         </span>
       </div>
 
       {/* Question */}
       <div className="bg-card border-2 border-border rounded-2xl p-6">
         <p className="text-lg font-bold">{current.text}</p>
-        <p className="text-xs text-muted-foreground mt-3">Kategori: {current.category}</p>
+        <p className="text-xs text-muted-foreground mt-3">Category: {current.category}</p>
       </div>
 
       {/* Options */}
@@ -122,7 +122,7 @@ export default function MultipleChoiceQuiz({ courseId, onBack }: { courseId: num
 
       {!answered && (
         <Button onClick={handleAnswer} disabled={!selected} size="lg" className="w-full font-bold rounded-2xl">
-          Konfirmo Përgjigjen
+          Confirm Answer
         </Button>
       )}
 
@@ -132,7 +132,7 @@ export default function MultipleChoiceQuiz({ courseId, onBack }: { courseId: num
             <div className="text-4xl">{isCorrect ? "✅" : "❌"}</div>
             <div className="flex-1">
               <h3 className={`font-bold text-lg ${isCorrect ? "text-green-700" : "text-red-700"}`}>
-                {isCorrect ? "Përgjigje e Saktë!" : "Përgjigje e Gabuar"}
+                {isCorrect ? "Correct Answer!" : "Wrong Answer"}
               </h3>
             </div>
           </div>
@@ -141,12 +141,12 @@ export default function MultipleChoiceQuiz({ courseId, onBack }: { courseId: num
           </p>
           {isLastQuestion ? (
             <div className="grid grid-cols-2 gap-3">
-              <Button onClick={reset} variant="outline" className="rounded-2xl font-bold">Rifillo</Button>
-              <Button onClick={onBack} className="rounded-2xl font-bold">Përfundo</Button>
+              <Button onClick={reset} variant="outline" className="rounded-2xl font-bold">Restart</Button>
+              <Button onClick={onBack} className="rounded-2xl font-bold">Finish</Button>
             </div>
           ) : (
             <Button onClick={nextQuestion} size="lg" className="w-full font-bold rounded-2xl">
-              Pyetja Tjetër ➡️
+              Next Question ➡️
             </Button>
           )}
         </div>

@@ -24,8 +24,8 @@ export default function FlashcardsGame({ courseId, onBack }: { courseId: number;
       .catch(() => setLoading(false));
   }, [courseId]);
 
-  if (loading) return <div className="text-center py-8 text-muted-foreground">Duke ngarkuar...</div>;
-  if (!cards.length) return <div className="text-center py-8 text-muted-foreground">Nuk ka kartela të disponueshme</div>;
+  if (loading) return <div className="text-center py-8 text-muted-foreground">Loading...</div>;
+  if (!cards.length) return <div className="text-center py-8 text-muted-foreground">No flashcards available</div>;
 
   const current = cards[currentIndex];
   const progress = learned.size;
@@ -46,7 +46,6 @@ export default function FlashcardsGame({ courseId, onBack }: { courseId: number;
       next++;
     }
     if (next >= cards.length) {
-      // Reset to show unlearned cards
       setCurrentIndex(cards.findIndex(c => !learned.has(c.id)));
     } else {
       setCurrentIndex(next);
@@ -64,14 +63,14 @@ export default function FlashcardsGame({ courseId, onBack }: { courseId: number;
     <div className="max-w-2xl mx-auto flex flex-col gap-6">
       <div className="flex items-center justify-between">
         <Button variant="ghost" size="sm" onClick={onBack} className="font-bold gap-1">
-          <ArrowLeft className="w-4 h-4" /> Mbrapa
+          <ArrowLeft className="w-4 h-4" /> Back
         </Button>
         <div className="flex items-center gap-2 bg-orange-100 px-4 py-2 rounded-full">
           <Trophy className="w-4 h-4 text-orange-600" />
           <span className="font-bold text-orange-700">{progress}/{cards.length}</span>
         </div>
         <Button variant="outline" size="sm" onClick={reset} className="rounded-xl font-bold gap-1">
-          <RotateCw className="w-4 h-4" /> Rifillo
+          <RotateCw className="w-4 h-4" /> Restart
         </Button>
       </div>
 
@@ -87,12 +86,12 @@ export default function FlashcardsGame({ courseId, onBack }: { courseId: number;
       >
         <div className="text-center px-8">
           <p className="text-sm font-bold text-orange-600 uppercase tracking-wide mb-3">
-            {flipped ? "📝 Përgjigja" : "❓ Pyetja"}
+            {flipped ? "📝 Answer" : "❓ Question"}
           </p>
           <p className="text-2xl font-bold text-orange-900 leading-relaxed">
             {flipped ? current.answer : current.question}
           </p>
-          <p className="text-xs text-orange-600 mt-4 opacity-60">Klik për të rrokullisur</p>
+          <p className="text-xs text-orange-600 mt-4 opacity-60">Click to flip</p>
         </div>
       </div>
 
@@ -112,7 +111,7 @@ export default function FlashcardsGame({ courseId, onBack }: { courseId: number;
           size="lg"
           className="flex-1 rounded-2xl font-bold"
         >
-          Nuk e Dija ➡️
+          Don't know ➡️
         </Button>
         <Button
           onClick={markAsLearned}
@@ -120,15 +119,15 @@ export default function FlashcardsGame({ courseId, onBack }: { courseId: number;
           size="lg"
           className="flex-1 rounded-2xl font-bold bg-green-500 hover:bg-green-600"
         >
-          {isLearned ? "✅ Mësuar" : "Mësova ✓"}
+          {isLearned ? "✅ Learned" : "I know it ✓"}
         </Button>
       </div>
 
       {progress === cards.length && (
         <div className="bg-green-50 border-2 border-green-200 rounded-2xl p-6 text-center">
           <div className="text-5xl mb-3">🏆</div>
-          <h3 className="text-2xl font-bold text-green-700 mb-2">Përfunduar!</h3>
-          <p className="text-green-600 font-bold">Mësove {correct} kartela!</p>
+          <h3 className="text-2xl font-bold text-green-700 mb-2">Complete!</h3>
+          <p className="text-green-600 font-bold">You learned {correct} flashcards!</p>
         </div>
       )}
     </div>

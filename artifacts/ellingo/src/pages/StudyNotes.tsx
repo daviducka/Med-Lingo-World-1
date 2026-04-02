@@ -13,14 +13,14 @@ function StudyNoteContent({ lessonId }: { lessonId: number }) {
     <div className="flex items-center justify-center py-16">
       <div className="text-center">
         <div className="text-4xl mb-3 animate-bounce">📚</div>
-        <p className="font-bold text-muted-foreground">Duke ngarkuar shënimet...</p>
+        <p className="font-bold text-muted-foreground">Loading notes...</p>
       </div>
     </div>
   );
   if (isError || !notes) return (
     <div className="text-center py-16">
       <div className="text-4xl mb-3">📭</div>
-      <p className="font-bold text-muted-foreground">Nuk ka shënime për këtë mësim.</p>
+      <p className="font-bold text-muted-foreground">No notes available for this lesson.</p>
     </div>
   );
 
@@ -34,7 +34,7 @@ function StudyNoteContent({ lessonId }: { lessonId: number }) {
       <div className="bg-card border rounded-2xl p-6 shadow-sm">
         <div className="flex items-center gap-2 mb-4">
           <BookOpen className="w-5 h-5 text-primary" />
-          <h3 className="font-bold text-lg text-primary" style={{ fontFamily: 'Fredoka One, sans-serif' }}>Hyrja</h3>
+          <h3 className="font-bold text-lg text-primary" style={{ fontFamily: 'Fredoka One, sans-serif' }}>Introduction</h3>
         </div>
         <p className="text-foreground leading-relaxed font-medium text-base">{notes.content}</p>
       </div>
@@ -44,7 +44,7 @@ function StudyNoteContent({ lessonId }: { lessonId: number }) {
         <div className="bg-gradient-to-br from-blue-50 to-indigo-50 border border-blue-200 rounded-2xl p-6">
           <div className="flex items-center gap-2 mb-4">
             <Star className="w-5 h-5 text-blue-600 fill-blue-600" />
-            <h3 className="font-bold text-lg text-blue-700" style={{ fontFamily: 'Fredoka One, sans-serif' }}>Pikat Kryesore</h3>
+            <h3 className="font-bold text-lg text-blue-700" style={{ fontFamily: 'Fredoka One, sans-serif' }}>Key Points</h3>
           </div>
           <ul className="space-y-3">
             {notes.keyPoints.map((point, i) => (
@@ -62,7 +62,7 @@ function StudyNoteContent({ lessonId }: { lessonId: number }) {
         <div className="bg-gradient-to-br from-amber-50 to-orange-50 border border-amber-200 rounded-2xl p-6">
           <div className="flex items-center gap-2 mb-4">
             <Lightbulb className="w-5 h-5 text-amber-600 fill-amber-200" />
-            <h3 className="font-bold text-lg text-amber-700" style={{ fontFamily: 'Fredoka One, sans-serif' }}>Mnemonikë & Shkurtesa</h3>
+            <h3 className="font-bold text-lg text-amber-700" style={{ fontFamily: 'Fredoka One, sans-serif' }}>Mnemonics & Shortcuts</h3>
           </div>
           <ul className="space-y-3">
             {notes.mnemonics.map((m, i) => (
@@ -79,7 +79,7 @@ function StudyNoteContent({ lessonId }: { lessonId: number }) {
         <div className="bg-gradient-to-br from-green-50 to-emerald-50 border border-green-200 rounded-2xl p-6">
           <div className="flex items-center gap-2 mb-4">
             <Stethoscope className="w-5 h-5 text-green-600" />
-            <h3 className="font-bold text-lg text-green-700" style={{ fontFamily: 'Fredoka One, sans-serif' }}>Perla Klinike 💎</h3>
+            <h3 className="font-bold text-lg text-green-700" style={{ fontFamily: 'Fredoka One, sans-serif' }}>Clinical Pearls 💎</h3>
           </div>
           <ul className="space-y-3">
             {notes.clinicalPearls.map((pearl, i) => (
@@ -101,14 +101,14 @@ function LessonsForCourse({ courseId }: { courseId: number }) {
     query: { queryKey: [`/api/courses/${courseId}/lessons`] }
   });
 
-  if (isLoading) return <div className="py-8 text-center font-bold text-muted-foreground animate-pulse">Duke ngarkuar mësimet...</div>;
-  if (!lessons?.length) return <div className="py-8 text-center font-bold text-muted-foreground">Nuk ka mësime.</div>;
+  if (isLoading) return <div className="py-8 text-center font-bold text-muted-foreground animate-pulse">Loading lessons...</div>;
+  if (!lessons?.length) return <div className="py-8 text-center font-bold text-muted-foreground">No lessons found.</div>;
 
   if (selectedLessonId) {
     return (
       <div>
         <Button variant="ghost" size="sm" onClick={() => setSelectedLessonId(null)} className="mb-4 font-bold gap-1">
-          ← Kthehu te lista
+          ← Back to list
         </Button>
         <StudyNoteContent lessonId={selectedLessonId} />
       </div>
@@ -137,7 +137,7 @@ function LessonsForCourse({ courseId }: { courseId: number }) {
 export default function StudyNotes() {
   const [selectedCourseId, setSelectedCourseId] = useState<number | null>(null);
   const { data: profile } = useGetUserProfile();
-  const lang = profile?.selectedLanguage ?? "sq";
+  const lang = profile?.selectedLanguage ?? "en";
   const { data: courses } = useListCourses(
     { language: lang },
     { query: { queryKey: [`/api/courses?language=${lang}`] } }
@@ -149,10 +149,10 @@ export default function StudyNotes() {
     <div className="max-w-3xl mx-auto">
       <div className="mb-8">
         <h1 className="text-4xl font-bold shimmer-text mb-2" style={{ fontFamily: 'Fredoka One, sans-serif' }}>
-          Shënime Studimi 📖
+          Study Notes 📖
         </h1>
         <p className="text-muted-foreground text-lg font-semibold">
-          Material studimi me pika kryesore, mnemonikë dhe perla klinike
+          Study material with key points, mnemonics, and clinical pearls
         </p>
       </div>
 
@@ -184,7 +184,7 @@ export default function StudyNotes() {
         <div>
           <div className="flex items-center gap-3 mb-6">
             <Button variant="ghost" size="sm" onClick={() => setSelectedCourseId(null)} className="font-bold gap-1">
-              ← Të gjitha lëndët
+              ← All Courses
             </Button>
             <span className="text-2xl">{selectedCourse?.iconEmoji}</span>
             <h2 className="text-2xl font-bold" style={{ fontFamily: 'Fredoka One, sans-serif' }}>{selectedCourse?.title}</h2>

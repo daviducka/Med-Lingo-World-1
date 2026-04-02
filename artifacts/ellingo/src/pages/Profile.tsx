@@ -33,7 +33,7 @@ export default function Profile() {
 
   return (
     <div className="max-w-2xl mx-auto space-y-8 animate-in fade-in duration-500">
-      <h1 className="text-3xl font-black tracking-tight">Cilësimet e Profilit</h1>
+      <h1 className="text-3xl font-black tracking-tight">Profile Settings</h1>
 
       <div className="bg-card border-2 rounded-3xl p-8 space-y-8">
         <div className="flex flex-col md:flex-row items-center gap-6">
@@ -47,13 +47,13 @@ export default function Profile() {
           
           <div className="flex-1 space-y-2 w-full text-center md:text-left">
             <h2 className="text-2xl font-black">{profile.username}</h2>
-            <p className="text-muted-foreground font-bold">Anëtarësuar: {new Date(profile.createdAt).toLocaleDateString("sq-AL")}</p>
+            <p className="text-muted-foreground font-bold">Member since: {new Date(profile.createdAt).toLocaleDateString("en-US")}</p>
           </div>
         </div>
 
         <div className="space-y-6 pt-6 border-t">
           <div className="space-y-2">
-            <label className="text-sm font-bold text-muted-foreground uppercase tracking-wider">Emri i Shfaqjes</label>
+            <label className="text-sm font-bold text-muted-foreground uppercase tracking-wider">Display Name</label>
             <Input 
               value={displayName} 
               onChange={e => setDisplayName(e.target.value)} 
@@ -62,10 +62,10 @@ export default function Profile() {
           </div>
 
           <div className="space-y-2">
-            <label className="text-sm font-bold text-muted-foreground uppercase tracking-wider">Gjuha e Mësimit</label>
+            <label className="text-sm font-bold text-muted-foreground uppercase tracking-wider">Learning Language</label>
             <Select value={selectedLanguage} onValueChange={setSelectedLanguage}>
               <SelectTrigger className="h-14 text-lg font-bold rounded-xl bg-muted/50 border-2">
-                <SelectValue placeholder="Zgjidhni gjuhën" />
+                <SelectValue placeholder="Select language" />
               </SelectTrigger>
               <SelectContent>
                 {languages?.map(lang => (
@@ -83,7 +83,7 @@ export default function Profile() {
             disabled={updateProfile.isPending || (displayName === profile.displayName && selectedLanguage === profile.selectedLanguage)}
             className="w-full h-14 text-lg font-bold rounded-xl"
           >
-            {updateProfile.isPending ? "Duke ruajtur..." : "Ruaj Ndryshimet"}
+            {updateProfile.isPending ? "Saving..." : "Save Changes"}
           </Button>
         </div>
       </div>

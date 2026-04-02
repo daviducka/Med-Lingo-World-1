@@ -45,15 +45,15 @@ export default function GuessTheOrgan({ courseId, onBack }: { courseId: number; 
     loadGame();
   };
 
-  if (loading) return <div className="text-center py-8 text-muted-foreground">Duke ngarkuar...</div>;
+  if (loading) return <div className="text-center py-8 text-muted-foreground">Loading...</div>;
 
   return (
     <div className="flex flex-col gap-6">
       <div className="flex items-center justify-between">
         <Button variant="ghost" size="sm" onClick={onBack} className="font-bold gap-1">
-          <ArrowLeft className="w-4 h-4" /> Mbrapa
+          <ArrowLeft className="w-4 h-4" /> Back
         </Button>
-        <span className="font-bold text-muted-foreground">Raundi {round}</span>
+        <span className="font-bold text-muted-foreground">Round {round}</span>
         <div className="flex items-center gap-2 bg-purple-100 px-4 py-2 rounded-full">
           <Trophy className="w-4 h-4 text-purple-600" />
           <span className="font-bold text-purple-700">{score}</span>
@@ -66,8 +66,8 @@ export default function GuessTheOrgan({ courseId, onBack }: { courseId: number; 
       </div>
 
       <div className="bg-gradient-to-r from-purple-100 to-pink-100 rounded-2xl p-6 text-center border-2 border-purple-200">
-        <p className="font-bold text-purple-700 text-lg">Cili organ/sistem është ky?</p>
-        <p className="text-sm text-purple-600 mt-2">Zgjedh përgjigjen e saktë</p>
+        <p className="font-bold text-purple-700 text-lg">Which organ/system is this?</p>
+        <p className="text-sm text-purple-600 mt-2">Choose the correct answer</p>
       </div>
 
       {/* Options */}
@@ -95,7 +95,7 @@ export default function GuessTheOrgan({ courseId, onBack }: { courseId: number; 
 
       {!answered && (
         <Button onClick={() => setAnswered(true)} disabled={!selected} size="lg" className="w-full font-bold rounded-2xl">
-          Konfirmo
+          Confirm
         </Button>
       )}
 
@@ -103,14 +103,14 @@ export default function GuessTheOrgan({ courseId, onBack }: { courseId: number; 
         <div className={`rounded-2xl p-6 text-center ${isCorrect ? "bg-green-50 border-2 border-green-200" : "bg-red-50 border-2 border-red-200"}`}>
           <div className="text-5xl mb-3">{isCorrect ? "🎉" : "😢"}</div>
           <h3 className={`font-bold text-lg mb-2 ${isCorrect ? "text-green-700" : "text-red-700"}`}>
-            {isCorrect ? "Përgjigje e Saktë!" : "Përgjigje e Gabuar"}
+            {isCorrect ? "Correct Answer!" : "Wrong Answer"}
           </h3>
           <p className={`font-bold mb-4 ${isCorrect ? "text-green-600" : "text-red-600"}`}>
-            Përgjigja e saktë: {targetName} {targetEmoji}
+            Correct answer: {targetName} {targetEmoji}
           </p>
-          {isCorrect && <p className="text-green-600 font-semibold mb-4">+10 pikë!</p>}
+          {isCorrect && <p className="text-green-600 font-semibold mb-4">+10 points!</p>}
           <Button onClick={nextRound} size="lg" className="w-full font-bold rounded-2xl">
-            Raundi Tjetër
+            Next Round
           </Button>
         </div>
       )}

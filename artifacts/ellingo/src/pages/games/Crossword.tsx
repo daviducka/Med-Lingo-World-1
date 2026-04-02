@@ -39,8 +39,8 @@ export default function Crossword({ courseId, onBack }: { courseId: number; onBa
     setScore(0);
   };
 
-  if (loading) return <div className="text-center py-8 text-muted-foreground">Duke ngarkuar...</div>;
-  if (!clues.length) return <div className="text-center py-8 text-muted-foreground">Nuk ka fjalëkryqe të disponueshme</div>;
+  if (loading) return <div className="text-center py-8 text-muted-foreground">Loading...</div>;
+  if (!clues.length) return <div className="text-center py-8 text-muted-foreground">No crossword available</div>;
 
   const acrossClues = clues.filter(c => c.direction === "across");
   const downClues = clues.filter(c => c.direction === "down");
@@ -49,9 +49,9 @@ export default function Crossword({ courseId, onBack }: { courseId: number; onBa
     <div className="max-w-4xl mx-auto">
       <div className="flex items-center justify-between mb-6">
         <Button variant="ghost" size="sm" onClick={onBack} className="font-bold gap-1">
-          <ArrowLeft className="w-4 h-4" /> Mbrapa
+          <ArrowLeft className="w-4 h-4" /> Back
         </Button>
-        <h1 className="font-bold text-2xl" style={{ fontFamily: 'Fredoka One, sans-serif' }}>Fjalëkryqe Mjekësore</h1>
+        <h1 className="font-bold text-2xl" style={{ fontFamily: 'Fredoka One, sans-serif' }}>Medical Crossword</h1>
         <div className="flex items-center gap-2 bg-red-100 px-4 py-2 rounded-full">
           <Trophy className="w-4 h-4 text-red-600" />
           <span className="font-bold text-red-700">{score}/{clues.length}</span>
@@ -65,7 +65,7 @@ export default function Crossword({ courseId, onBack }: { courseId: number; onBa
             {clues.map(clue => (
               <div key={clue.number} className="bg-card border-2 border-border rounded-xl p-4">
                 <p className="text-sm font-bold text-muted-foreground mb-2">
-                  #{clue.number} {clue.direction === "across" ? "→ Horizontalisht" : "↓ Vertikalisht"}
+                  #{clue.number} {clue.direction === "across" ? "→ Across" : "↓ Down"}
                 </p>
                 <p className="font-bold mb-3">{clue.clue}</p>
                 <input
@@ -73,7 +73,7 @@ export default function Crossword({ courseId, onBack }: { courseId: number; onBa
                   maxLength={clue.answer.length}
                   value={answers[clue.number] || ""}
                   onChange={e => handleAnswer(clue.number, e.target.value)}
-                  placeholder={`${clue.answer.length} shkronja`}
+                  placeholder={`${clue.answer.length} letters`}
                   className="w-full px-4 py-2 border-2 border-border rounded-lg font-bold uppercase tracking-widest focus:border-primary outline-none"
                 />
               </div>
@@ -82,10 +82,10 @@ export default function Crossword({ courseId, onBack }: { courseId: number; onBa
 
           <div className="flex gap-3">
             <Button onClick={checkAnswers} size="lg" className="flex-1 font-bold rounded-2xl">
-              Kontrollo Përgjigjet
+              Check Answers
             </Button>
             <Button onClick={reset} variant="outline" size="lg" className="flex-1 font-bold rounded-2xl">
-              Rifillo
+              Restart
             </Button>
           </div>
         </div>
@@ -94,7 +94,7 @@ export default function Crossword({ courseId, onBack }: { courseId: number; onBa
         <div className="space-y-6">
           {acrossClues.length > 0 && (
             <div>
-              <h3 className="font-bold text-lg mb-3">→ HORIZONTALISHT</h3>
+              <h3 className="font-bold text-lg mb-3">→ ACROSS</h3>
               <div className="space-y-2">
                 {acrossClues.map(clue => (
                   <div key={clue.number} className="text-sm">
@@ -108,7 +108,7 @@ export default function Crossword({ courseId, onBack }: { courseId: number; onBa
 
           {downClues.length > 0 && (
             <div>
-              <h3 className="font-bold text-lg mb-3">↓ VERTIKALISHT</h3>
+              <h3 className="font-bold text-lg mb-3">↓ DOWN</h3>
               <div className="space-y-2">
                 {downClues.map(clue => (
                   <div key={clue.number} className="text-sm">
@@ -125,7 +125,7 @@ export default function Crossword({ courseId, onBack }: { courseId: number; onBa
       {score > 0 && (
         <div className="mt-6 bg-green-50 border-2 border-green-200 rounded-2xl p-6 text-center">
           <div className="text-4xl mb-2">✅</div>
-          <p className="font-bold text-green-700">Përgjigje të sakta: {score}/{clues.length}</p>
+          <p className="font-bold text-green-700">Correct answers: {score}/{clues.length}</p>
         </div>
       )}
     </div>

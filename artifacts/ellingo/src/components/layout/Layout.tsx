@@ -9,45 +9,45 @@ import { useGetUserStats } from "@workspace/api-client-react";
 
 const NAV_SECTIONS = [
   {
-    label: "Kryesore",
+    label: "Main",
     items: [
-      { href: "/", label: "Ana Faqe", icon: Home },
-      { href: "/learn", label: "Mëso", icon: BookOpen },
-      { href: "/progress", label: "Progresi", icon: BarChart3 },
+      { href: "/", label: "Home", icon: Home },
+      { href: "/learn", label: "Learn", icon: BookOpen },
+      { href: "/progress", label: "Progress", icon: BarChart3 },
     ],
   },
   {
-    label: "Studimi",
+    label: "Study",
     items: [
-      { href: "/flashcards", label: "Kartela", icon: Brain },
-      { href: "/study-notes", label: "Shënime", icon: FileText },
-      { href: "/exam-prep", label: "Provimi", icon: GraduationCap },
+      { href: "/flashcards", label: "Flashcards", icon: Brain },
+      { href: "/study-notes", label: "Study Notes", icon: FileText },
+      { href: "/exam-prep", label: "Exam Prep", icon: GraduationCap },
       { href: "/notes", label: "EL Notes", icon: NotebookPen },
     ],
   },
   {
-    label: "Argëtim",
+    label: "Entertainment",
     items: [
       { href: "/ai-doctor", label: "Dr. Denisa AI", icon: Bot, accent: "#ec4899" },
       { href: "/games", label: "Gerard Games", icon: Gamepad2, accent: "#f97316" },
-      { href: "/certificates", label: "Sertifikatat", icon: Award, accent: "#eab308" },
-      { href: "/leaderboard", label: "Renditja", icon: Trophy },
+      { href: "/certificates", label: "Certificates", icon: Award, accent: "#eab308" },
+      { href: "/leaderboard", label: "Leaderboard", icon: Trophy },
     ],
   },
   {
-    label: "Llogaria",
+    label: "Account",
     items: [
-      { href: "/profile", label: "Profili", icon: User },
+      { href: "/profile", label: "Profile", icon: User },
     ],
   },
 ];
 
 const MOBILE_NAV = [
-  { href: "/", label: "Ballina", icon: Home },
-  { href: "/learn", label: "Mëso", icon: BookOpen },
+  { href: "/", label: "Home", icon: Home },
+  { href: "/learn", label: "Learn", icon: BookOpen },
   { href: "/ai-doctor", label: "Denisa", icon: Bot },
-  { href: "/games", label: "Lojëra", icon: Gamepad2 },
-  { href: "/profile", label: "Profili", icon: User },
+  { href: "/games", label: "Games", icon: Gamepad2 },
+  { href: "/profile", label: "Profile", icon: User },
 ];
 
 export default function Layout({ children }: { children: React.ReactNode }) {
@@ -64,7 +64,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         <div className="px-5 py-5 border-b border-gray-100">
           <Link href="/" className="flex items-center gap-3 group">
             <div className="w-10 h-10 rounded-2xl flex items-center justify-center shadow-lg shrink-0 transition-transform group-hover:scale-105" style={{ background: "linear-gradient(135deg, #7c3aed, #2563eb)" }}>
-              <span className="text-white font-black text-base" style={{ fontFamily: "Fredoka One, sans-serif" }}>EL</span>
+              <span className="text-white font-black text-base" style={{ fontFamily: "Fredoka One, sans-serif" }}>ML</span>
             </div>
             <div>
               <div className="text-xl font-black leading-tight shimmer-text" style={{ fontFamily: "Fredoka One, sans-serif" }}>Med Lingo Portal</div>
@@ -153,7 +153,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
               <div className="flex flex-col items-center gap-0.5">
                 <span className="text-lg leading-none">❤️</span>
                 <span className="text-rose-500 text-xs font-black">{stats.hearts}</span>
-                <span className="text-[9px] text-gray-400 font-semibold">Jeta</span>
+                <span className="text-[9px] text-gray-400 font-semibold">Lives</span>
               </div>
             </div>
             <p className="text-center text-[9px] text-gray-300 font-semibold mt-2 tracking-widest uppercase">Med Lingo Portal</p>
@@ -165,7 +165,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       <header className="md:hidden sticky top-0 z-40 px-4 py-3 flex items-center justify-between" style={{ background: "rgba(255,255,255,0.95)", backdropFilter: "blur(12px)", borderBottom: "1px solid #eff0f6" }}>
         <Link href="/" className="flex items-center gap-2">
           <div className="w-8 h-8 rounded-xl flex items-center justify-center shadow-md" style={{ background: "linear-gradient(135deg, #7c3aed, #2563eb)" }}>
-            <span className="text-white font-black text-xs" style={{ fontFamily: "Fredoka One, sans-serif" }}>EL</span>
+            <span className="text-white font-black text-xs" style={{ fontFamily: "Fredoka One, sans-serif" }}>ML</span>
           </div>
           <span className="font-black text-lg shimmer-text" style={{ fontFamily: "Fredoka One, sans-serif" }}>Med Lingo Portal</span>
         </Link>

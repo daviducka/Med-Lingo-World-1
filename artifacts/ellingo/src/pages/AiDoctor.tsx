@@ -8,19 +8,19 @@ interface Message {
 }
 
 const QUICK_QUESTIONS = [
-  "Çfarë është ATP-ja dhe si prodhohet?",
-  "Shpjego sistemin kardiovaskular",
-  "Çfarë janë antibiotiket beta-laktame?",
-  "Mnemonik për nervat kranial",
-  "Ç'është tensioni i gjakut normal?",
-  "Shpjego ciklin Krebs",
+  "What is ATP and how is it produced?",
+  "Explain the cardiovascular system",
+  "What are beta-lactam antibiotics?",
+  "Mnemonic for cranial nerves",
+  "What is a normal blood pressure?",
+  "Explain the Krebs cycle",
 ];
 
 export default function AiDoctor() {
   const [messages, setMessages] = useState<Message[]>([
     {
       role: "assistant",
-      content: "Përshëndetje! Unë jam **Dr. Denisa** 👩‍⚕️\n\nJam asistentja juaj mjekësore AI. Mund të më pyesni për:\n- 🦴 Anatomi dhe fiziologji\n- 💊 Farmakologji dhe barna\n- 🔬 Biologji dhe biokimi\n- 📚 Pyetje USMLE\n- 🧠 Neuroanatomi\n\nSi mund t'ju ndihmoj sot?",
+      content: "Hello! I am **Dr. Denisa** 👩‍⚕️\n\nI am your AI medical assistant. You can ask me about:\n- 🦴 Anatomy and physiology\n- 💊 Pharmacology and medications\n- 🔬 Biology and biochemistry\n- 📚 USMLE questions\n- 🧠 Neuroanatomy\n\nHow can I help you today?",
     },
   ]);
   const [input, setInput] = useState("");
@@ -92,7 +92,7 @@ export default function AiDoctor() {
         const updated = [...prev];
         updated[updated.length - 1] = {
           ...updated[updated.length - 1],
-          content: "❌ Gabim në lidhje. Provoni përsëri.",
+          content: "❌ Connection error. Please try again.",
         };
         return updated;
       });
@@ -111,7 +111,7 @@ export default function AiDoctor() {
   const clearChat = () => {
     setMessages([{
       role: "assistant",
-      content: "Biseda u fshi! Si mund t'ju ndihmoj? 😊",
+      content: "Chat cleared! How can I help you? 😊",
     }]);
   };
 
@@ -138,11 +138,11 @@ export default function AiDoctor() {
             <h1 className="text-2xl font-bold" style={{ fontFamily: 'Fredoka One, sans-serif' }}>
               Dr. Denisa <Sparkles className="w-5 h-5 inline text-yellow-500" />
             </h1>
-            <p className="text-sm text-muted-foreground font-semibold">Asistente mjekësore AI • Aktive</p>
+            <p className="text-sm text-muted-foreground font-semibold">AI Medical Assistant • Active</p>
           </div>
         </div>
         <Button variant="ghost" size="sm" onClick={clearChat} className="text-muted-foreground gap-1">
-          <Trash2 className="w-4 h-4" /> Fshi
+          <Trash2 className="w-4 h-4" /> Clear
         </Button>
       </div>
 
@@ -186,7 +186,7 @@ export default function AiDoctor() {
       {/* Quick Questions */}
       {messages.length <= 2 && (
         <div className="mb-3">
-          <p className="text-xs font-bold text-muted-foreground uppercase tracking-wide mb-2">Pyetje të shpejta:</p>
+          <p className="text-xs font-bold text-muted-foreground uppercase tracking-wide mb-2">Quick questions:</p>
           <div className="flex flex-wrap gap-2">
             {QUICK_QUESTIONS.map((q, i) => (
               <button
@@ -208,7 +208,7 @@ export default function AiDoctor() {
           value={input}
           onChange={e => setInput(e.target.value)}
           onKeyDown={handleKeyDown}
-          placeholder="Pyet Dr. Denisa diçka mjekësore... (Enter për dërgim)"
+          placeholder="Ask Dr. Denisa a medical question... (Enter to send)"
           rows={2}
           className="flex-1 resize-none rounded-2xl border-2 border-border focus:border-primary/60 bg-card px-4 py-3 text-sm font-medium outline-none transition-colors min-h-[52px] max-h-32"
           disabled={isLoading}
@@ -223,7 +223,7 @@ export default function AiDoctor() {
       </div>
 
       <p className="text-center text-xs text-muted-foreground mt-2 font-medium">
-        ⚕️ Dr. Denisa është AI. Konsultohuni me mjek të vërtetë për diagnozë.
+        ⚕️ Dr. Denisa is AI. Consult a real doctor for diagnosis.
       </p>
     </div>
   );

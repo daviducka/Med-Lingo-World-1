@@ -14,7 +14,7 @@ export default function Flashcards() {
   const [completed, setCompleted] = useState(false);
 
   const { data: profile } = useGetUserProfile();
-  const lang = profile?.selectedLanguage ?? "sq";
+  const lang = profile?.selectedLanguage ?? "en";
   const { data: courses } = useListCourses(
     { language: lang },
     { query: { queryKey: [`/api/courses?language=${lang}`] } }
@@ -61,7 +61,7 @@ export default function Flashcards() {
             Flashcards ✨
           </h1>
           <p className="text-muted-foreground text-lg font-semibold">
-            Zgjidh një lëndë për të studiuar me kartela
+            Choose a course to study with flashcards
           </p>
         </div>
 
@@ -84,7 +84,7 @@ export default function Flashcards() {
               </div>
               <div className="mt-3 flex items-center gap-2 text-sm text-muted-foreground">
                 <Brain className="w-4 h-4" />
-                <span className="font-semibold">Kartela studimi</span>
+                <span className="font-semibold">Study flashcards</span>
               </div>
             </button>
           ))}
@@ -98,7 +98,7 @@ export default function Flashcards() {
       <div className="min-h-[60vh] flex items-center justify-center">
         <div className="text-center">
           <div className="text-5xl mb-4 animate-bounce">🃏</div>
-          <p className="text-xl font-bold text-muted-foreground">Duke ngarkuar kartelat...</p>
+          <p className="text-xl font-bold text-muted-foreground">Loading flashcards...</p>
         </div>
       </div>
     );
@@ -108,9 +108,9 @@ export default function Flashcards() {
     return (
       <div className="max-w-lg mx-auto text-center py-20">
         <div className="text-6xl mb-4">📭</div>
-        <h2 className="text-2xl font-bold mb-2" style={{ fontFamily: 'Fredoka One, sans-serif' }}>Nuk ka kartela</h2>
-        <p className="text-muted-foreground mb-6 font-semibold">Kartelat nuk janë shtuar ende për këtë lëndë.</p>
-        <Button onClick={() => setSelectedCourseId(null)} variant="outline">← Kthehu</Button>
+        <h2 className="text-2xl font-bold mb-2" style={{ fontFamily: 'Fredoka One, sans-serif' }}>No flashcards found</h2>
+        <p className="text-muted-foreground mb-6 font-semibold">No flashcards have been added for this course yet.</p>
+        <Button onClick={() => setSelectedCourseId(null)} variant="outline">← Back</Button>
       </div>
     );
   }
@@ -122,31 +122,31 @@ export default function Flashcards() {
       <div className="max-w-lg mx-auto text-center py-16">
         <div className="text-7xl mb-6 animate-bounce">🎉</div>
         <h2 className="text-4xl font-bold mb-2 shimmer-text" style={{ fontFamily: 'Fredoka One, sans-serif' }}>
-          Sesioni mbaroi!
+          Session Complete!
         </h2>
         <p className="text-muted-foreground text-lg font-semibold mb-8">
-          Ke studiuar {total} kartela
+          You studied {total} flashcards
         </p>
         <div className="grid grid-cols-2 gap-4 mb-8">
           <div className="bg-green-50 border border-green-200 rounded-2xl p-6">
             <div className="text-3xl font-bold text-green-600" style={{ fontFamily: 'Fredoka One, sans-serif' }}>{sessionStats.known}</div>
-            <div className="text-green-700 font-bold mt-1">I Njohur ✓</div>
+            <div className="text-green-700 font-bold mt-1">Known ✓</div>
           </div>
           <div className="bg-red-50 border border-red-200 rounded-2xl p-6">
             <div className="text-3xl font-bold text-red-600" style={{ fontFamily: 'Fredoka One, sans-serif' }}>{sessionStats.unknown}</div>
-            <div className="text-red-700 font-bold mt-1">Për t'u rishikuar</div>
+            <div className="text-red-700 font-bold mt-1">To Review</div>
           </div>
         </div>
         <div className="mb-8 bg-primary/10 rounded-2xl p-4">
           <div className="text-4xl font-bold text-primary" style={{ fontFamily: 'Fredoka One, sans-serif' }}>{pct}%</div>
-          <div className="text-primary font-bold">Rezultati i Sesionit</div>
+          <div className="text-primary font-bold">Session Score</div>
         </div>
         <div className="flex gap-3 justify-center">
           <Button onClick={handleRestart} className="gap-2 font-bold rounded-xl">
-            <RotateCcw className="w-4 h-4" /> Rifillo
+            <RotateCcw className="w-4 h-4" /> Restart
           </Button>
           <Button variant="outline" onClick={() => setSelectedCourseId(null)} className="font-bold rounded-xl">
-            Lëndë tjetër
+            Another Course
           </Button>
         </div>
       </div>
@@ -187,7 +187,7 @@ export default function Flashcards() {
           {/* Front */}
           <div className="flip-card-front w-full h-full rounded-3xl shadow-xl border-2 border-primary/20 bg-gradient-to-br from-primary to-purple-700 flex flex-col items-center justify-center p-8 text-white">
             <div className="text-xs font-bold uppercase tracking-widest opacity-70 mb-4 bg-white/20 px-3 py-1 rounded-full">
-              Klikoni për të kthyer
+              Click to flip
             </div>
             <p className="text-2xl font-bold text-center leading-relaxed" style={{ fontFamily: 'Fredoka One, sans-serif' }}>
               {currentCard?.front}
@@ -202,7 +202,7 @@ export default function Flashcards() {
           {/* Back */}
           <div className="flip-card-back w-full h-full rounded-3xl shadow-xl border-2 border-green-200 bg-gradient-to-br from-emerald-500 to-teal-600 flex flex-col items-center justify-center p-8 text-white">
             <div className="text-xs font-bold uppercase tracking-widest opacity-70 mb-4 bg-white/20 px-3 py-1 rounded-full">
-              Përgjigja
+              Answer
             </div>
             <p className="text-xl font-bold text-center leading-relaxed" style={{ fontFamily: 'Nunito, sans-serif' }}>
               {currentCard?.back}
@@ -214,7 +214,7 @@ export default function Flashcards() {
       {/* Flip hint */}
       {!isFlipped && (
         <p className="text-center text-muted-foreground text-sm font-semibold mb-6 animate-pulse">
-          👆 Klikoni kartelën për të parë përgjigjen
+          👆 Click the card to see the answer
         </p>
       )}
 
@@ -227,14 +227,14 @@ export default function Flashcards() {
             className="flex-1 max-w-[180px] h-14 rounded-2xl border-2 border-red-300 text-red-500 hover:bg-red-50 font-bold text-base gap-2"
           >
             <ThumbsDown className="w-5 h-5" />
-            Nuk e di
+            Don't know
           </Button>
           <Button
             onClick={() => handleKnown(true)}
             className="flex-1 max-w-[180px] h-14 rounded-2xl font-bold text-base gap-2 bg-green-500 hover:bg-green-600"
           >
             <ThumbsUp className="w-5 h-5" />
-            E di! ✓
+            Know it! ✓
           </Button>
         </div>
       )}
@@ -248,7 +248,7 @@ export default function Flashcards() {
           disabled={currentIndex === 0}
           className="font-bold gap-1"
         >
-          <ChevronLeft className="w-4 h-4" /> Para
+          <ChevronLeft className="w-4 h-4" /> Previous
         </Button>
         <Button
           variant="ghost"
@@ -259,7 +259,7 @@ export default function Flashcards() {
           }}
           className="font-bold gap-1"
         >
-          Tjetër <ChevronRight className="w-4 h-4" />
+          Next <ChevronRight className="w-4 h-4" />
         </Button>
       </div>
     </div>

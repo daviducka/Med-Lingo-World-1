@@ -4,21 +4,6 @@ import { useGetCourse } from "@workspace/api-client-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ArrowLeft, Star, Lock, CheckCircle2 } from "lucide-react";
 
-const CATEGORY_SQ: Record<string, string> = {
-  anatomy: "Anatomi",
-  pharmacology: "Farmakologji",
-  physiology: "Fiziologji",
-  pathology: "Patologji",
-  microbiology: "Mikrobiologji",
-  biochemistry: "Biokimi",
-  neuroanatomy: "Neuroanatomi",
-  immunology: "Imunologji",
-  biology: "Biologji",
-  ecology: "Ekologji",
-  botany: "Botanikë",
-  genetics: "Gjenetikë",
-};
-
 export default function CourseDetail() {
   const [, params] = useRoute("/learn/:courseId");
   const courseId = params?.courseId ? parseInt(params.courseId) : 0;
@@ -36,12 +21,12 @@ export default function CourseDetail() {
     );
   }
 
-  if (!course) return <div>Kursi nuk u gjet.</div>;
+  if (!course) return <div>Course not found.</div>;
 
   return (
     <div className="max-w-2xl mx-auto pb-24 animate-in fade-in duration-300">
       <Link href="/learn" className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground font-bold mb-6 transition-colors">
-        <ArrowLeft className="w-5 h-5" /> Kthehu te Lëndët
+        <ArrowLeft className="w-5 h-5" /> Back to Courses
       </Link>
 
       <div 
@@ -51,7 +36,7 @@ export default function CourseDetail() {
         <div className="absolute -right-10 -top-10 text-[150px] opacity-10 leading-none">{course.iconEmoji}</div>
         <div className="relative z-10">
           <span className="bg-white/20 px-3 py-1 rounded-full text-sm font-bold backdrop-blur-sm inline-block mb-4 uppercase tracking-wider">
-            {CATEGORY_SQ[course.category] || course.category}
+            {course.category}
           </span>
           <h1 className="text-4xl font-black mb-2">{course.title}</h1>
           <p className="text-white/90 font-medium text-lg max-w-md">{course.description}</p>
@@ -60,7 +45,6 @@ export default function CourseDetail() {
 
       {/* Lesson Path (Duolingo Style Vertical Path) */}
       <div className="flex flex-col items-center relative py-8">
-        {/* The connecting path line */}
         <div className="absolute top-0 bottom-0 w-4 bg-muted left-1/2 -translate-x-1/2 rounded-full -z-10" />
         
         {course.lessons?.map((lesson, index) => {
@@ -76,15 +60,13 @@ export default function CourseDetail() {
               
               <Link href={lesson.isLocked ? "#" : `/lesson/${lesson.id}`} className={lesson.isLocked ? "pointer-events-none cursor-not-allowed" : ""}>
                 <div className="relative group">
-                  {/* Tooltip bubble - always visible on desktop hover, or always if it's the current available one */}
                   {status === 'available' && (
                     <div className="absolute -top-14 left-1/2 -translate-x-1/2 bg-white border-2 border-border px-4 py-2 rounded-xl font-bold shadow-md whitespace-nowrap z-20 animate-bounce">
-                      Fillo Mësimin {lesson.orderIndex}
+                      Start Lesson {lesson.orderIndex}
                       <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-4 h-4 bg-white border-b-2 border-r-2 border-border rotate-45" />
                     </div>
                   )}
 
-                  {/* Lesson Node */}
                   <div 
                     className={`w-24 h-24 rounded-full flex items-center justify-center text-3xl transition-transform ${status !== 'locked' ? 'hover:-translate-y-2 active:translate-y-0' : ''}`}
                     style={{ 

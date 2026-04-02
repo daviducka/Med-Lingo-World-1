@@ -26,8 +26,8 @@ export default function DailyChallenge({ onBack }: { onBack: () => void }) {
       .catch(() => setLoading(false));
   }, []);
 
-  if (loading) return <div className="text-center py-8 text-muted-foreground">Duke ngarkuar...</div>;
-  if (!question) return <div className="text-center py-8 text-muted-foreground">Nuk ka pyetje për sot</div>;
+  if (loading) return <div className="text-center py-8 text-muted-foreground">Loading...</div>;
+  if (!question) return <div className="text-center py-8 text-muted-foreground">No question for today</div>;
 
   const isCorrect = selected === question.correctAnswer;
 
@@ -35,9 +35,9 @@ export default function DailyChallenge({ onBack }: { onBack: () => void }) {
     <div className="max-w-2xl mx-auto">
       <div className="flex items-center gap-4 mb-6">
         <Button variant="ghost" size="sm" onClick={onBack} className="font-bold gap-1">
-          <ArrowLeft className="w-4 h-4" /> Mbrapa
+          <ArrowLeft className="w-4 h-4" /> Back
         </Button>
-        <span className="text-sm font-bold text-muted-foreground">📅 Sfida e Ditës • {new Date(question.date).toLocaleDateString("sq-AL")}</span>
+        <span className="text-sm font-bold text-muted-foreground">📅 Daily Challenge • {new Date(question.date).toLocaleDateString("en-US")}</span>
       </div>
 
       {/* Difficulty Badge */}
@@ -47,16 +47,16 @@ export default function DailyChallenge({ onBack }: { onBack: () => void }) {
           : question.difficulty === "intermediate" ? "bg-yellow-100 text-yellow-700"
           : "bg-red-100 text-red-700"
         }`}>
-          {question.difficulty === "easy" ? "🟢 E Lehtë"
-          : question.difficulty === "intermediate" ? "🟡 Mesatare"
-          : "🔴 E Vështirë"}
+          {question.difficulty === "easy" ? "🟢 Easy"
+          : question.difficulty === "intermediate" ? "🟡 Medium"
+          : "🔴 Hard"}
         </span>
       </div>
 
       {/* Question */}
       <div className="bg-card border-2 border-border rounded-2xl p-6 mb-6">
         <p className="text-lg font-bold text-foreground">{question.text}</p>
-        <p className="text-xs text-muted-foreground mt-3 font-semibold">Kategori: {question.category}</p>
+        <p className="text-xs text-muted-foreground mt-3 font-semibold">Category: {question.category}</p>
       </div>
 
       {/* Options */}
@@ -88,7 +88,7 @@ export default function DailyChallenge({ onBack }: { onBack: () => void }) {
 
       {!answered && (
         <Button onClick={() => setAnswered(true)} disabled={!selected} size="lg" className="w-full font-bold rounded-2xl">
-          Konfirmo Përgjigjen
+          Confirm Answer
         </Button>
       )}
 
@@ -98,10 +98,10 @@ export default function DailyChallenge({ onBack }: { onBack: () => void }) {
             <div className="text-4xl">{isCorrect ? "✅" : "❌"}</div>
             <div className="flex-1">
               <h3 className={`font-bold text-lg mb-2 ${isCorrect ? "text-green-700" : "text-red-700"}`}>
-                {isCorrect ? "Përgjigje e Saktë!" : "Përgjigje e Gabuar"}
+                {isCorrect ? "Correct Answer!" : "Wrong Answer"}
               </h3>
               <p className={`font-semibold mb-3 ${isCorrect ? "text-green-600" : "text-red-600"}`}>
-                Përgjigja e saktë: <span className="font-bold">{question.correctAnswer}</span>
+                Correct answer: <span className="font-bold">{question.correctAnswer}</span>
               </p>
               <p className={`${isCorrect ? "text-green-600" : "text-red-600"}`}>
                 {question.explanation}

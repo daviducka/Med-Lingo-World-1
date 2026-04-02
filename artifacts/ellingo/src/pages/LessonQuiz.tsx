@@ -35,13 +35,12 @@ export default function LessonQuiz() {
   const questions = lesson?.questions || [];
   const currentQ = questions[currentQIndex];
 
-  // Shuffle options once per question change
   const shuffledOptions = useMemo(() => {
     if (!currentQ?.options) return [];
     return shuffleArray(currentQ.options);
   }, [currentQIndex, lesson?.id]);
 
-  if (isLoading || !lesson) return <div className="min-h-screen bg-background flex items-center justify-center font-bold text-xl animate-pulse">Duke ngarkuar...</div>;
+  if (isLoading || !lesson) return <div className="min-h-screen bg-background flex items-center justify-center font-bold text-xl animate-pulse">Loading...</div>;
   const progress = ((currentQIndex) / questions.length) * 100;
 
   const handleCheck = () => {
@@ -62,13 +61,11 @@ export default function LessonQuiz() {
 
     if (currentQIndex < questions.length - 1) {
       if (hearts === 0) {
-        // Handle failure
         setLocation('/learn');
         return;
       }
       setCurrentQIndex(prev => prev + 1);
     } else {
-      // Finish lesson
       const timeTaken = Math.floor((Date.now() - startTimeRef.current) / 1000);
       completeLessonMutation.mutate({
         lessonId,
@@ -84,7 +81,6 @@ export default function LessonQuiz() {
           setShowCelebration(true);
         },
         onError: () => {
-          // Fallback if mutation fails so user isn't stuck
           setXpEarned(lesson.xpReward);
           setShowCelebration(true);
         }
@@ -96,7 +92,7 @@ export default function LessonQuiz() {
     return (
       <div className="fixed inset-0 bg-background z-[100] flex flex-col items-center justify-center p-6 text-center animate-in zoom-in duration-500">
         <div className="w-full max-w-md space-y-8">
-          <h1 className="text-4xl font-black text-amber-500 drop-shadow-sm">Mësimi Përfundoi! 🎉</h1>
+          <h1 className="text-4xl font-black text-amber-500 drop-shadow-sm">Lesson Complete! 🎉</h1>
           
           <div className="bg-card border-2 p-8 rounded-3xl shadow-xl space-y-6">
             <div className="flex justify-center mb-4">
@@ -107,18 +103,18 @@ export default function LessonQuiz() {
             
             <div className="grid grid-cols-2 gap-4">
               <div className="bg-amber-50 border-2 border-amber-200 p-4 rounded-2xl">
-                <div className="text-amber-600 font-bold uppercase text-xs mb-1">XP Fituar</div>
+                <div className="text-amber-600 font-bold uppercase text-xs mb-1">XP Earned</div>
                 <div className="text-3xl font-black text-amber-500">+{xpEarned}</div>
               </div>
               <div className="bg-green-50 border-2 border-green-200 p-4 rounded-2xl">
-                <div className="text-green-600 font-bold uppercase text-xs mb-1">Saktësia</div>
+                <div className="text-green-600 font-bold uppercase text-xs mb-1">Accuracy</div>
                 <div className="text-3xl font-black text-green-500">{Math.round((correctCount/questions.length)*100)}%</div>
               </div>
             </div>
           </div>
           
           <Button size="lg" className="w-full h-14 text-lg font-bold rounded-2xl border-b-[6px] active:border-b-0 active:translate-y-[6px] transition-all" onClick={() => setLocation(`/learn/${lesson.courseId}`)}>
-            Vazhdo
+            Continue
           </Button>
         </div>
       </div>
@@ -151,7 +147,6 @@ export default function LessonQuiz() {
             {shuffledOptions.map((option, idx) => {
               const isSelected = selectedOption === option;
               
-              // Only show colors if not in 'idle' state, AND this option is either selected or is the correct answer (if wrong was selected)
               let itemClass = "bg-card border-2 hover:bg-muted text-foreground";
               
               if (answerState === 'correct' && isSelected) {
@@ -183,7 +178,6 @@ export default function LessonQuiz() {
       <div className={`fixed bottom-0 left-0 w-full border-t-2 transition-colors duration-300 ${answerState === 'correct' ? 'bg-success/10 border-success/20' : answerState === 'wrong' ? 'bg-destructive/10 border-destructive/20' : 'bg-card border-border'}`}>
         <div className="max-w-5xl mx-auto p-4 md:p-8 flex flex-col md:flex-row items-center justify-between gap-4">
           
-          {/* Feedback area */}
           <div className="flex-1">
             {answerState === 'correct' && (
               <div className="animate-in slide-in-from-bottom flex items-start gap-4">
@@ -191,7 +185,7 @@ export default function LessonQuiz() {
                   <Check className="w-8 h-8" />
                 </div>
                 <div>
-                  <h3 className="text-2xl font-black text-success">Shkëlqyeshëm!</h3>
+                  <h3 className="text-2xl font-black text-success">Excellent!</h3>
                   <p className="text-success/80 font-bold mt-1 max-w-xl">{currentQ?.explanation}</p>
                 </div>
               </div>
@@ -202,7 +196,7 @@ export default function LessonQuiz() {
                   <X className="w-8 h-8" />
                 </div>
                 <div>
-                  <h3 className="text-2xl font-black text-destructive">Përgjigja e saktë:</h3>
+                  <h3 className="text-2xl font-black text-destructive">Correct Answer:</h3>
                   <p className="font-bold text-destructive mt-1 text-lg">{currentQ?.correctAnswer}</p>
                   <p className="text-destructive/80 font-bold mt-2 max-w-xl text-sm">{currentQ?.explanation}</p>
                 </div>
@@ -219,7 +213,7 @@ export default function LessonQuiz() {
             disabled={!selectedOption && answerState === 'idle'}
             onClick={answerState === 'idle' ? handleCheck : handleNext}
           >
-            {answerState === 'idle' ? 'Kontrollo' : 'Vazhdo'}
+            {answerState === 'idle' ? 'Check' : 'Continue'}
           </Button>
 
         </div>

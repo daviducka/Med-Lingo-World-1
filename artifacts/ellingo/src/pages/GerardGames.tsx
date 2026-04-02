@@ -11,28 +11,13 @@ import Crossword from "./games/Crossword";
 
 type GameId = "match-term" | "daily-challenge" | "guess-organ" | "flashcards" | "quiz" | "crossword" | null;
 
-const CATEGORY_SQ: Record<string, string> = {
-  anatomy: "Anatomi",
-  pharmacology: "Farmakologji",
-  physiology: "Fiziologji",
-  pathology: "Patologji",
-  microbiology: "Mikrobiologji",
-  biochemistry: "Biokimi",
-  neuroanatomy: "Neuroanatomi",
-  immunology: "Imunologji",
-  biology: "Biologji",
-  ecology: "Ekologji",
-  botany: "Botanikë",
-  genetics: "Gjenetikë",
-};
-
 const GAMES = [
-  { id: "match-term" as GameId, emoji: "🔗", title: "Lidh Termat", desc: "Lidh termat me përkufizimet", bg: "from-blue-400 to-blue-600", needsCourse: true },
-  { id: "daily-challenge" as GameId, emoji: "📅", title: "Sfida Ditore", desc: "Sfida e përditshme — nuk kërkon kurs", bg: "from-purple-400 to-purple-600", needsCourse: false },
-  { id: "guess-organ" as GameId, emoji: "🫀", title: "Gjej Organin", desc: "Identifiko organet e trupit", bg: "from-pink-400 to-rose-600", needsCourse: true },
-  { id: "flashcards" as GameId, emoji: "🎴", title: "Loja e Kartelave", desc: "Mëso me kartela interaktive", bg: "from-orange-400 to-orange-600", needsCourse: true },
-  { id: "quiz" as GameId, emoji: "❓", title: "Quiz me Alternativa", desc: "Pyetje me zgjedhje të shumëfishta", bg: "from-cyan-400 to-blue-600", needsCourse: true },
-  { id: "crossword" as GameId, emoji: "🔤", title: "Fjalëkryq Mjekësor", desc: "Fjalëkryqe mjekësore shqip", bg: "from-green-400 to-green-600", needsCourse: true },
+  { id: "match-term" as GameId, emoji: "🔗", title: "Match the Term", desc: "Match terms to their definitions", bg: "from-blue-400 to-blue-600", needsCourse: true },
+  { id: "daily-challenge" as GameId, emoji: "📅", title: "Daily Challenge", desc: "Daily challenge — no course required", bg: "from-purple-400 to-purple-600", needsCourse: false },
+  { id: "guess-organ" as GameId, emoji: "🫀", title: "Guess the Organ", desc: "Identify body organs", bg: "from-pink-400 to-rose-600", needsCourse: true },
+  { id: "flashcards" as GameId, emoji: "🎴", title: "Flashcard Game", desc: "Learn with interactive flashcards", bg: "from-orange-400 to-orange-600", needsCourse: true },
+  { id: "quiz" as GameId, emoji: "❓", title: "Multiple Choice Quiz", desc: "Multiple-choice questions", bg: "from-cyan-400 to-blue-600", needsCourse: true },
+  { id: "crossword" as GameId, emoji: "🔤", title: "Medical Crossword", desc: "Medical crossword puzzles", bg: "from-green-400 to-green-600", needsCourse: true },
 ];
 
 interface Course {
@@ -50,7 +35,7 @@ export default function GerardGames() {
   const [courses, setCourses] = useState<Course[]>([]);
   const [step, setStep] = useState<"courses" | "games" | "playing">("courses");
   const { data: profile } = useGetUserProfile();
-  const language = profile?.selectedLanguage || "sq";
+  const language = profile?.selectedLanguage || "en";
 
   useEffect(() => {
     fetch(`/api/courses?language=${language}`)
@@ -85,7 +70,6 @@ export default function GerardGames() {
     }
   };
 
-  // ─── Render active game ──────────────────────────────────────────────────
   if (step === "playing" && selectedCourse) {
     if (activeGame === "match-term") return <MatchTheTerm courseId={selectedCourse.id} onBack={handleBack} />;
     if (activeGame === "guess-organ") return <GuessTheOrgan courseId={selectedCourse.id} onBack={handleBack} />;
@@ -97,7 +81,6 @@ export default function GerardGames() {
     return <DailyChallenge onBack={handleBack} />;
   }
 
-  // ─── Step 1: Course Selection ────────────────────────────────────────────
   if (step === "courses") {
     return (
       <div className="max-w-5xl mx-auto">
@@ -106,7 +89,7 @@ export default function GerardGames() {
             Gerard Games 🎮
           </h1>
           <p className="text-muted-foreground font-semibold text-lg">
-            Zgjedh një kurs për të filluar lojën
+            Choose a course to start playing
           </p>
           <p className="text-xs text-muted-foreground italic mt-1">by Elson</p>
         </div>
@@ -118,14 +101,14 @@ export default function GerardGames() {
         >
           <div className="text-5xl">📅</div>
           <div className="flex-1">
-            <h2 className="text-2xl font-bold" style={{ fontFamily: "Fredoka One, sans-serif" }}>Sfida Ditore</h2>
-            <p className="text-white/85 text-sm font-semibold">Sfida e përditshme — nuk kërkon kurs</p>
+            <h2 className="text-2xl font-bold" style={{ fontFamily: "Fredoka One, sans-serif" }}>Daily Challenge</h2>
+            <p className="text-white/85 text-sm font-semibold">Daily challenge — no course required</p>
           </div>
-          <div className="bg-white/25 px-4 py-2 rounded-full font-bold text-sm">Luaj →</div>
+          <div className="bg-white/25 px-4 py-2 rounded-full font-bold text-sm">Play →</div>
         </div>
 
         {/* Course Grid */}
-        <h2 className="font-bold text-xl mb-4">Zgjedh Kursin 📚</h2>
+        <h2 className="font-bold text-xl mb-4">Choose a Course 📚</h2>
         <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
           {courses.map(course => (
             <button
@@ -136,12 +119,12 @@ export default function GerardGames() {
             >
               <div className="text-4xl mb-3">{course.iconEmoji}</div>
               <p className="font-bold text-sm leading-tight">{course.title}</p>
-              <p className="text-xs text-muted-foreground mt-1">{CATEGORY_SQ[course.category] || course.category}</p>
+              <p className="text-xs text-muted-foreground mt-1">{course.category}</p>
               <div
                 className="mt-3 text-xs font-bold px-3 py-1 rounded-full inline-block"
                 style={{ backgroundColor: `${course.color}25`, color: course.color }}
               >
-                {course.totalLessons} mësime →
+                {course.totalLessons} lessons →
               </div>
             </button>
           ))}
@@ -154,13 +137,11 @@ export default function GerardGames() {
     );
   }
 
-  // ─── Step 2: Games Selection ─────────────────────────────────────────────
   return (
     <div className="max-w-5xl mx-auto">
-      {/* Header with back + selected course */}
       <div className="flex items-center gap-4 mb-8">
         <Button variant="ghost" onClick={handleBack} className="font-bold gap-2 rounded-xl">
-          <ArrowLeft className="w-4 h-4" /> Ndrysho Kursin
+          <ArrowLeft className="w-4 h-4" /> Change Course
         </Button>
         <div
           className="flex items-center gap-3 px-4 py-2 rounded-2xl border-2"
@@ -169,17 +150,16 @@ export default function GerardGames() {
           <span className="text-2xl">{selectedCourse?.iconEmoji}</span>
           <div>
             <p className="font-bold text-sm">{selectedCourse?.title}</p>
-            <p className="text-xs text-muted-foreground">{CATEGORY_SQ[selectedCourse?.category || ""] || selectedCourse?.category}</p>
+            <p className="text-xs text-muted-foreground">{selectedCourse?.category}</p>
           </div>
         </div>
       </div>
 
       <div className="text-center mb-8">
-        <h2 className="text-3xl font-bold" style={{ fontFamily: "Fredoka One, sans-serif" }}>Zgjedh Lojën 🕹️</h2>
-        <p className="text-muted-foreground font-semibold mt-1">6 lojëra interaktive për të mësuar</p>
+        <h2 className="text-3xl font-bold" style={{ fontFamily: "Fredoka One, sans-serif" }}>Choose a Game 🕹️</h2>
+        <p className="text-muted-foreground font-semibold mt-1">6 interactive games to learn with</p>
       </div>
 
-      {/* Games Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
         {GAMES.map(game => (
           <button
@@ -197,7 +177,7 @@ export default function GerardGames() {
               </h2>
               <p className="text-white/85 font-semibold text-sm">{game.desc}</p>
               <div className="mt-4 inline-flex items-center gap-1 bg-white/25 backdrop-blur rounded-full px-4 py-1.5 text-sm font-bold shadow">
-                Luaj Tani →
+                Play Now →
               </div>
             </div>
           </button>

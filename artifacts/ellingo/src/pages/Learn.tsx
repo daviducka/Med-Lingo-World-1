@@ -16,7 +16,7 @@ export default function Learn() {
     }
   }, [profile?.selectedLanguage]);
 
-  const lang = selectedLanguage || profile?.selectedLanguage || "sq";
+  const lang = selectedLanguage || profile?.selectedLanguage || "en";
 
   const { data: courses, isLoading: coursesLoading } = useListCourses(
     { language: lang },
@@ -36,17 +36,17 @@ export default function Learn() {
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <h1 className="text-4xl font-bold shimmer-text mb-1" style={{ fontFamily: 'Fredoka One, sans-serif' }}>
-            Lëndët 📚
+            Courses 📚
           </h1>
           <p className="text-muted-foreground font-semibold text-lg">
-            {currentLang?.flagEmoji} Mëso mjekësinë, sistem pas sistemi
+            {currentLang?.flagEmoji} Learn medicine, system by system
           </p>
         </div>
 
         <div className="w-full md:w-52">
           <Select value={lang} onValueChange={handleLanguageChange}>
             <SelectTrigger className="w-full font-bold h-12 rounded-2xl border-2">
-              <SelectValue placeholder="Gjuha" />
+              <SelectValue placeholder="Language" />
             </SelectTrigger>
             <SelectContent>
               {languages?.map(l => (
@@ -67,9 +67,9 @@ export default function Learn() {
         <div className="text-center py-20">
           <div className="text-6xl mb-4">📭</div>
           <p className="text-xl font-bold text-muted-foreground">
-            Nuk ka lëndë për gjuhën {currentLang?.name ?? lang}
+            No courses found for {currentLang?.name ?? lang}
           </p>
-          <p className="text-muted-foreground mt-2 font-semibold">Zgjidh anglishten ose shqipen.</p>
+          <p className="text-muted-foreground mt-2 font-semibold">Try selecting English.</p>
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -105,7 +105,7 @@ export default function Learn() {
                     <BookOpen className="w-3 h-3" /> {course.category}
                   </span>
                   <span className="font-bold text-sm flex items-center gap-1" style={{ color: course.color }}>
-                    {course.totalLessons} Mësime <Play className="w-3.5 h-3.5" />
+                    {course.totalLessons} Lessons <Play className="w-3.5 h-3.5" />
                   </span>
                 </div>
               </div>

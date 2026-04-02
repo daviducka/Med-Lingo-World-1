@@ -36,9 +36,9 @@ export default function Home() {
         </div>
         <div>
           <h1 className="text-3xl font-bold tracking-tight" style={{ fontFamily: 'Fredoka One, sans-serif' }}>
-            Mirë se vjen, {profile?.displayName}! 👋
+            Welcome, {profile?.displayName}! 👋
           </h1>
-          <p className="text-muted-foreground font-semibold">Sfida jote e sotme mjekësore pret.</p>
+          <p className="text-muted-foreground font-semibold">Your daily medical challenge awaits.</p>
         </div>
       </header>
 
@@ -47,17 +47,17 @@ export default function Home() {
         <div className="bg-card border-2 border-b-4 rounded-2xl p-4 text-center">
           <Flame className="w-6 h-6 text-orange-500 mx-auto mb-1" />
           <p className="text-2xl font-bold">{stats?.streak ?? 0}</p>
-          <p className="text-xs font-bold text-muted-foreground uppercase tracking-wide">Ditë radhazi</p>
+          <p className="text-xs font-bold text-muted-foreground uppercase tracking-wide">Day Streak</p>
         </div>
         <div className="bg-card border-2 border-b-4 rounded-2xl p-4 text-center border-primary/40">
           <Target className="w-6 h-6 text-primary mx-auto mb-1" />
-          <p className="text-2xl font-bold text-primary">{stats?.totalXp ?? 0}</p>
+          <p className="text-2xl font-bold text-primary">{stats?.xp ?? 0}</p>
           <p className="text-xs font-bold text-muted-foreground uppercase tracking-wide">XP Total</p>
         </div>
         <div className="bg-card border-2 border-b-4 rounded-2xl p-4 text-center">
           <BookOpen className="w-6 h-6 text-green-500 mx-auto mb-1" />
-          <p className="text-2xl font-bold">{stats?.lessonsCompleted ?? 0}</p>
-          <p className="text-xs font-bold text-muted-foreground uppercase tracking-wide">Mësime</p>
+          <p className="text-2xl font-bold">{stats?.totalLessonsCompleted ?? 0}</p>
+          <p className="text-xs font-bold text-muted-foreground uppercase tracking-wide">Lessons</p>
         </div>
       </div>
 
@@ -69,20 +69,20 @@ export default function Home() {
         <div className="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
           <div className="space-y-2">
             <div className="inline-flex items-center gap-1.5 bg-white/20 px-3 py-1 rounded-full text-sm font-bold backdrop-blur-sm">
-              <Target className="w-4 h-4" /> Qëllimi i Ditës
+              <Target className="w-4 h-4" /> Daily Goal
             </div>
             <h2 className="text-2xl md:text-3xl font-black" style={{ fontFamily: 'Fredoka One, sans-serif' }}>
-              Mëso 3 Mësime Sot
+              Learn 3 Lessons Today
             </h2>
-            <p className="text-primary-foreground/80 font-medium">Fiton +50 XP bonus kur i kryen të 3.</p>
+            <p className="text-primary-foreground/80 font-medium">Earn +50 XP bonus when you complete all 3.</p>
           </div>
 
           <div className="flex items-center gap-4 w-full md:w-auto">
             <div className="flex-1 md:w-36 bg-black/20 h-3 rounded-full overflow-hidden">
-              <div className="bg-white h-full rounded-full" style={{ width: `${Math.min(100, (stats?.lessonsCompleted ?? 0) * 33)}%` }} />
+              <div className="bg-white h-full rounded-full" style={{ width: `${Math.min(100, (stats?.totalLessonsCompleted ?? 0) * 33)}%` }} />
             </div>
             <Link href="/learn" className="bg-white text-primary px-6 py-3 rounded-2xl font-bold hover:bg-white/90 transition-colors shadow-lg active:scale-95 whitespace-nowrap">
-              Fillo ▶
+              Start ▶
             </Link>
           </div>
         </div>
@@ -93,10 +93,10 @@ export default function Home() {
         <section className="space-y-4">
           <div className="flex items-center justify-between">
             <h2 className="text-xl font-bold" style={{ fontFamily: 'Fredoka One, sans-serif' }}>
-              Vazhdo Mësimin 📖
+              Continue Learning 📖
             </h2>
             <Link href="/learn" className="text-primary font-bold hover:underline flex items-center text-sm">
-              Të gjitha <ChevronRight className="w-4 h-4" />
+              See all <ChevronRight className="w-4 h-4" />
             </Link>
           </div>
 
@@ -121,8 +121,8 @@ export default function Home() {
 
                   <div className="mt-auto pt-3 border-t space-y-1.5">
                     <div className="flex justify-between text-xs font-bold text-muted-foreground">
-                      <span>Progresi</span>
-                      <span>{course.totalLessons} mësime</span>
+                      <span>Progress</span>
+                      <span>{course.totalLessons} lessons</span>
                     </div>
                     <div className="w-full bg-muted h-2.5 rounded-full overflow-hidden">
                       <div className="h-full rounded-full" style={{ width: '0%', backgroundColor: course.color }} />
@@ -141,8 +141,8 @@ export default function Home() {
           <div className="bg-card border-2 border-b-4 border-blue-400 rounded-2xl p-5 flex items-center gap-4 hover:shadow-lg hover:-translate-y-1 transition-all">
             <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center text-2xl">🃏</div>
             <div>
-              <h3 className="font-bold text-lg" style={{ fontFamily: 'Fredoka One, sans-serif' }}>Kartela Flash</h3>
-              <p className="text-sm text-muted-foreground font-medium">Rishiko me kartelat Gizmo-style</p>
+              <h3 className="font-bold text-lg" style={{ fontFamily: 'Fredoka One, sans-serif' }}>Flashcards</h3>
+              <p className="text-sm text-muted-foreground font-medium">Review with Gizmo-style cards</p>
             </div>
             <ChevronRight className="w-5 h-5 text-muted-foreground ml-auto" />
           </div>
@@ -152,8 +152,8 @@ export default function Home() {
           <div className="bg-card border-2 border-b-4 border-green-400 rounded-2xl p-5 flex items-center gap-4 hover:shadow-lg hover:-translate-y-1 transition-all">
             <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center text-2xl">📝</div>
             <div>
-              <h3 className="font-bold text-lg" style={{ fontFamily: 'Fredoka One, sans-serif' }}>Shënime Studimi</h3>
-              <p className="text-sm text-muted-foreground font-medium">Pikat kryesore & mnemonikët</p>
+              <h3 className="font-bold text-lg" style={{ fontFamily: 'Fredoka One, sans-serif' }}>Study Notes</h3>
+              <p className="text-sm text-muted-foreground font-medium">Key points & mnemonics</p>
             </div>
             <ChevronRight className="w-5 h-5 text-muted-foreground ml-auto" />
           </div>
@@ -170,11 +170,11 @@ export default function Home() {
                 <Swords className="w-8 h-8" /> Hard Round 🔥
               </h2>
               <p className="font-medium text-white/90 max-w-md">
-                Testo njohuritë me pyetje të nivelit USMLE. XP i dyfishtë, pa mëshirë.
+                Test your knowledge with USMLE-level questions. Double XP, no mercy.
               </p>
             </div>
             <button className="bg-white text-destructive px-8 py-4 rounded-2xl font-black text-lg shadow-[0_4px_0_0_rgba(0,0,0,0.3)] active:shadow-none active:translate-y-1 transition-all">
-              Hyr në Arenë ⚔️
+              Enter the Arena ⚔️
             </button>
           </div>
         </Link>
@@ -187,12 +187,12 @@ export default function Home() {
           <div className="relative p-6 flex flex-col md:flex-row items-center justify-between gap-4 text-white">
             <div className="space-y-1">
               <h2 className="text-xl font-black flex items-center gap-2" style={{ fontFamily: 'Fredoka One, sans-serif' }}>
-                <Layers className="w-6 h-6" /> Përgatitja për Provim 🎓
+                <Layers className="w-6 h-6" /> Exam Preparation 🎓
               </h2>
-              <p className="font-medium text-white/80 text-sm">30 pyetje USMLE-style, simulim i plotë.</p>
+              <p className="font-medium text-white/80 text-sm">30 USMLE-style questions, full simulation.</p>
             </div>
             <button className="bg-white/20 backdrop-blur border-2 border-white/30 text-white px-6 py-3 rounded-2xl font-bold hover:bg-white/30 transition-colors whitespace-nowrap">
-              Fillo Provimin →
+              Start Exam →
             </button>
           </div>
         </Link>
