@@ -1,14 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { Shield, Stethoscope, Brain, BookOpen, Award, Zap, Check, Sparkles, Loader2 } from "lucide-react";
+import { Shield, Stethoscope, Brain, BookOpen, Award, Zap, Check, Sparkles, Loader2, Mail } from "lucide-react";
 
-const PAYPAL_URL =
-  "https://www.paypal.com/cgi-bin/webscr" +
-  "?cmd=_xclick" +
-  "&business=gjergjielson9%40gmail.com" +
-  "&amount=15.00" +
-  "&currency_code=USD" +
-  "&item_name=Med+Lingo+Portal+-+Yearly+Access" +
-  "&no_shipping=1";
+const CONTACT_EMAIL = "gjergjielson9@gmail.com";
 
 const features = [
   { icon: BookOpen, label: "24+ Medical Courses" },
@@ -49,7 +42,6 @@ export default function PaywallGate({ children }: { children: React.ReactNode })
       className="min-h-[100dvh] w-full flex flex-col items-center justify-center px-4 py-10 relative"
       style={{ background: "linear-gradient(135deg, #0a0a1a 0%, #0d1a3a 50%, #0a0a1a 100%)", zIndex: 9999 }}
     >
-      {/* Glow blobs */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div style={{ position:"absolute", top:"15%", left:"10%", width:400, height:400, borderRadius:"50%", background:"radial-gradient(circle, rgba(124,58,237,0.18) 0%, transparent 70%)", filter:"blur(40px)" }} />
         <div style={{ position:"absolute", bottom:"15%", right:"10%", width:350, height:350, borderRadius:"50%", background:"radial-gradient(circle, rgba(0,112,186,0.18) 0%, transparent 70%)", filter:"blur(40px)" }} />
@@ -57,7 +49,6 @@ export default function PaywallGate({ children }: { children: React.ReactNode })
 
       <div className="relative z-10 w-full max-w-md">
 
-        {/* Logo */}
         <div className="text-center mb-8">
           <div className="inline-flex items-center justify-center w-20 h-20 rounded-3xl mb-4 shadow-2xl"
             style={{ background: "linear-gradient(135deg, #7c3aed, #2563eb)" }}>
@@ -72,7 +63,6 @@ export default function PaywallGate({ children }: { children: React.ReactNode })
           </p>
         </div>
 
-        {/* Card */}
         <div className="rounded-3xl overflow-hidden shadow-2xl"
           style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.12)", backdropFilter: "blur(20px)" }}>
           <div className="h-1" style={{ background: "linear-gradient(90deg, #7c3aed, #2563eb, #06b6d4)" }} />
@@ -110,26 +100,20 @@ export default function PaywallGate({ children }: { children: React.ReactNode })
             </div>
 
             <a
-              href={PAYPAL_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center justify-center gap-3 w-full py-4 rounded-2xl font-black text-white text-lg no-underline transition-all duration-200 hover:-translate-y-0.5 hover:shadow-2xl active:translate-y-0"
+              href={`mailto:${CONTACT_EMAIL}?subject=Med%20Lingo%20Portal%20-%20Access%20Request&body=Hi%2C%20I%20would%20like%20to%20get%20access%20to%20Med%20Lingo%20Portal.`}
+              className="flex items-center justify-center gap-3 w-full py-4 rounded-2xl font-black text-white text-lg no-underline transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0"
               style={{
-                background: "linear-gradient(135deg, #003087 0%, #009cde 100%)",
-                boxShadow: "0 8px 32px rgba(0,48,135,0.5)",
+                background: "linear-gradient(135deg, #7c3aed 0%, #2563eb 100%)",
+                boxShadow: "0 8px 32px rgba(124,58,237,0.4)",
               }}
             >
-              <img
-                src="https://www.paypalobjects.com/webstatic/icon/pp258.png"
-                alt="PayPal"
-                className="w-7 h-7 rounded-md"
-              />
-              Pay $15/year with PayPal
+              <Mail className="w-6 h-6" />
+              Contact to Get Access
             </a>
 
-            <p className="text-center text-white/35 text-xs mt-4 flex items-center justify-center gap-1">
+            <p className="text-center text-white/40 text-xs mt-4 flex items-center justify-center gap-1">
               <Shield className="w-3 h-3" />
-              Secure payment via PayPal · Access activates after payment
+              {CONTACT_EMAIL}
             </p>
           </div>
         </div>

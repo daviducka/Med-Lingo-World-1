@@ -1,16 +1,8 @@
 import React from "react";
-import { Check, BookOpen, Zap, Brain, Award, Flame, Star } from "lucide-react";
+import { Check, BookOpen, Zap, Brain, Award, Flame, Star, Mail } from "lucide-react";
 
-const PAYPAL_EMAIL = "gjergjielson9@gmail.com";
-export const PAYPAL_URL =
-  "https://www.paypal.com/cgi-bin/webscr" +
-  `?cmd=_xclick&business=${encodeURIComponent(PAYPAL_EMAIL)}` +
-  "&amount=15.00" +
-  "&currency_code=USD" +
-  "&item_name=El_lingo+Premium+-+Yearly+Subscription" +
-  "&no_shipping=1" +
-  "&return=https%3A%2F%2Fellingo.replit.app%2Fpayment-success" +
-  "&cancel_return=https%3A%2F%2Fellingo.replit.app%2Fpricing";
+const CONTACT_EMAIL = "gjergjielson9@gmail.com";
+const MAILTO = `mailto:${CONTACT_EMAIL}?subject=Med%20Lingo%20Portal%20-%20Access%20Request&body=Hi%2C%20I%20would%20like%20to%20get%20access%20to%20Med%20Lingo%20Portal.`;
 
 const features = [
   { icon: BookOpen, text: "24+ medical courses", sub: "Anatomy, Pharmacology, Physiology & more" },
@@ -26,7 +18,7 @@ export default function Pricing() {
     <div className="max-w-2xl mx-auto px-4 py-8" style={{ animation: "fadeInUp 0.5s ease both" }}>
       <div className="text-center mb-10">
         <span className="inline-block px-4 py-1.5 rounded-full text-xs font-black tracking-widest uppercase bg-purple-100 text-purple-700 mb-4">
-          El_lingo Premium
+          Med Lingo Portal
         </span>
         <h1 className="text-5xl font-black mb-3" style={{ fontFamily: "Fredoka One, sans-serif", background: "linear-gradient(135deg, #7c3aed, #2563eb)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
           Learn Without Limits
@@ -45,7 +37,7 @@ export default function Pricing() {
             <span className="text-7xl font-black leading-none" style={{ fontFamily: "Fredoka One, sans-serif", color: "#7c3aed" }}>15</span>
             <span className="text-gray-500 font-medium mb-2">/year</span>
           </div>
-          <p className="text-sm text-gray-400 mb-1">No contract • Cancel anytime • Launch price</p>
+          <p className="text-sm text-gray-400 mb-1">No contract · Cancel anytime · Launch price</p>
           <p className="text-xs text-green-600 font-bold mb-6">✅ That's only $1.25/month!</p>
 
           <div className="border-t border-gray-100 mb-6" />
@@ -65,30 +57,26 @@ export default function Pricing() {
             ))}
           </div>
 
-          {/* PayPal Button */}
           <a
-            href={PAYPAL_URL}
-            target="_blank"
-            rel="noopener noreferrer"
+            href={MAILTO}
             className="flex items-center justify-center gap-3 w-full py-4 rounded-2xl font-bold text-white text-lg no-underline transition-all duration-300 hover:-translate-y-0.5 active:translate-y-0"
-            style={{ background: "linear-gradient(135deg, #003087 0%, #009cde 100%)", boxShadow: "0 6px 24px rgba(0,48,135,0.35)" }}
+            style={{ background: "linear-gradient(135deg, #7c3aed 0%, #2563eb 100%)", boxShadow: "0 6px 24px rgba(124,58,237,0.35)" }}
           >
-            <img src="https://www.paypalobjects.com/webstatic/icon/pp258.png" alt="PayPal" className="w-6 h-6 rounded" />
-            Pay with PayPal — $15/year
+            <Mail className="w-5 h-5" />
+            Contact to Get Access
           </a>
 
           <div className="flex items-center justify-center gap-2 mt-4">
-            <span className="text-xs text-gray-400">🔒 Secure payment via PayPal</span>
+            <span className="text-xs text-gray-400">📧 {CONTACT_EMAIL}</span>
           </div>
         </div>
       </div>
 
-      {/* Reviews */}
       <div className="grid grid-cols-3 gap-3 mb-8">
         {[
           { stars: 5, text: "Best medical platform!", name: "Arta M." },
           { stars: 5, text: "Dr. Denisa AI is amazing", name: "Erion K." },
-          { stars: 5, text: "Passed my exam thanks to El_lingo!", name: "Blerina H." },
+          { stars: 5, text: "Passed my exam!", name: "Blerina H." },
         ].map(({ stars, text, name }, i) => (
           <div key={i} className="rounded-2xl p-4 text-center" style={{ background: "#fafafa", border: "1px solid #f0f0f0" }}>
             <div className="flex justify-center gap-0.5 mb-2">
@@ -103,8 +91,8 @@ export default function Pricing() {
       <div className="text-center py-4 border-t border-gray-100">
         <p className="text-sm text-muted-foreground">
           Questions?{" "}
-          <a href="mailto:gjergjielson9@gmail.com" className="font-bold text-purple-600 hover:underline">
-            gjergjielson9@gmail.com
+          <a href={`mailto:${CONTACT_EMAIL}`} className="font-bold text-purple-600 hover:underline">
+            {CONTACT_EMAIL}
           </a>
           {" "}— Reply within 24 hours
         </p>
