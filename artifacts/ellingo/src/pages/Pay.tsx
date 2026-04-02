@@ -2,11 +2,12 @@ import React, { useEffect, useState } from "react";
 import { Shield } from "lucide-react";
 
 const PAYPAL_URL =
-  "https://www.paypal.com/donate" +
-  "?business=gjergjielson9%40gmail.com" +
+  "https://www.paypal.com/cgi-bin/webscr" +
+  "?cmd=_xclick&business=gjergjielson9%40gmail.com" +
   "&amount=15.00" +
   "&currency_code=USD" +
-  "&item_name=El_lingo+Premium+-+Yearly+Subscription";
+  "&item_name=El_lingo+Premium+-+Yearly+Subscription" +
+  "&no_shipping=1";
 
 export default function Pay() {
   const [dots, setDots] = useState(".");

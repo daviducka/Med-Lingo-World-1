@@ -3,11 +3,14 @@ import { Check, BookOpen, Zap, Brain, Award, Flame, Star } from "lucide-react";
 
 const PAYPAL_EMAIL = "gjergjielson9@gmail.com";
 export const PAYPAL_URL =
-  "https://www.paypal.com/donate" +
-  `?business=${encodeURIComponent(PAYPAL_EMAIL)}` +
+  "https://www.paypal.com/cgi-bin/webscr" +
+  `?cmd=_xclick&business=${encodeURIComponent(PAYPAL_EMAIL)}` +
   "&amount=15.00" +
   "&currency_code=USD" +
-  "&item_name=El_lingo+Premium+-+Yearly+Subscription";
+  "&item_name=El_lingo+Premium+-+Yearly+Subscription" +
+  "&no_shipping=1" +
+  "&return=https%3A%2F%2Fellingo.replit.app%2Fpayment-success" +
+  "&cancel_return=https%3A%2F%2Fellingo.replit.app%2Fpricing";
 
 const features = [
   { icon: BookOpen, text: "24+ medical courses", sub: "Anatomy, Pharmacology, Physiology & more" },
