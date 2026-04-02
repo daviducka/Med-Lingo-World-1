@@ -126,17 +126,8 @@ export default function PaywallGate({ children }: { children: React.ReactNode })
 
             <p className="text-center text-white/40 text-xs mt-3 flex items-center justify-center gap-1">
               <Shield className="w-3 h-3" />
-              Secure payment · After paying, come back and click below
+              Secure payment via PayPal
             </p>
-
-            {/* Already paid button */}
-            <button
-              onClick={() => { markAsPaid(); setPaid(true); }}
-              className="w-full mt-4 py-3 rounded-2xl text-sm font-bold transition-all hover:bg-white/10"
-              style={{ background: "rgba(255,255,255,0.06)", color: "rgba(255,255,255,0.6)", border: "1px solid rgba(255,255,255,0.1)" }}
-            >
-              ✅ I already paid — Open Portal
-            </button>
           </div>
         </div>
 
