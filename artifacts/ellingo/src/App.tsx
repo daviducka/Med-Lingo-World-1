@@ -6,6 +6,7 @@ import NotFound from "@/pages/not-found";
 import BackgroundMusic from "@/components/BackgroundMusic";
 
 import Layout from "@/components/layout/Layout";
+import PaywallGate from "@/components/PaywallGate";
 import Home from "@/pages/Home";
 import Learn from "@/pages/Learn";
 import CourseDetail from "@/pages/CourseDetail";
@@ -21,6 +22,10 @@ import AiDoctor from "@/pages/AiDoctor";
 import ElNotes from "@/pages/ElNotes";
 import GerardGames from "@/pages/GerardGames";
 import Certificates from "@/pages/Certificates";
+import Pricing from "@/pages/Pricing";
+import Pay from "@/pages/Pay";
+import PaymentSuccess from "@/pages/PaymentSuccess";
+import PayPalReturn from "@/pages/PayPalReturn";
 
 const queryClient = new QueryClient();
 
@@ -29,6 +34,11 @@ function Router() {
     <Switch>
       <Route path="/lesson/:lessonId" component={LessonQuiz} />
       <Route path="/hard-round" component={HardRound} />
+      <Route path="/pricing" component={Pricing} />
+      <Route path="/pay" component={Pay} />
+      <Route path="/payment-success" component={PaymentSuccess} />
+      <Route path="/paypal-return" component={PayPalReturn} />
+
       <Route>
         <Layout>
           <Switch>
@@ -58,7 +68,9 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
         <WouterRouter base={import.meta.env.BASE_URL.replace(/\/$/, "")}>
-          <Router />
+          <PaywallGate>
+            <Router />
+          </PaywallGate>
         </WouterRouter>
         <BackgroundMusic />
         <Toaster />
