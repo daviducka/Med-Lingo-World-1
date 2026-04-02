@@ -1,5 +1,14 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { useGetExamPrepQuestions, useSubmitExamPrep } from "@workspace/api-client-react";
+
+function shuffleArray<T>(arr: T[]): T[] {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
 import { GraduationCap, Clock, Trophy, CheckCircle, XCircle, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -36,6 +45,11 @@ export default function ExamPrep() {
 
   const currentQ = questions?.[currentQIndex];
   const progress = questions?.length ? ((currentQIndex) / questions.length) * 100 : 0;
+
+  const shuffledOptions = useMemo(() => {
+    if (!currentQ?.options) return [];
+    return shuffleArray(currentQ.options);
+  }, [currentQIndex, questions]);
 
   const handleStartExam = async (subject: string) => {
     setSelectedSubject(subject);
@@ -179,7 +193,7 @@ export default function ExamPrep() {
         </div>
 
         <div className="space-y-3 mb-6">
-          {currentQ?.options.map((opt, idx) => {
+          {shuffledOptions.map((opt, idx) => {
             const letter = ["A", "B", "C", "D"][idx];
             let className = "w-full p-4 rounded-2xl border-2 text-left flex items-center gap-4 font-bold transition-all duration-200 ";
             if (answerState === "idle") {

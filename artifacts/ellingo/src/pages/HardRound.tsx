@@ -1,6 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { Link, useLocation } from "wouter";
 import { useGetHardRoundQuestions, useSubmitHardRound } from "@workspace/api-client-react";
+
+function shuffleArray<T>(arr: T[]): T[] {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
 import { Shield, Timer, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -17,6 +26,11 @@ export default function HardRound() {
   const [timeLeft, setTimeLeft] = useState(120); // 2 minutes for hard round
   const [finished, setFinished] = useState(false);
   const [result, setResult] = useState<any>(null);
+
+  const shuffledOptions = useMemo(() => {
+    if (!questions?.[currentIdx]?.options) return [];
+    return shuffleArray(questions[currentIdx].options);
+  }, [currentIdx, questions]);
 
   // Timer effect
   React.useEffect(() => {
@@ -160,7 +174,7 @@ export default function HardRound() {
         </div>
 
         <div className="space-y-4">
-          {currentQ.options.map((option, idx) => (
+          {shuffledOptions.map((option, idx) => (
             <button
               key={idx}
               onClick={() => handleSelect(option)}

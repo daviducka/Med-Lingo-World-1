@@ -1,9 +1,18 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useMemo } from "react";
 import { useRoute, useLocation } from "wouter";
 import { useGetLesson, useCompleteLesson } from "@workspace/api-client-react";
 import { X, Heart, Check, Play } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
+
+function shuffleArray<T>(arr: T[]): T[] {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
 
 export default function LessonQuiz() {
   const [, params] = useRoute("/lesson/:lessonId");
@@ -23,10 +32,16 @@ export default function LessonQuiz() {
 
   const startTimeRef = useRef(Date.now());
 
-  if (isLoading || !lesson) return <div className="min-h-screen bg-background flex items-center justify-center font-bold text-xl animate-pulse">Duke ngarkuar...</div>;
-
-  const questions = lesson.questions || [];
+  const questions = lesson?.questions || [];
   const currentQ = questions[currentQIndex];
+
+  // Shuffle options once per question change
+  const shuffledOptions = useMemo(() => {
+    if (!currentQ?.options) return [];
+    return shuffleArray(currentQ.options);
+  }, [currentQIndex, lesson?.id]);
+
+  if (isLoading || !lesson) return <div className="min-h-screen bg-background flex items-center justify-center font-bold text-xl animate-pulse">Duke ngarkuar...</div>;
   const progress = ((currentQIndex) / questions.length) * 100;
 
   const handleCheck = () => {
@@ -133,7 +148,7 @@ export default function LessonQuiz() {
           </h2>
 
           <div className="space-y-4">
-            {currentQ?.options.map((option, idx) => {
+            {shuffledOptions.map((option, idx) => {
               const isSelected = selectedOption === option;
               
               // Only show colors if not in 'idle' state, AND this option is either selected or is the correct answer (if wrong was selected)
